@@ -1,0 +1,10 @@
+SET(SRC_FILES
+    ${SRC_FILES}
+    CACHE INTERNAL ""
+)
+
+if( BUILD_TESTS )
+	ADD_SUBDIRECTORY(tests)
+endif()
+
+ADD_SUBDIRECTORY(gui_tools)
