@@ -7,4 +7,7 @@ if( BUILD_TESTS )
 	ADD_SUBDIRECTORY(tests)
 endif()
 
+ADD_SUBDIRECTORY(audio)
+ADD_SUBDIRECTORY(common)
+ADD_SUBDIRECTORY(widgets)
 ADD_SUBDIRECTORY(gui_tools)
