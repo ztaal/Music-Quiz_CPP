@@ -19,11 +19,3 @@ This repository contains the code for the music quiz game. The game is a Jepardy
 
 ## Coding Guidelines 
 [Coding Guidlines](documentation/CodingGuidlines.md).
-
-## How to create a Task Manager 
-[How to create a Task Manager Settings file](documentation/tm_settings.md).
-
-## Manual
-The user manual for the HMI can be downloaded here:
-
- * [Crawler HMI User Manual](https://github.com/Inrotech/InrotechRobotSoftware/raw/master/documentation/Software_Manual_Inrotech-Crawler_en.pdf)
