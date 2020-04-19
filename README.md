@@ -11,7 +11,7 @@
 
 ## About 
 
-This repository contains the code for the Inrotech Big-9 and Inrotech Crawler Welding Robots and more.
+This repository contains the code for the music quiz game. The game is a Jepardy like game where the object is to guess as many songs as possible as fast as possible. The game can be played with both firends and family.
 
 ## Installation 
 
