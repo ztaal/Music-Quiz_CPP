@@ -6,6 +6,7 @@
 
 #include "common/Log.hpp"
 #include "MusicQuizGUI.hpp"
+#include "widgets/QuizEntry.hpp"
 
 
 #if defined(_WIN32) || defined(WIN32)
@@ -60,10 +61,36 @@ int main(int argc, char* argv[])
 	} else if ( msgBox.clickedButton() == musicCreatorButton ) {
 		/** Start Quiz Creator */
 		LOG_INFO("Quiz Creator Selected.");
+
+		/** Test Code \todo remove this */
+		try {
+			MusicQuiz::QuizEntry entry1("C:/Users/Ztaal/Desktop/5.mp3", "Song 1", 1000, 0, 10000, 30000, 40000, nullptr);
+			MusicQuiz::QuizEntry entry2("C:/Users/Ztaal/Desktop/test.wav", "Song 2", 2000, 0, 10000, 0, 40000, nullptr);
+
+			MusicQuiz::MusicQuizGUI w;
+			w.layout()->addWidget(&entry1);
+			w.layout()->addWidget(&entry2);
+			w.show();
+			app.exec();
+		} catch ( const std::exception& err ) {
+			LOG_ERROR("Failed to start Quiz Creator. " << err.what());
+#if WINDOWS_INTERFACE
+			system("pause");
+#endif
+			return 1;
+		} catch ( ... ) {
+			LOG_ERROR("Failed to start Quiz Creator. Unknown Error.");
+#if WINDOWS_INTERFACE
+			system("pause");
+#endif
+			return 1;
+		}
 	} else {
 		/** Close Program */
 		LOG_INFO("Exit Program Selected.");
 	}
+
+	system("pause");
 
 	return 0;
 }
