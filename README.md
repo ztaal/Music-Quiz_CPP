@@ -3,7 +3,7 @@
 <p align="center">
   <a href="#about">About</a> •
   <a href="#installation">Installation</a> •
-  <a href="#coding-guidelines">Coding Guidelines</a> •
+  <a href="#coding-guidelines">Coding Guidelines</a>
 </p>
 
 ## About 
