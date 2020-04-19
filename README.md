@@ -1,12 +1,9 @@
-<h1 align="center">Music Quiz</h4>
+<h1 align="center">Music Quiz</h1>
       
 <p align="center">
   <a href="#about">About</a> •
   <a href="#installation">Installation</a> •
   <a href="#coding-guidelines">Coding Guidelines</a> •
-  <a href="#how-to-create-a-task-manager">Creating a Task Manager</a> •
-  <a href="#manual">Manual</a> •
-  <a href="#support">Support</a>
 </p>
 
 ## About 
