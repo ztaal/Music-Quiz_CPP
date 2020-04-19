@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>musicQuiz_resources.qrc</file>
+    </qresource>
+</RCC>

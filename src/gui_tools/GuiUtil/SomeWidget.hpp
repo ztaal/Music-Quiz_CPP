@@ -5,7 +5,7 @@
 #include <QTabWidget>
 
 
-namespace jeopardy {
+namespace MusicQuiz {
 	namespace GuiUtil {
 		class SomeWidget : public QTabWidget
 		{

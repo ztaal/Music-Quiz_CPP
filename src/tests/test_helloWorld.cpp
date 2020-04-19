@@ -3,7 +3,7 @@
 
 int main()
 {
-	std::cout << "Hello Jeopardy World!" << std::endl;
+	std::cout << "Hello MusicQuiz World!" << std::endl;
 
 #if defined(_WIN32) || defined(WIN32)
 	system("pause");

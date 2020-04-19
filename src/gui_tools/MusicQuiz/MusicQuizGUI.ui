@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Music Jeopardy!</string>
+   <string>Music Quiz</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>

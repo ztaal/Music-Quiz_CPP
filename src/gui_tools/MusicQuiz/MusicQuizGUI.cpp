@@ -1,7 +1,7 @@
-#include "JeopardyGUI.hpp"
+#include "MusicQuizGUI.hpp"
 
 
-jeopardy::JeopardyGUI::JeopardyGUI(QWidget *this_parent) :
+MusicQuiz::MusicQuizGUI::MusicQuizGUI(QWidget *this_parent) :
 	QDialog(this_parent)
 {
 	setWindowFlags(windowFlags() | Qt::WindowMaximizeButtonHint | Qt::WindowMinimizeButtonHint);
@@ -9,5 +9,5 @@ jeopardy::JeopardyGUI::JeopardyGUI(QWidget *this_parent) :
 	Ui::Dialog::setupUi(this);
 }
 
-jeopardy::JeopardyGUI::~JeopardyGUI()
+MusicQuiz::MusicQuizGUI::~MusicQuizGUI()
 {}
