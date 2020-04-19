@@ -30,7 +30,7 @@ MESSAGE("-- Build type: " ${CMAKE_BUILD_TYPE})
 include("cmake/FindQt.cmake")
 
 ### Boost
-#include("cmake/FindBoost.cmake")
+include("cmake/FindBoost.cmake")
 
 INCLUDE_DIRECTORIES( src )
 
