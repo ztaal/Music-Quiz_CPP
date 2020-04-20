@@ -21,7 +21,7 @@ audio::AudioPlayer::~AudioPlayer()
 {
 	/** Stop Audio */
 #if WINDOWS_INTERFACE
-	mciSendString("close audio", NULL, 0, NULL);
+	mciSendString("close audioTrack", NULL, 0, NULL);
 #endif
 }
 
@@ -40,7 +40,7 @@ void audio::AudioPlayer::play(const std::string& audioFile)
 	openFile(audioFile);
 
 	/** Play Audio */
-	const std::string playCommand = "play audio";
+	const std::string playCommand = "play audioTrack";
 	mciSendString(playCommand.c_str(), NULL, 0, NULL);
 #endif
 
@@ -49,7 +49,7 @@ void audio::AudioPlayer::play(const std::string& audioFile)
 }
 
 void audio::AudioPlayer::play(const std::string& audioFile, const size_t startTime)
-{	
+{
 	/** Sanity Check */
 	if ( audioFile.empty() ) {
 		throw std::runtime_error("Audio File Name is empty.");
@@ -63,7 +63,7 @@ void audio::AudioPlayer::play(const std::string& audioFile, const size_t startTi
 	openFile(audioFile);
 
 	/** Play Audio */
-	const std::string playCommand = "play audio from " + std::to_string(startTime);
+	const std::string playCommand = "play audioTrack from " + std::to_string(startTime);
 	mciSendString(playCommand.c_str(), NULL, 0, NULL);
 #endif
 
@@ -90,7 +90,7 @@ void audio::AudioPlayer::play(const std::string& audioFile, const size_t startTi
 	openFile(audioFile);
 
 	/** Play Audio */
-	const std::string playCommand = "play audio from " + std::to_string(startTime) + " to " + std::to_string(endTime);
+	const std::string playCommand = "play audioTrack from " + std::to_string(startTime) + " to " + std::to_string(endTime);
 	mciSendString(playCommand.c_str(), NULL, 0, NULL);
 #endif
 
@@ -107,7 +107,7 @@ void audio::AudioPlayer::pause()
 
 	/** Pause audio */
 #if WINDOWS_INTERFACE
-	mciSendString("pause audio", NULL, 0, NULL);
+	mciSendString("pause audioTrack", NULL, 0, NULL);
 #endif
 
 	/** Set State */
@@ -123,7 +123,7 @@ void audio::AudioPlayer::resume()
 
 	/** Pause audio */
 #if WINDOWS_INTERFACE
-	const std::string playCommand = "play audio";
+	const std::string playCommand = "resume audioTrack";
 	mciSendString(playCommand.c_str(), NULL, 0, NULL);
 #endif
 
@@ -135,7 +135,7 @@ void audio::AudioPlayer::stop()
 {
 	/** Stop audio and close file */
 #if WINDOWS_INTERFACE
-	mciSendString("close audio", NULL, 0, NULL);
+	mciSendString("close audioTrack", NULL, 0, NULL);
 	mciSendString("close all", NULL, 0, NULL);
 	mciSendString("clear all", NULL, 0, NULL);
 #endif
@@ -148,7 +148,6 @@ void audio::AudioPlayer::openFile(const std::string& audioFile)
 {
 	/** Get File extension */
 	const std::string fileExt = getFileExtension(audioFile);
-	LOG_DEBUG("FISK " << fileExt);
 	if ( fileExt.empty() ) {
 		throw std::runtime_error("Audio File Name does not have an extension type.");
 	}
@@ -157,9 +156,9 @@ void audio::AudioPlayer::openFile(const std::string& audioFile)
 	/** Open Mp3 File */
 	std::string openCommand = "open \"" + audioFile;
 	if ( fileExt == "mp3" || fileExt == "MP3" ) {
-		openCommand += "\" type mpegvideo alias audio";
+		openCommand += "\" type mpegvideo alias audioTrack";
 	} else if ( fileExt == "wav" || fileExt == "WAV" ) {
-		openCommand += "\" type waveaudio alias audio";
+		openCommand += "\" type waveaudio alias audioTrack";
 	} else {
 		throw std::runtime_error("Unknown audio type.");
 	}

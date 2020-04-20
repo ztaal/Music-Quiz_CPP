@@ -64,8 +64,8 @@ int main(int argc, char* argv[])
 
 		/** Test Code \todo remove this */
 		try {
-			MusicQuiz::QuizEntry entry1("C:/Users/Ztaal/Desktop/5.mp3", "Song 1", 1000, 0, 10000, 30000, 40000, nullptr);
-			MusicQuiz::QuizEntry entry2("C:/Users/Ztaal/Desktop/test.wav", "Song 2", 2000, 0, 10000, 0, 40000, nullptr);
+			MusicQuiz::QuizEntry entry1("C:/Users/Ztaal/Desktop/5.mp3", "Song 1", 1000, 0, 30000, -1, -1, nullptr);
+			MusicQuiz::QuizEntry entry2("C:/Users/Ztaal/Desktop/test.wav", "Song 2", 2000, 0, 100, -1, -1, nullptr);
 
 			MusicQuiz::MusicQuizGUI w;
 			w.layout()->addWidget(&entry1);

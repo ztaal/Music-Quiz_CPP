@@ -16,7 +16,19 @@ namespace MusicQuiz {
 	{
 		Q_OBJECT
 	public:
-		explicit QuizEntry(std::string _audioFile, QString answer, size_t points, size_t startTime, size_t endTime, size_t answerStartTime, size_t answerEndTime, QWidget* parent = nullptr);
+		/** 
+		 * @brief Constructor 
+		 *
+		 * @param[in] audioFile The audio file to play.
+		 * @param[in] answer The entry anwser.
+		 * @param[in] points The number of points obtained by guessing the entry.
+		 * @param[in] startTime The start time of the media in [ms].
+		 * @param[in] answerStartTime The answer media start time in [ms].
+		 * @param[in] endTime The media end time in [ms]. Set to -1 for no end time.
+		 * @param[in] answerEndTime The answer media end time in [ms]. Set to -1 for no end time.
+		 * @param[in] parent The parent widget.
+		 */
+		explicit QuizEntry(std::string audioFile, QString answer, size_t points, size_t startTime, size_t answerStartTime, size_t endTime, size_t answerEndTime, QWidget* parent = nullptr);
 
 		virtual ~QuizEntry() = default;
 
