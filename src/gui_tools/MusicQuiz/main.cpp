@@ -7,6 +7,7 @@
 #include "common/Log.hpp"
 #include "MusicQuizGUI.hpp"
 #include "widgets/QuizEntry.hpp"
+#include "widgets/QuizCategory.hpp"
 
 
 #if defined(_WIN32) || defined(WIN32)
@@ -64,12 +65,21 @@ int main(int argc, char* argv[])
 
 		/** Test Code \todo remove this */
 		try {
-			MusicQuiz::QuizEntry entry1("C:/Users/Ztaal/Desktop/5.mp3", "Song 1", 1000, 0, 30000, -1, -1, nullptr);
-			MusicQuiz::QuizEntry entry2("C:/Users/Ztaal/Desktop/test.wav", "Song 2", 2000, 0, 100, -1, -1, nullptr);
+			MusicQuiz::QuizEntry entry11("C:/Users/Ztaal/Desktop/5.mp3", "Song 1", 1000, 0, 30000, -1, -1, nullptr);
+			MusicQuiz::QuizEntry entry12("C:/Users/Ztaal/Desktop/test.wav", "Song 2", 2000, 0, 100, -1, -1, nullptr);
+			MusicQuiz::QuizEntry entry13("C:/Users/Ztaal/Desktop/5.mp3", "Song 3", 3000, 0, 50000, -1, -1, nullptr);
+
+			MusicQuiz::QuizCategory category1("Category 1", { &entry11, &entry12, &entry13 }, nullptr);
+
+			MusicQuiz::QuizEntry entry21("C:/Users/Ztaal/Desktop/5.mp3", "Song 1", 1000, 0, 30000, -1, -1, nullptr);
+			MusicQuiz::QuizEntry entry22("C:/Users/Ztaal/Desktop/test.wav", "Song 2", 2000, 0, 100, -1, -1, nullptr);
+			MusicQuiz::QuizEntry entry23("C:/Users/Ztaal/Desktop/5.mp3", "Song 3", 3000, 0, 50000, -1, -1, nullptr);
+
+			MusicQuiz::QuizCategory category2("Category 1", { &entry21, &entry22, &entry23 }, nullptr);
 
 			MusicQuiz::MusicQuizGUI w;
-			w.layout()->addWidget(&entry1);
-			w.layout()->addWidget(&entry2);
+			w.layout()->addWidget(&category1);
+			w.layout()->addWidget(&category2);
 			w.show();
 			app.exec();
 		} catch ( const std::exception& err ) {
