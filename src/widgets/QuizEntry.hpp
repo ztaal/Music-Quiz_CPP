@@ -16,8 +16,8 @@ namespace MusicQuiz {
 	{
 		Q_OBJECT
 	public:
-		/** 
-		 * @brief Constructor 
+		/**
+		 * @brief Constructor
 		 *
 		 * @param[in] audioFile The audio file to play.
 		 * @param[in] answer The entry anwser.
@@ -30,11 +30,14 @@ namespace MusicQuiz {
 		 */
 		explicit QuizEntry(std::string audioFile, QString answer, size_t points, size_t startTime, size_t answerStartTime, size_t endTime, size_t answerEndTime, QWidget* parent = nullptr);
 
+		/**
+		 * @brief Default Destructor
+		 */
 		virtual ~QuizEntry() = default;
 
 		enum class EntryState
 		{
-			IDLE = 1,				// Default
+			IDLE = 1, // Default
 			PLAYING = 2,
 			PAUSED = 3,
 			PLAYING_ANSWER = 4,
