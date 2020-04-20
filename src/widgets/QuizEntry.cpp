@@ -7,7 +7,7 @@
 #include "common/Log.hpp"
 
 
-MusicQuiz::QuizEntry::QuizEntry(std::string audioFile, QString answer, size_t points, size_t startTime, size_t answerStartTime, size_t endTime, size_t answerEndTime, QWidget* parent) :
+MusicQuiz::QuizEntry::QuizEntry(QString audioFile, QString answer, size_t points, size_t startTime, size_t answerStartTime, size_t endTime, size_t answerEndTime, QWidget* parent) :
 	_audioFile(audioFile), _answer(answer), _points(points), _startTime(startTime), _answerStartTime(answerStartTime), _endTime(endTime), _answerEndTime(answerEndTime), QPushButton(parent)
 {
 	/** Set Button Text */
@@ -39,9 +39,9 @@ void MusicQuiz::QuizEntry::leftClickEvent()
 		LOG_DEBUG("IDLE State.");
 		_state = EntryState::PLAYING;
 		if ( _endTime == -1 ) {
-			_audioPlayer.play(_audioFile, _startTime);
+			_audioPlayer.play(_audioFile.toStdString(), _startTime);
 		} else {
-			_audioPlayer.play(_audioFile, _startTime, _endTime);
+			_audioPlayer.play(_audioFile.toStdString(), _startTime, _endTime);
 		}
 		break;
 	case EntryState::PLAYING: // Pause Song
@@ -53,9 +53,9 @@ void MusicQuiz::QuizEntry::leftClickEvent()
 		LOG_DEBUG("PAUSED State.");
 		_state = EntryState::PLAYING_ANSWER;
 		if ( _answerEndTime == -1 ) {
-			_audioPlayer.play(_audioFile, _answerStartTime);
+			_audioPlayer.play(_audioFile.toStdString(), _answerStartTime);
 		} else {
-			_audioPlayer.play(_audioFile, _answerStartTime, _answerEndTime);
+			_audioPlayer.play(_audioFile.toStdString(), _answerStartTime, _answerEndTime);
 		}
 		break;
 	case EntryState::PLAYING_ANSWER: // Entry Answered
@@ -67,9 +67,9 @@ void MusicQuiz::QuizEntry::leftClickEvent()
 	case QuizEntry::EntryState::PLAYED: // Play Answer Again
 		LOG_DEBUG("PLAYED State.");
 		if ( _answerEndTime == -1 ) {
-			_audioPlayer.play(_audioFile, _answerStartTime);
+			_audioPlayer.play(_audioFile.toStdString(), _answerStartTime);
 		} else {
-			_audioPlayer.play(_audioFile, _answerStartTime, _answerEndTime);
+			_audioPlayer.play(_audioFile.toStdString(), _answerStartTime, _answerEndTime);
 		}
 		_state = EntryState::PLAYING_ANSWER;
 		break;
@@ -109,9 +109,9 @@ void MusicQuiz::QuizEntry::rightClickEvent()
 		LOG_DEBUG("PLAYED State.");
 		_state = EntryState::PLAYING_ANSWER;
 		if ( _answerEndTime == -1 ) {
-			_audioPlayer.play(_audioFile, _answerStartTime);
+			_audioPlayer.play(_audioFile.toStdString(), _answerStartTime);
 		} else {
-			_audioPlayer.play(_audioFile, _answerStartTime, _answerEndTime);
+			_audioPlayer.play(_audioFile.toStdString(), _answerStartTime, _answerEndTime);
 		}
 		setText(QString(_points));
 		break;
