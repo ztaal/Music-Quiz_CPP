@@ -36,8 +36,9 @@ void MusicQuiz::QuizCategory::createLayout()
 	QVBoxLayout* mainlayout = new QVBoxLayout;
 
 	/** Category Name */
-	QLabel* label = new QLabel(_name);
+	QLabel* label = new QLabel(QString::fromLocal8Bit(_name.toStdString().c_str()));
 	label->setObjectName("categoryLabel");
+	label->setAlignment(Qt::AlignCenter);
 	mainlayout->addWidget(label);
 
 	/** Add Entries */
