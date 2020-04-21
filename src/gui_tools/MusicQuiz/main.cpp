@@ -17,6 +17,11 @@
 #endif
 
 
+void errorMessage(const std::string& title, const std::string& errorMsg)
+{
+	QMessageBox::critical(nullptr, QString::fromLocal8Bit(title.c_str()), QString::fromLocal8Bit(errorMsg.c_str()), QMessageBox::Ok);
+}
+
 int main(int argc, char* argv[])
 {
 	/** Create QApplication */
@@ -48,12 +53,14 @@ int main(int argc, char* argv[])
 			app.exec();
 		} catch ( const std::exception& err ) {
 			LOG_ERROR("Failed to start Music Quiz. " << err.what());
+			errorMessage("Quiz Creator", "Quiz Creator Error. " + std::string(err.what()));
 #if WINDOWS_INTERFACE
 			system("pause");
 #endif
 			return 1;
 		} catch ( ... ) {
 			LOG_ERROR("Failed to start Music Quiz. Unknown Error.");
+			errorMessage("Quiz Creator", "Quiz Creator Error. Unknown Error.");
 #if WINDOWS_INTERFACE
 			system("pause");
 #endif
@@ -84,12 +91,14 @@ int main(int argc, char* argv[])
 			app.exec();
 		} catch ( const std::exception& err ) {
 			LOG_ERROR("Failed to start Quiz Creator. " << err.what());
+			errorMessage("Quiz Creator", "Quiz Creator Error. " + std::string(err.what()));
 #if WINDOWS_INTERFACE
 			system("pause");
 #endif
 			return 1;
 		} catch ( ... ) {
 			LOG_ERROR("Failed to start Quiz Creator. Unknown Error.");
+			errorMessage("Quiz Creator", "Quiz Creator Error. Unknown Error.");
 #if WINDOWS_INTERFACE
 			system("pause");
 #endif
