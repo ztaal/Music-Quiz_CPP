@@ -33,7 +33,7 @@ void MusicQuiz::QuizCategory::createLayout()
 	mainlayout->setSpacing(10);
 
 	/** Category Name */
-	QPushButton* categoryBtn = new QPushButton(QString::fromLocal8Bit(_name.toStdString().c_str()));
+	QPushButton* categoryBtn = new QPushButton(QString::fromLocal8Bit(_name.toStdString().c_str()), this);
 	categoryBtn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	categoryBtn->setObjectName("QuizEntry_categoryLabel");
 	mainlayout->addWidget(categoryBtn);

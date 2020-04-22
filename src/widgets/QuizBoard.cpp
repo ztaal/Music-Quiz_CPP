@@ -3,6 +3,7 @@
 #include <stdexcept>
 
 #include <QLabel>
+#include <QSpacerItem>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QGridLayout>
@@ -23,15 +24,15 @@ MusicQuiz::QuizBoard::QuizBoard(const std::vector<MusicQuiz::QuizCategory*>& cat
 
 	/** Set Row Categories if they match the number of entries in the categories */
 	bool sameNumberOfEntries = true;
-	for ( size_t i = 0; i < _categories.size() - 1; ++i ) {
-		if ( _categories[i]->size() != _categories[i + 1]->size() ) {
+	for ( size_t i = 0; i < _categories.size(); ++i ) {
+		if ( rowCategories.size() != _categories[i]->size() ) {
 			sameNumberOfEntries = false;
 			break;
 		}
 	}
 
 	if ( sameNumberOfEntries ) {
-		//_rowCategories = rowCategories;
+		_rowCategories = rowCategories;
 	}
 
 	/** Create Widget Layout */
@@ -46,7 +47,6 @@ void MusicQuiz::QuizBoard::createLayout()
 	QHBoxLayout* teamsLayout = new QHBoxLayout;
 	mainlayout->setHorizontalSpacing(0);
 	mainlayout->setVerticalSpacing(5);
-	mainlayout->setRowStretch(0, 1);
 	teamsLayout->setSpacing(10);
 	categorylayout->setSpacing(0);
 
@@ -55,28 +55,43 @@ void MusicQuiz::QuizBoard::createLayout()
 		categorylayout->addWidget(_categories[i]);
 		categorylayout->setStretch(i, 1);
 	}
-	mainlayout->addItem(categorylayout, 0, 0);
 
 	/** Row Categories */
 	if ( !_rowCategories.empty() ) {
 		QVBoxLayout* rowCategorylayout = new QVBoxLayout;
-		rowCategorylayout->addWidget(new QLabel(""));
+		rowCategorylayout->setSpacing(10);
+		rowCategorylayout->setSizeConstraint(QVBoxLayout::SetMinimumSize);
+
+		/** Add Empty Box */
+		QPushButton* rowCategoryBtn = new QPushButton("", this);
+		rowCategoryBtn->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Expanding);
+		rowCategoryBtn->setObjectName("QuizEntry_rowCategoryLabel");
+		rowCategorylayout->addWidget(rowCategoryBtn);
+
+		/** Add Row Categories */
 		for ( size_t i = 0; i < _rowCategories.size(); ++i ) {
-			QLabel* rowLabel = new QLabel(_rowCategories[i]);
-			rowCategorylayout->addWidget(rowLabel);
+			rowCategoryBtn = new QPushButton(_rowCategories[i], this);
+			rowCategoryBtn->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Expanding);
+			rowCategoryBtn->setObjectName("QuizEntry_rowCategoryLabel");
+			rowCategorylayout->addWidget(rowCategoryBtn);
 		}
-		mainlayout->addItem(rowCategorylayout, 0, 0);
-		mainlayout->addItem(categorylayout, 0, 1);
-		mainlayout->setColumnStretch(1, 1);
+
+		/** Add layouts to main layout */
+		QGridLayout* tmpLayout = new QGridLayout;
+		tmpLayout->setSizeConstraint(QGridLayout::SetMinimumSize);
+		tmpLayout->addItem(rowCategorylayout, 0, 0);
+		tmpLayout->addItem(categorylayout, 0, 1);
+		tmpLayout->setColumnStretch(1, 1);
+		mainlayout->addItem(tmpLayout, 0, 0);
 	} else {
-		mainlayout->addItem(categorylayout, 0, 0, 1, 2);
+		mainlayout->addItem(categorylayout, 0, 0);
 	}
 
 	/** Teams */
 	for ( size_t i = 0; i < _teams.size(); ++i ) {
 		teamsLayout->addWidget(_teams[i]);
 	}
-	mainlayout->addItem(teamsLayout, 1, 0, 1, 2);
+	mainlayout->addItem(teamsLayout, 1, 0);
 
 	/** Set Layout */
 	setLayout(mainlayout);

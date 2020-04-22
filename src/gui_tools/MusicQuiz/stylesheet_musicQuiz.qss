@@ -38,3 +38,9 @@ QPushButton#QuizEntry_categoryLabel
 	font-size			: 30px;
 	font-weight			: bold;
 }
+
+QPushButton#QuizEntry_rowCategoryLabel
+{
+	font-size			: 25px;
+	min-width			: 200px;
+}

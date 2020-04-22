@@ -17,7 +17,7 @@ MusicQuiz::QuizTeam::QuizTeam(const QString& name, const QColor& color, QWidget*
 	}
 
 	/** Set Team Text */
-	QString str = _name + ": " + QString(_score);
+	QString str = _name + ": " + QString::fromLocal8Bit(std::to_string(_score).c_str());
 	setText(str.toLocal8Bit());
 
 	/** Set Background Color */
