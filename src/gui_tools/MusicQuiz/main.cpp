@@ -6,6 +6,8 @@
 
 #include "common/Log.hpp"
 #include "MusicQuizGUI.hpp"
+#include "widgets/QuizTeam.hpp"
+#include "widgets/QuizBoard.hpp"
 #include "widgets/QuizEntry.hpp"
 #include "widgets/QuizCategory.hpp"
 
@@ -76,17 +78,25 @@ int main(int argc, char* argv[])
 			MusicQuiz::QuizEntry entry12("C:/Users/Ztaal/Desktop/test.wav", "Song 2", 2000, 0, 100, -1, -1, nullptr);
 			MusicQuiz::QuizEntry entry13("C:/Users/Ztaal/Desktop/5.mp3", "Song 3", 3000, 0, 50000, -1, -1, nullptr);
 
-			MusicQuiz::QuizCategory category1("Category 1", { &entry11, &entry12, &entry13 }, nullptr);
+			MusicQuiz::QuizCategory *category1 = new MusicQuiz::QuizCategory("Category 1", { &entry11, &entry12, &entry13 }, nullptr);
 
 			MusicQuiz::QuizEntry entry21("C:/Users/Ztaal/Desktop/5.mp3", "Song 1", 1000, 0, 30000, -1, -1, nullptr);
 			MusicQuiz::QuizEntry entry22("C:/Users/Ztaal/Desktop/test.wav", "Song 2", 2000, 0, 100, -1, -1, nullptr);
 			MusicQuiz::QuizEntry entry23("C:/Users/Ztaal/Desktop/5.mp3", "Song 3", 3000, 0, 50000, -1, -1, nullptr);
 
-			MusicQuiz::QuizCategory category2("Category 1", { &entry21, &entry22, &entry23 }, nullptr);
+			MusicQuiz::QuizCategory* category2 = new MusicQuiz::QuizCategory("Category 2", { &entry21, &entry22, &entry23 }, nullptr);
+
+			MusicQuiz::QuizTeam *team1 = new MusicQuiz::QuizTeam("Team 1", QColor(255, 0, 0), nullptr);
+			MusicQuiz::QuizTeam *team2 = new MusicQuiz::QuizTeam("Team 2", QColor(0, 255, 0), nullptr);
+
+			std::vector< QString > rowCategories = { "Row Category 1", "Row Category 2", "Row Category 3" };
+			std::vector< MusicQuiz::QuizTeam* > teams = { team1, team2 };
+			std::vector< MusicQuiz::QuizCategory* > categories = { category1, category2 };
+			MusicQuiz::QuizBoard board(categories, rowCategories, teams, nullptr);
 
 			MusicQuiz::MusicQuizGUI w;
-			w.layout()->addWidget(&category1);
-			w.layout()->addWidget(&category2);
+			w.setObjectName("MusicQuiz");
+			w.layout()->addWidget(&board);
 			w.show();
 			app.exec();
 		} catch ( const std::exception& err ) {
