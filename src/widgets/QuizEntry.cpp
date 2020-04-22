@@ -2,6 +2,7 @@
 
 #include <stdexcept>
 
+#include <QStyle>
 #include <QMouseEvent>
 
 #include "common/Log.hpp"
@@ -22,10 +23,33 @@ MusicQuiz::QuizEntry::QuizEntry(QString audioFile, QString answer, size_t points
 
 void MusicQuiz::QuizEntry::mouseReleaseEvent(QMouseEvent* event)
 {
+	/** Handle Event */
 	if ( event->button() == Qt::LeftButton ) {
 		leftClickEvent();
 	} else if ( event->button() == Qt::RightButton ) {
 		rightClickEvent();
+	}
+
+	/** Set Object Name (this changes the color) */
+	switch ( _state )
+	{
+	case MusicQuiz::QuizEntry::EntryState::IDLE:
+		setStyleSheet("background-color	: rgb(0, 0, 205)");
+		break;
+	case MusicQuiz::QuizEntry::EntryState::PLAYING:
+		setStyleSheet("background-color	: rgb(0, 0, 139)");
+		break;
+	case MusicQuiz::QuizEntry::EntryState::PAUSED:
+		setStyleSheet("background-color	: rgb(255, 215, 0)");
+		break;
+	case MusicQuiz::QuizEntry::EntryState::PLAYING_ANSWER:
+		setStyleSheet("background-color	: rgb(0, 128, 0)");
+		break;
+	case MusicQuiz::QuizEntry::EntryState::PLAYED:
+		setStyleSheet("background-color	: rgb(0, 0, 205)");
+		break;
+	default:
+		break;
 	}
 }
 

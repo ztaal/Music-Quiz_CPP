@@ -1,0 +1,17 @@
+QPushButton[objectName^="quizEntry"]
+{
+	color				: Black;
+	font-size			: 25px;
+
+	background-color	: rgb(0, 0, 255);
+
+	border-color		: rgb(0, 0, 255);
+	border-radius		: 0px;
+	border-width		: 1px;
+	border-style		: solid;
+}
+
+QPushButton[objectName^="_dayliDouble"]
+{
+	border-color		: rgb(255,215,0);
+}
