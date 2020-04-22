@@ -11,20 +11,16 @@
 
 
 MusicQuiz::QuizCategory::QuizCategory(QString name, const std::vector<MusicQuiz::QuizEntry*>& entries, QWidget* parent) :
-	QWidget(parent)
+	QWidget(parent), _name(name), _entries(entries)
 {
 	/** Sanity Check */
-	if ( name.isEmpty() ) {
+	if ( _name.isEmpty() ) {
 		throw std::runtime_error("Cannot create category without a name.");
 	}
 
-	if ( entries.empty() ) {
+	if ( _entries.empty() ) {
 		throw std::runtime_error("Cannot create category with empty list of entries.");
 	}
-
-	/** Set Variables */
-	_name = name;
-	_entries = entries;
 
 	/** Create Widget Layout */
 	createLayout();
@@ -34,12 +30,13 @@ void MusicQuiz::QuizCategory::createLayout()
 {
 	/** Layout */
 	QVBoxLayout* mainlayout = new QVBoxLayout;
+	mainlayout->setSpacing(10);
 
 	/** Category Name */
-	QLabel* label = new QLabel(QString::fromLocal8Bit(_name.toStdString().c_str()));
-	label->setObjectName("categoryLabel");
-	label->setAlignment(Qt::AlignCenter);
-	mainlayout->addWidget(label);
+	QPushButton* categoryBtn = new QPushButton(QString::fromLocal8Bit(_name.toStdString().c_str()));
+	categoryBtn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	categoryBtn->setObjectName("QuizEntry_categoryLabel");
+	mainlayout->addWidget(categoryBtn);
 
 	/** Add Entries */
 	for ( size_t i = 0; i < _entries.size(); ++i ) {
@@ -50,7 +47,7 @@ void MusicQuiz::QuizCategory::createLayout()
 	setLayout(mainlayout);
 }
 
-size_t MusicQuiz::QuizCategory::getSize()
+size_t MusicQuiz::QuizCategory::size()
 {
 	return _entries.size();
 }

@@ -33,7 +33,7 @@ namespace MusicQuiz {
 		 *
 		 * @return The size of the category.
 		 */
-		size_t getSize();
+		size_t size();
 
 	public slots:
 
