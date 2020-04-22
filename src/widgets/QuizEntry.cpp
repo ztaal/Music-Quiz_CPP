@@ -37,7 +37,7 @@ void MusicQuiz::QuizEntry::mouseReleaseEvent(QMouseEvent* event)
 	switch ( _state )
 	{
 	case MusicQuiz::QuizEntry::EntryState::IDLE:
-		setStyleSheet("background-color	: rgb(0, 0, 205)");
+		setStyleSheet("background-color	: rgb(0, 0, 255)");
 		break;
 	case MusicQuiz::QuizEntry::EntryState::PLAYING:
 		setStyleSheet("background-color	: rgb(0, 0, 139)");
