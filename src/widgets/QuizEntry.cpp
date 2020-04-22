@@ -2,14 +2,14 @@
 
 #include <stdexcept>
 
-#include <QStyle>
 #include <QMouseEvent>
+#include <QSizePolicy>
 
 #include "common/Log.hpp"
 
 
-MusicQuiz::QuizEntry::QuizEntry(QString audioFile, QString answer, size_t points, size_t startTime, size_t answerStartTime, size_t endTime, size_t answerEndTime, QWidget* parent) :
-	_audioFile(audioFile), _answer(answer), _points(points), _startTime(startTime), _answerStartTime(answerStartTime), _endTime(endTime), _answerEndTime(answerEndTime), QPushButton(parent)
+MusicQuiz::QuizEntry::QuizEntry(const QString &audioFile, const QString &answer, const size_t points, const size_t startTime, const size_t answerStartTime, const size_t endTime, const size_t answerEndTime, QWidget* parent) :
+	QPushButton(parent), _audioFile(audioFile), _answer(answer), _points(points), _startTime(startTime), _answerStartTime(answerStartTime), _endTime(endTime), _answerEndTime(answerEndTime)
 {
 	/** Set Button Text */
 	setText(QString::fromLocal8Bit(std::to_string(_points).c_str()));
@@ -18,7 +18,10 @@ MusicQuiz::QuizEntry::QuizEntry(QString audioFile, QString answer, size_t points
 	_state = EntryState::IDLE;
 
 	/** Set Object Name */
-	setObjectName("quizEntry");
+	setObjectName("QuizEntry");
+
+	/** Set Size Policy */
+	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
 
 void MusicQuiz::QuizEntry::mouseReleaseEvent(QMouseEvent* event)
