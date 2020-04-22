@@ -52,6 +52,5 @@ void MusicQuiz::QuizCategory::createLayout()
 
 size_t MusicQuiz::QuizCategory::getSize()
 {
-	//return _entries.size();
-	return 0;
+	return _entries.size();
 }
