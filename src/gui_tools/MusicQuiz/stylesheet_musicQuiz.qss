@@ -1,6 +1,12 @@
-QPushButton[objectName^="quizEntry"]
+QDialog#MusicQuiz
 {
-	color				: Black;
+	color				: Yellow;
+	background-color	: rgb(0, 0, 200);
+}
+
+QPushButton[objectName^="QuizEntry"]
+{
+	color				: Yellow;
 	font-size			: 25px;
 
 	background-color	: rgb(0, 0, 255);
@@ -9,9 +15,26 @@ QPushButton[objectName^="quizEntry"]
 	border-radius		: 0px;
 	border-width		: 1px;
 	border-style		: solid;
+
+	min-height			: 100px;
+	min-width			: 200px;
+}
+
+QPushButton[objectName^="TeamEntry"]
+{
+	font-size			: 25px;
+
+	min-height			: 100px;
+	min-width			: 200px;
 }
 
 QPushButton[objectName^="_dayliDouble"]
 {
-	border-color		: rgb(255,215,0);
+	border-color		: rgb(255, 215, 0);
+}
+
+QPushButton#QuizEntry_categoryLabel
+{
+	font-size			: 30px;
+	font-weight			: bold;
 }
