@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QColor>
 #include <QString>
 #include <QObject>
 #include <QWidget>
@@ -34,11 +35,25 @@ namespace MusicQuiz {
 		void addPoints(size_t points);
 
 		/**
+		 * @brief Gets the team name.
+		 *
+		 * @return The name.
+		 */
+		QString getName() const;
+
+		/**
 		 * @brief Gets the team score.
 		 *
 		 * @return The score.
 		 */
-		size_t getScore();
+		size_t getScore() const;
+
+		/**
+		 * @brief Gets the team color.
+		 *
+		 * @return The color.
+		 */
+		QColor getColor() const;
 
 	protected:
 

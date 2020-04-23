@@ -35,6 +35,11 @@ namespace MusicQuiz {
 		 */
 		size_t size();
 
+		/** Overload [] operator */
+		MusicQuiz::QuizEntry*& operator[](int index)
+		{
+			return _entries[index];
+		};
 	public slots:
 
 	protected:
@@ -45,7 +50,6 @@ namespace MusicQuiz {
 
 		/** Variables */
 		QString _name = "";
-
 		std::vector<MusicQuiz::QuizEntry*> _entries;
 	};
 }

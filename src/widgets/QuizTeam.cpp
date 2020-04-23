@@ -18,7 +18,7 @@ MusicQuiz::QuizTeam::QuizTeam(const QString& name, const QColor& color, QWidget*
 
 	/** Set Team Text */
 	QString str = _name + ": " + QString::fromLocal8Bit(std::to_string(_score).c_str());
-	setText(str.toLocal8Bit());
+	setText(str);
 
 	/** Set Background Color */
 	std::stringstream ss;
@@ -38,11 +38,21 @@ void MusicQuiz::QuizTeam::addPoints(size_t points)
 	_score += points;
 
 	/** Update Text */
-	QString str = _name + ": " + QString(_score);
-	setText(str.toLocal8Bit());
+	QString str = _name + ": " + QString::fromLocal8Bit(std::to_string(_score).c_str());
+	setText(str);
 }
 
-size_t MusicQuiz::QuizTeam::getScore()
+QString MusicQuiz::QuizTeam::getName() const
+{
+	return _name;
+}
+
+size_t MusicQuiz::QuizTeam::getScore() const
 {
 	return _score;
+}
+
+QColor MusicQuiz::QuizTeam::getColor() const
+{
+	return _color;
 }

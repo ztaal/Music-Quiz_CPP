@@ -7,10 +7,12 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QGridLayout>
+#include <QMessageBox>
 
 #include "common/Log.hpp"
 
 #include "widgets/QuizTeam.hpp"
+#include "widgets/QuizEntry.hpp"
 #include "widgets/QuizCategory.hpp"
 
 
@@ -54,6 +56,14 @@ void MusicQuiz::QuizBoard::createLayout()
 	for ( size_t i = 0; i < _categories.size(); ++i ) {
 		categorylayout->addWidget(_categories[i]);
 		categorylayout->setStretch(i, 1);
+
+		/** Connect Buttons */
+		for ( size_t j = 0; j < _categories[i]->size(); ++j ) {
+			MusicQuiz::QuizEntry* quizEntry = (*_categories[i])[j];
+			if ( quizEntry != nullptr ) {
+				connect(quizEntry, SIGNAL(answered(size_t)), this, SLOT(handleAnswer(size_t)));
+			}
+		}
 	}
 
 	/** Row Categories */
@@ -64,14 +74,14 @@ void MusicQuiz::QuizBoard::createLayout()
 
 		/** Add Empty Box */
 		QPushButton* rowCategoryBtn = new QPushButton("", this);
-		rowCategoryBtn->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Expanding);
+		rowCategoryBtn->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 		rowCategoryBtn->setObjectName("QuizEntry_rowCategoryLabel");
 		rowCategorylayout->addWidget(rowCategoryBtn);
 
 		/** Add Row Categories */
 		for ( size_t i = 0; i < _rowCategories.size(); ++i ) {
 			rowCategoryBtn = new QPushButton(_rowCategories[i], this);
-			rowCategoryBtn->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Expanding);
+			rowCategoryBtn->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
 			rowCategoryBtn->setObjectName("QuizEntry_rowCategoryLabel");
 			rowCategorylayout->addWidget(rowCategoryBtn);
 		}
@@ -95,4 +105,45 @@ void MusicQuiz::QuizBoard::createLayout()
 
 	/** Set Layout */
 	setLayout(mainlayout);
+}
+
+void MusicQuiz::QuizBoard::handleAnswer(const size_t points)
+{
+	/** Sanity Check */
+	if ( sender() == nullptr ) {
+		return;
+	}
+
+	MusicQuiz::QuizEntry* button = dynamic_cast<MusicQuiz::QuizEntry*>(sender());
+	if ( button == nullptr ) {
+		return;
+	}
+
+	if ( !_teams.empty() ) {
+
+		/** Select which team guessed the entry */
+		QMessageBox msgBox(QMessageBox::Question, "Select Team", "Select Team", QMessageBox::NoButton, nullptr, Qt::WindowStaysOnTopHint);
+		std::vector< QAbstractButton* > teamButtons;
+		for ( size_t i = 0; i < _teams.size(); ++i ) {
+			teamButtons.push_back(msgBox.addButton(_teams[i]->getName(), QMessageBox::YesRole));
+		}
+		QAbstractButton* exitButton = msgBox.addButton("No One", QMessageBox::NoRole); 
+		msgBox.setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
+		msgBox.exec();
+
+		MusicQuiz::QuizTeam* team = nullptr;
+		for ( size_t i = 0; i < teamButtons.size(); ++i ) {
+			if ( msgBox.clickedButton() == teamButtons[i] ) {
+				team = _teams[i];
+			}
+		}
+
+		if ( team != nullptr ) {
+			/** Add Points to the team */
+			team->addPoints(points);
+
+			/** Set button color */
+			button->setColor(team->getColor());
+		}
+	}
 }

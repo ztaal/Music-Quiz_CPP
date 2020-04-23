@@ -37,19 +37,23 @@ void MusicQuiz::QuizEntry::mouseReleaseEvent(QMouseEvent* event)
 	switch ( _state )
 	{
 	case MusicQuiz::QuizEntry::EntryState::IDLE:
-		setStyleSheet("background-color	: rgb(0, 0, 255)");
+		applyColor(QColor(0, 0, 255));
 		break;
 	case MusicQuiz::QuizEntry::EntryState::PLAYING:
-		setStyleSheet("background-color	: rgb(0, 0, 139)");
+		applyColor(QColor(0, 0, 139));
 		break;
 	case MusicQuiz::QuizEntry::EntryState::PAUSED:
-		setStyleSheet("background-color	: rgb(255, 215, 0)");
+		applyColor(QColor(255, 215, 0));
 		break;
 	case MusicQuiz::QuizEntry::EntryState::PLAYING_ANSWER:
-		setStyleSheet("background-color	: rgb(0, 128, 0)");
+		applyColor(QColor(0, 128, 0));
+		if ( !_entryAnswered ) {
+			_entryAnswered = true;
+			emit answered(_points);
+		}
 		break;
 	case MusicQuiz::QuizEntry::EntryState::PLAYED:
-		setStyleSheet("background-color	: rgb(0, 0, 205)");
+		applyColor(_answeredColor);
 		break;
 	default:
 		break;
@@ -119,6 +123,7 @@ void MusicQuiz::QuizEntry::rightClickEvent()
 		setText(QString::fromLocal8Bit(_answer.toStdString().c_str()));
 		break;
 	case QuizEntry::EntryState::PLAYED: // Back to idle
+		_entryAnswered = false;
 		_state = EntryState::IDLE;
 		setText(QString::fromLocal8Bit(std::to_string(_points).c_str()));
 		break;
@@ -126,4 +131,17 @@ void MusicQuiz::QuizEntry::rightClickEvent()
 		throw std::runtime_error("Unknown Quiz Entry State Encountered.");
 		break;
 	}
+}
+
+void MusicQuiz::QuizEntry::setColor(const QColor &color)
+{
+	/** Set Color */
+	_answeredColor = color;
+}
+
+void MusicQuiz::QuizEntry::applyColor(const QColor& color)
+{
+	std::stringstream ss;
+	ss << "background-color	: rgb(" << color.red() << ", " << color.green() << ", " << color.blue() << ");";
+	setStyleSheet(QString::fromStdString(ss.str()));
 }

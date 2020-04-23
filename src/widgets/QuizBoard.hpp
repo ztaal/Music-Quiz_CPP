@@ -34,7 +34,12 @@ namespace MusicQuiz {
 		virtual ~QuizBoard() = default;
 
 	public slots:
-
+		/**
+		 * @brief Handle answer.
+		 *
+		 * @param[in] points The points from the entry.
+		 */
+		void handleAnswer(size_t points);
 	protected:
 		/**
 		 * @brief Creates the category layout.

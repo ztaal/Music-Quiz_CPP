@@ -45,6 +45,15 @@ namespace MusicQuiz {
 		};
 
 	public slots:
+		/**
+		 * @brief Sets the color of the button (used after the entry is answered).
+		 *
+		 * @param[in] color The color.
+		 */
+		void setColor(const QColor &color);
+
+	signals:
+		void answered(size_t points);
 
 	protected:
 		/**
@@ -64,6 +73,13 @@ namespace MusicQuiz {
 		 */
 		void rightClickEvent();
 
+		/**
+		 * @brief Applys the color to the button.
+		 *
+		 * @param[in] color The color.
+		 */
+		void applyColor(const QColor& color);
+
 		/** Variables */
 		size_t _points = 0;
 
@@ -74,6 +90,8 @@ namespace MusicQuiz {
 		size_t _answerEndTime = 0;
 
 		QString _answer = "";
+		bool _entryAnswered = false;
+		QColor _answeredColor = QColor(0, 0, 205);
 
 		QString _audioFile = "";
 
