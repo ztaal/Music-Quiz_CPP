@@ -44,6 +44,13 @@ namespace MusicQuiz {
 			PLAYED = 5,
 		};
 
+		/**
+		 * @brief Get the entry state.
+		 *
+		 * @return The entry state.
+		 */
+		EntryState getEntryState();
+
 	public slots:
 		/**
 		 * @brief Sets the color of the button (used after the entry is answered).
@@ -54,6 +61,7 @@ namespace MusicQuiz {
 
 	signals:
 		void answered(size_t points);
+		void played();
 
 	protected:
 		/**

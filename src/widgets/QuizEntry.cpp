@@ -53,6 +53,7 @@ void MusicQuiz::QuizEntry::mouseReleaseEvent(QMouseEvent* event)
 		}
 		break;
 	case MusicQuiz::QuizEntry::EntryState::PLAYED:
+		emit played();
 		applyColor(_answeredColor);
 		break;
 	default:
@@ -144,4 +145,9 @@ void MusicQuiz::QuizEntry::applyColor(const QColor& color)
 	std::stringstream ss;
 	ss << "background-color	: rgb(" << color.red() << ", " << color.green() << ", " << color.blue() << ");";
 	setStyleSheet(QString::fromStdString(ss.str()));
+}
+
+MusicQuiz::QuizEntry::EntryState MusicQuiz::QuizEntry::getEntryState()
+{
+	return _state;
 }

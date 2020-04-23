@@ -40,6 +40,15 @@ namespace MusicQuiz {
 		 * @param[in] points The points from the entry.
 		 */
 		void handleAnswer(size_t points);
+
+		/**
+		 * @brief Checks if game is over.
+		 */
+		void handleGameComplete();
+
+	signals:
+		void gameComplete(std::vector<MusicQuiz::QuizTeam*> winningTeam);
+
 	protected:
 		/**
 		 * @brief Creates the category layout.

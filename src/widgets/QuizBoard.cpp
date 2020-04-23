@@ -1,6 +1,7 @@
 #include "QuizBoard.hpp"
 
 #include <stdexcept>
+#include <algorithm>
 
 #include <QLabel>
 #include <QSpacerItem>
@@ -62,6 +63,7 @@ void MusicQuiz::QuizBoard::createLayout()
 			MusicQuiz::QuizEntry* quizEntry = (*_categories[i])[j];
 			if ( quizEntry != nullptr ) {
 				connect(quizEntry, SIGNAL(answered(size_t)), this, SLOT(handleAnswer(size_t)));
+				connect(quizEntry, SIGNAL(played()), this, SLOT(handleGameComplete()));
 			}
 		}
 	}
@@ -145,5 +147,34 @@ void MusicQuiz::QuizBoard::handleAnswer(const size_t points)
 			/** Set button color */
 			button->setColor(team->getColor());
 		}
+	}
+}
+
+void MusicQuiz::QuizBoard::handleGameComplete()
+{
+	/** Check if game has ended */
+	bool gameComplete = true;
+	for ( size_t i = 0; i < _categories.size(); ++i ) {
+		for ( size_t j = 0; j < _categories[i]->size(); ++j ) {
+			if ( (*_categories[i])[j]->getEntryState() != QuizEntry::EntryState::PLAYED ) {
+				gameComplete = false;
+				break;
+			}
+		}
+	}
+
+	if ( gameComplete ) {
+		/** Find Winner */
+		const size_t highScore = (*std::max_element(_teams.begin(), _teams.end(), [](const MusicQuiz::QuizTeam* a, const MusicQuiz::QuizTeam* b) {
+			return a->getScore() < b->getScore(); }))->getScore();
+			std::vector<MusicQuiz::QuizTeam*> winningTeams;
+			for ( size_t i = 0; i < _teams.size(); ++i ) {
+				if ( _teams[i]->getScore() == highScore ) {
+					winningTeams.push_back(_teams[i]);
+					LOG_DEBUG("Winning Team(s): " << _teams[i]->getName().toStdString());
+				}
+			}
+
+			//emit gameComplete(winningTeams);
 	}
 }
