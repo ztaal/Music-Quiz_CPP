@@ -80,9 +80,9 @@ int main(int argc, char* argv[])
 
 			MusicQuiz::QuizCategory *category1 = new MusicQuiz::QuizCategory("Category 1", { &entry11, &entry12, &entry13 }, nullptr);
 
-			MusicQuiz::QuizEntry entry21("C:/Users/Ztaal/Desktop/5.mp3", "Song 1", 1000, 0, 30000, -1, -1, nullptr);
-			MusicQuiz::QuizEntry entry22("C:/Users/Ztaal/Desktop/test.wav", "Song 2", 2000, 0, 100, -1, -1, nullptr);
-			MusicQuiz::QuizEntry entry23("C:/Users/Ztaal/Desktop/5.mp3", "Song 3", 3000, 0, 50000, -1, -1, nullptr);
+			MusicQuiz::QuizEntry entry21("C:/Users/Ztaal/Desktop/5.mp3", "Song 1", 100, 0, 30000, -1, -1, nullptr);
+			MusicQuiz::QuizEntry entry22("C:/Users/Ztaal/Desktop/test.wav", "Song 2", 200, 0, 100, -1, -1, nullptr);
+			MusicQuiz::QuizEntry entry23("C:/Users/Ztaal/Desktop/5.mp3", "Song 3", 300, 0, 50000, -1, -1, nullptr);
 
 			MusicQuiz::QuizCategory* category2 = new MusicQuiz::QuizCategory("Category 2", { &entry21, &entry22, &entry23 }, nullptr);
 

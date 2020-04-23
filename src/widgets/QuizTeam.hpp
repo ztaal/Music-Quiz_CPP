@@ -1,6 +1,10 @@
 #pragma once
 
+#include <atomic>
+#include <thread>
+
 #include <QColor>
+#include <QTimer>
 #include <QString>
 #include <QObject>
 #include <QWidget>
@@ -22,9 +26,9 @@ namespace MusicQuiz {
 		explicit QuizTeam(const QString& name, const QColor& color, QWidget* parent = nullptr);
 
 		/**
-		 * @brief Default Destructor
+		 * @brief Destructor
 		 */
-		virtual ~QuizTeam() = default;
+		virtual ~QuizTeam();
 
 	public slots:
 		/**
@@ -55,11 +59,23 @@ namespace MusicQuiz {
 		 */
 		QColor getColor() const;
 
+	private slots:
+		/**
+		 * @brief Accumulates the score given by the addPoints function.
+		 */
+		void accumulateScore();
+
 	protected:
 
 		/** Variables */
 		QString _name = "";
 		size_t _score = 0;
 		QColor _color = QColor(0, 0, 0);
+
+		QTimer _scoreCntTimer;
+		size_t _scoreCntRate = 0;
+		const size_t _scoreTimerDelay = 25; // ms
+
+		std::atomic<size_t> _newPoints = 0;
 	};
 }
