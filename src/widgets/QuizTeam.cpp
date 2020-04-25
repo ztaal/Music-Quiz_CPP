@@ -84,7 +84,7 @@ QString MusicQuiz::QuizTeam::getName() const
 
 size_t MusicQuiz::QuizTeam::getScore() const
 {
-	return _score;
+	return _score + _newPoints;
 }
 
 QColor MusicQuiz::QuizTeam::getColor() const
