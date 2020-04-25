@@ -43,7 +43,6 @@ namespace MusicQuiz {
 		virtual ~MusicQuizController();
 
 	public slots:
-
 		/** 
 		 * @brief Handles the close event.
 		 *

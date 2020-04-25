@@ -29,6 +29,16 @@ MusicQuiz::MusicQuizController::~MusicQuizController()
 	if ( _updateTimer.isActive() ) {
 		_updateTimer.stop();
 	}
+
+	/** Close Quiz Creator */
+	if ( _quizSelector != nullptr ) {
+		_quizSelector->close();
+	}
+
+	/** Close Quiz Board */
+	if ( _quizBoard != nullptr ) {
+		_quizBoard->close();
+	}
 }
 
 void MusicQuiz::MusicQuizController::executeQuiz()
@@ -111,7 +121,6 @@ void MusicQuiz::MusicQuizController::executeQuiz()
 		break;
 	}
 }
-
 
 void MusicQuiz::MusicQuizController::closeEvent(QCloseEvent* event)
 {
