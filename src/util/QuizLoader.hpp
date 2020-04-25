@@ -13,7 +13,11 @@ namespace MusicQuiz {
 		public:
 			struct QuizPreview
 			{
-
+				std::string quizName = "";
+				bool includeSongs = false;
+				bool includeVideos = false;
+				std::string quizDescription = "";
+				std::vector<std::string> categories;
 			};
 
 			/**
