@@ -129,7 +129,7 @@ void MusicQuiz::QuizBoard::handleAnswer(const size_t points)
 		for ( size_t i = 0; i < _teams.size(); ++i ) {
 			teamButtons.push_back(msgBox.addButton(_teams[i]->getName(), QMessageBox::YesRole));
 		}
-		QAbstractButton* exitButton = msgBox.addButton("No One", QMessageBox::NoRole); 
+		QAbstractButton* exitButton = msgBox.addButton("No One", QMessageBox::NoRole);
 		msgBox.setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
 		msgBox.exec();
 
@@ -153,28 +153,27 @@ void MusicQuiz::QuizBoard::handleAnswer(const size_t points)
 void MusicQuiz::QuizBoard::handleGameComplete()
 {
 	/** Check if game has ended */
-	bool gameComplete = true;
+	bool isGameComplete = true;
 	for ( size_t i = 0; i < _categories.size(); ++i ) {
 		for ( size_t j = 0; j < _categories[i]->size(); ++j ) {
 			if ( (*_categories[i])[j]->getEntryState() != QuizEntry::EntryState::PLAYED ) {
-				gameComplete = false;
+				isGameComplete = false;
 				break;
 			}
 		}
 	}
 
-	if ( gameComplete ) {
+	if ( isGameComplete ) {
 		/** Find Winner */
-		const size_t highScore = (*std::max_element(_teams.begin(), _teams.end(), [](const MusicQuiz::QuizTeam* a, const MusicQuiz::QuizTeam* b) {
-			return a->getScore() < b->getScore(); }))->getScore();
-			std::vector<MusicQuiz::QuizTeam*> winningTeams;
-			for ( size_t i = 0; i < _teams.size(); ++i ) {
-				if ( _teams[i]->getScore() == highScore ) {
-					winningTeams.push_back(_teams[i]);
-					LOG_DEBUG("Winning Team(s): " << _teams[i]->getName().toStdString());
-				}
+		const size_t highScore = (*std::max_element(_teams.begin(), _teams.end(), [](const MusicQuiz::QuizTeam* a, const MusicQuiz::QuizTeam* b) {return a->getScore() < b->getScore(); }))->getScore();
+		std::vector<MusicQuiz::QuizTeam*> winningTeams;
+		for ( size_t i = 0; i < _teams.size(); ++i ) {
+			if ( _teams[i]->getScore() == highScore ) {
+				winningTeams.push_back(_teams[i]);
+				LOG_DEBUG("Winning Team(s): " << _teams[i]->getName().toStdString());
 			}
+		}
 
-			//emit gameComplete(winningTeams);
+		emit gameComplete(winningTeams);
 	}
 }
