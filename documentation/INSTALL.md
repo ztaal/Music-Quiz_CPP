@@ -36,3 +36,4 @@ Windows 10:
   - Example 'D:\boost_1_69_0"
 - Add 'BOOST_LIBRARYDIR' with the msvc folder as value.
   - Example 'D:\boost_1_69_0\lib32-msvc-14.1"
+- Add 'boost_1_69_0\lib32-msvc-14.1' to the path variable.
