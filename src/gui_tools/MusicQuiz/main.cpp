@@ -57,6 +57,8 @@ int main(int argc, char* argv[])
 			for ( size_t i = 0; i < quizList.size(); ++i ) {
 				LOG_DEBUG("Quiz: " << quizList[i]);
 			}
+			MusicQuiz::util::QuizLoader::QuizPreview quizPreview = MusicQuiz::util::QuizLoader::getQuizPreview(1);
+			LOG_DEBUG(quizPreview);
 
 			MusicQuiz::MusicQuizGUI w;
 			w.show();
