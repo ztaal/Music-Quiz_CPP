@@ -7,7 +7,7 @@
 #include "common/Log.hpp"
 #include "util/QuizLoader.hpp"
 
-#include "MusicQuizGUI.hpp"
+#include "MusicQuizController.hpp"
 
 #include "widgets/QuizTeam.hpp"
 #include "widgets/QuizBoard.hpp"
@@ -60,8 +60,7 @@ int main(int argc, char* argv[])
 			MusicQuiz::util::QuizLoader::QuizPreview quizPreview = MusicQuiz::util::QuizLoader::getQuizPreview(1);
 			LOG_DEBUG(quizPreview);
 
-			MusicQuiz::MusicQuizGUI w;
-			w.show();
+			MusicQuiz::MusicQuizController w;
 			app.exec();
 		} catch ( const std::exception& err ) {
 			LOG_ERROR("Failed to start Music Quiz. " << err.what());
@@ -102,12 +101,9 @@ int main(int argc, char* argv[])
 			std::vector< QString > rowCategories = { "Row Category 1", "Row Category 2", "Row Category 3" };
 			std::vector< MusicQuiz::QuizTeam* > teams = { team1, team2 };
 			std::vector< MusicQuiz::QuizCategory* > categories = { category1, category2 };
-			MusicQuiz::QuizBoard board(categories, rowCategories, teams, nullptr);
+			MusicQuiz::QuizBoard* board = new MusicQuiz::QuizBoard(categories, rowCategories, teams, nullptr);
 
-			MusicQuiz::MusicQuizGUI w;
-			w.setObjectName("MusicQuiz");
-			w.layout()->addWidget(&board);
-			w.show();
+			board->exec();
 			app.exec();
 		} catch ( const std::exception& err ) {
 			LOG_ERROR("Failed to start Quiz Creator. " << err.what());

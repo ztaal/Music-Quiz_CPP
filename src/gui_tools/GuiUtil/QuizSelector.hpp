@@ -5,13 +5,15 @@
 
 #include <QObject>
 #include <QWidget>
+#include <QDialog>
 #include <QTextEdit>
+#include <QKeyEvent>
 #include <QListWidget>
 
 #include "util/QuizLoader.hpp"
 
 namespace MusicQuiz {
-	class QuizSelector : public QWidget
+	class QuizSelector : public QDialog
 	{
 		Q_OBJECT
 	public:
@@ -28,6 +30,12 @@ namespace MusicQuiz {
 		virtual ~QuizSelector() = default;
 
 	public slots:
+		/**
+		 * @brief Handles the key press events.
+		 *
+		 * @param[in] event The event.
+		 */
+		void keyPressEvent(QKeyEvent* event);
 
 	private slots:
 		/**
@@ -49,7 +57,7 @@ namespace MusicQuiz {
 
 	signals:
 		void quitSignal();
-		void quizSelectedSignal(const std::string& quiz);
+		void quizSelectedSignal(std::string quiz);
 	protected:
 		/**
 		 * @brief Creates the category layout.

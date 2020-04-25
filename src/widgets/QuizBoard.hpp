@@ -7,13 +7,14 @@
 #include <QColor>
 #include <QString>
 #include <QObject>
-#include <QWidget>
+#include <QDialog>
+#include <QKeyEvent>
 
 
 namespace MusicQuiz {
 	class QuizTeam;
 	class QuizCategory;
-	class QuizBoard : public QWidget
+	class QuizBoard : public QDialog
 	{
 		Q_OBJECT
 	public:
@@ -46,7 +47,15 @@ namespace MusicQuiz {
 		 */
 		void handleGameComplete();
 
+		/**
+		 * @brief Handles the key press events.
+		 *
+		 * @param[in] event The event.
+		 */
+		void keyPressEvent(QKeyEvent* event);
+
 	signals:
+		void quitSignal();
 		void gameComplete(std::vector<MusicQuiz::QuizTeam*> winningTeam);
 
 	protected:

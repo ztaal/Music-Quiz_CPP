@@ -18,8 +18,11 @@
 
 
 MusicQuiz::QuizBoard::QuizBoard(const std::vector<MusicQuiz::QuizCategory*>& categories, const std::vector<QString>& rowCategories, const std::vector<MusicQuiz::QuizTeam*>& teams, QWidget* parent) :
-	QWidget(parent), _categories(categories), _teams(teams)
+	QDialog(parent), _categories(categories), _teams(teams)
 {
+	/** Set Window Flags */
+	setWindowFlags(windowFlags() | Qt::WindowMaximizeButtonHint | Qt::WindowMinimizeButtonHint);
+
 	/** Sanity Check */
 	if ( _categories.empty() ) {
 		throw std::runtime_error("Cannot create quiz board without any categories.");
@@ -175,5 +178,18 @@ void MusicQuiz::QuizBoard::handleGameComplete()
 		}
 
 		emit gameComplete(winningTeams);
+	}
+}
+
+void MusicQuiz::QuizBoard::keyPressEvent(QKeyEvent* event)
+{
+	switch ( event->key() )
+	{
+	case Qt::Key_Escape:
+		emit quitSignal();
+		break;
+	default:
+		QWidget::keyPressEvent(event);
+		break;
 	}
 }

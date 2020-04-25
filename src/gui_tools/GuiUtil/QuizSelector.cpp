@@ -18,8 +18,11 @@
 
 
 MusicQuiz::QuizSelector::QuizSelector(QWidget* parent) :
-	QWidget(parent)
+	QDialog(parent)
 {
+	/** Set Window Flags */
+	setWindowFlags(windowFlags() | Qt::WindowMaximizeButtonHint | Qt::WindowMinimizeButtonHint);
+
 	/** Load Quizzes */
 	_quizList = MusicQuiz::util::QuizLoader::getListOfQuizzes();	
 	if ( _quizList.empty() ) {
@@ -44,6 +47,7 @@ void MusicQuiz::QuizSelector::createLayout()
 	QHBoxLayout* buttonLayout = new QHBoxLayout;
 	mainlayout->setHorizontalSpacing(10);
 	mainlayout->setVerticalSpacing(5);
+	descriptionLayout->setSpacing(15);
 	mainlayout->setColumnStretch(0, 1);
 	mainlayout->setColumnStretch(1, 1);
 	mainlayout->setColumnStretch(2, 1);
@@ -74,7 +78,9 @@ void MusicQuiz::QuizSelector::createLayout()
 	/** Description */
 	QLabel* descriptionLabel = new QLabel("Description");
 	descriptionLabel->setObjectName("descriptionLabel");
-	descriptionLayout->addWidget(descriptionLabel, Qt::AlignCenter);
+	descriptionLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Minimum);
+	descriptionLabel->setAlignment(Qt::AlignHCenter);
+	descriptionLayout->addWidget(descriptionLabel);
 
 	_descriptionText = new QTextEdit;
 	_descriptionText->setReadOnly(true);
@@ -165,5 +171,22 @@ void MusicQuiz::QuizSelector::quizSelected()
 
 void MusicQuiz::QuizSelector::quit()
 {
+	/** Send Quit Signal */
 	emit quitSignal();
+
+	/** Call Destructor */
+	close();
+}
+
+void MusicQuiz::QuizSelector::keyPressEvent(QKeyEvent* event)
+{
+	switch ( event->key() )
+	{
+	case Qt::Key_Escape:
+		emit quitSignal();
+		break;
+	default:
+		QWidget::keyPressEvent(event);
+		break;
+	}
 }
