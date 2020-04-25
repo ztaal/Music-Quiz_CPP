@@ -5,7 +5,10 @@
 #include <QAbstractButton>
 
 #include "common/Log.hpp"
+#include "util/QuizLoader.hpp"
+
 #include "MusicQuizGUI.hpp"
+
 #include "widgets/QuizTeam.hpp"
 #include "widgets/QuizBoard.hpp"
 #include "widgets/QuizEntry.hpp"
@@ -50,6 +53,11 @@ int main(int argc, char* argv[])
 		LOG_INFO("Music Quiz Selected.");
 
 		try {
+			std::vector<std::string> quizList = MusicQuiz::util::QuizLoader::getListOfQuizzes();
+			for ( size_t i = 0; i < quizList.size(); ++i ) {
+				LOG_DEBUG("Quiz: " << quizList[i]);
+			}
+
 			MusicQuiz::MusicQuizGUI w;
 			w.show();
 			app.exec();
