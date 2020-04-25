@@ -2,13 +2,20 @@
 
 #include <QMessageBox>
 
+#include "gui_tools/GuiUtil/QuizSelector.hpp"
 
-MusicQuiz::MusicQuizGUI::MusicQuizGUI(QWidget *this_parent) :
+
+MusicQuiz::MusicQuizGUI::MusicQuizGUI(QWidget* this_parent) :
 	QDialog(this_parent)
 {
 	setWindowFlags(windowFlags() | Qt::WindowMaximizeButtonHint | Qt::WindowMinimizeButtonHint);
 
 	Ui::Dialog::setupUi(this);
+
+	MusicQuiz::QuizSelector* quizSelector = new MusicQuiz::QuizSelector();
+	connect(quizSelector, SIGNAL(quitSignal()), this, SLOT(closeWindow()));
+
+	layout()->addWidget(quizSelector);
 }
 
 MusicQuiz::MusicQuizGUI::~MusicQuizGUI()

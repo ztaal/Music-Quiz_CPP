@@ -1,8 +1,18 @@
+/****************************************/
+/*****			 QDialog			*****/
+/****************************************/
+
 QDialog#MusicQuiz
 {
 	color				: Yellow;
 	background-color	: rgb(0, 0, 200);
 }
+
+
+
+/****************************************/
+/*****		    QPushButton			*****/
+/****************************************/
 
 QPushButton[objectName^="QuizEntry"]
 {
@@ -43,4 +53,54 @@ QPushButton#QuizEntry_rowCategoryLabel
 {
 	font-size			: 25px;
 	min-width			: 200px;
+}
+
+
+
+/****************************************/
+/*****		    QLabel  			*****/
+/****************************************/
+
+QLabel#selectQuizlabel
+{
+	font-size			: 40px;
+	color				: Black;
+}
+
+QLabel#descriptionLabel
+{
+	font-size			: 30px;
+	color				: Black;
+}
+
+
+
+/****************************************/
+/*****		    QListWidget			*****/
+/****************************************/
+
+QListWidget
+{
+	font-size						: 22px;
+	background-color				: rgb(200, 200, 200);
+	selection-background-color		: rgb(150, 150, 150);
+}
+
+QListWidgetItem
+{
+	color							: Black;
+}
+
+
+
+/****************************************/
+/*****		    QTextEdit			*****/
+/****************************************/
+
+QTextEdit#descriptionTextLabel
+{
+	font-size						: 25px;
+	background-color				: rgba(0, 0, 0, 0);
+	selection-background-color		: rgba(0, 0, 0, 0);
+	border							: none;
 }

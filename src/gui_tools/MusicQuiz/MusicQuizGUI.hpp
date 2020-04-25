@@ -34,14 +34,16 @@ namespace MusicQuiz {
 		 */
 		void keyPressEvent(QKeyEvent* event);
 
-	public:
-
-
+	private slots:
 		/**
 		 * @brief Closes the window.
 		 *
 		 * @return True if the window should be closed.
 		 */
 		bool closeWindow();
+
+	public:
+
+
 	};
 }
