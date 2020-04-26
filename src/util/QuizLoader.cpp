@@ -64,6 +64,9 @@ MusicQuiz::util::QuizLoader::QuizPreview MusicQuiz::util::QuizLoader::getQuizPre
 	/** Name */
 	quizPreview.quizName = sub_tree.get<std::string>("QuizName");
 
+	/** Author */
+	quizPreview.quizAuthor = sub_tree.get<std::string>("QuizAuthor");
+
 	/** Description */
 	quizPreview.quizDescription = sub_tree.get<std::string>("QuizDescription");
 

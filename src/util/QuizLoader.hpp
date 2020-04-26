@@ -18,6 +18,7 @@ namespace MusicQuiz {
 			struct QuizPreview
 			{
 				std::string quizName = "";
+				std::string quizAuthor = "";
 				bool includeSongs = false;
 				bool includeVideos = false;
 				std::string quizDescription = "";
@@ -27,6 +28,7 @@ namespace MusicQuiz {
 				friend std::ostream& operator<<(std::ostream& out, const QuizPreview& quizPreview)
 				{
 					out << "\n\nQuiz Name: " << quizPreview.quizName << "\n";
+					out << "Quiz Author: " << quizPreview.quizAuthor << "\n";
 					out << "Quiz Description: " << quizPreview.quizDescription << "\n";
 					if ( !quizPreview.categories.empty() ) {
 						out << "Quiz Categories:\n";
