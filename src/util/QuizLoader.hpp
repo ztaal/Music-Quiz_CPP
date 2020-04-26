@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include <boost/filesystem.hpp>
+#include "widgets/QuizCategory.hpp"
 
 
 namespace MusicQuiz {
@@ -70,6 +71,16 @@ namespace MusicQuiz {
 			* @return The quiz preview.
 			*/
 			static QuizPreview getQuizPreview(size_t idx);
+
+			/**
+			* @brief Returns a list of the categories.
+			*
+			* @param[in] quizIdx The index of the quiz to load the categories from.
+			*
+			* @return The quiz categories.
+			*/
+			static std::vector<MusicQuiz::QuizCategory*> loadQuizCategories(size_t idx);
+
 
 		protected:
 			/** Variables */
