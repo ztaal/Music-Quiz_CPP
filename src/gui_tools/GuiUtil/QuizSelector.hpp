@@ -57,7 +57,7 @@ namespace MusicQuiz {
 
 	signals:
 		void quitSignal();
-		void quizSelectedSignal(std::string quiz);
+		void quizSelectedSignal(size_t quizIdx);
 	protected:
 		/**
 		 * @brief Creates the category layout.

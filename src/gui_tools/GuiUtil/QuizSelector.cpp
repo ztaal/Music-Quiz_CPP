@@ -165,7 +165,7 @@ void MusicQuiz::QuizSelector::quizSelected()
 		QMessageBox::No | QMessageBox::Yes, QMessageBox::Yes);
 
 	if ( resBtn == QMessageBox::Yes ) {
-		emit quizSelectedSignal(_quizPreviews[currentIndex].quizName);
+		emit quizSelectedSignal(currentIndex);
 	}
 }
 
