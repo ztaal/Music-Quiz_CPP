@@ -22,14 +22,13 @@ MusicQuiz::QuizBoard* MusicQuiz::QuizFactory::createQuiz(const size_t idx, const
 		std::vector<MusicQuiz::QuizCategory*> categories = MusicQuiz::util::QuizLoader::loadQuizCategories(idx);
 
 		/** Load Row Categories */
-		std::vector< QString > rowCategories = { "Row Category 1", "Row Category 2", "Row Category 3" };
+		std::vector< QString > rowCategories = MusicQuiz::util::QuizLoader::loadQuizRowCategories(idx);
 
 		/** Create Quiz */
 		quizBoard = new MusicQuiz::QuizBoard(categories, rowCategories, teams);
 		
 		/** Set Quiz Name */
-		//board->setQuizName(QString::fromStdString(MusicQuiz::util::QuizLoader::getListOfQuizzes[idx]));
-
+		//quizBoard->setQuizName(QString::fromStdString(MusicQuiz::util::QuizLoader::getListOfQuizzes[idx]));
 
 		return quizBoard;
 	} catch ( const std::exception& err ) {

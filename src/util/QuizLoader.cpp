@@ -170,3 +170,43 @@ std::vector<MusicQuiz::QuizCategory*> MusicQuiz::util::QuizLoader::loadQuizCateg
 
 	return categories;
 }
+
+std::vector<QString> MusicQuiz::util::QuizLoader::loadQuizRowCategories(const size_t idx)
+{
+	/** Get List of Quizzes */
+	const std::vector<std::string> quizList = getListOfQuizzes();
+	if ( quizList.empty() ) {
+		throw std::runtime_error("No quizzes found in the data folder.");
+	}
+
+	/** Sanity Check */
+	if ( idx < 0 || idx >= quizList.size() ) {
+		throw std::runtime_error("No quiz index requested does not exists.");
+	}
+
+	if ( !boost::filesystem::exists(quizList[idx]) ) {
+		throw std::runtime_error("Quiz file does not exists.");
+	}
+
+
+	/** Load Row Categories */
+	boost::property_tree::ptree tree;
+	boost::property_tree::read_xml(quizList[idx], tree, boost::property_tree::xml_parser::trim_whitespace);
+	boost::property_tree::ptree sub_tree = tree.get_child("MusicQuiz");
+
+	std::vector<QString> rowCategories;
+	boost::property_tree::ptree::const_iterator ctrl = sub_tree.begin();
+	for ( ; ctrl != sub_tree.end(); ++ctrl ) {
+		if ( ctrl->first == "RowCategories" ) { // Load Categories
+			boost::property_tree::ptree rowCategoriesTree = ctrl->second;
+			boost::property_tree::ptree::const_iterator sub_ctrl = rowCategoriesTree.begin();
+			for ( ; sub_ctrl != rowCategoriesTree.end(); ++sub_ctrl ) {
+				if ( sub_ctrl->first == "RowCategory" ) {
+					rowCategories.push_back(QString::fromStdString(sub_ctrl->second.data()));
+				}
+			}
+		}
+	}
+
+	return rowCategories;
+}

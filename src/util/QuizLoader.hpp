@@ -4,6 +4,8 @@
 #include <vector>
 #include <iostream>
 
+#include <QString>
+
 #include <boost/filesystem.hpp>
 #include "widgets/QuizCategory.hpp"
 
@@ -75,11 +77,20 @@ namespace MusicQuiz {
 			/**
 			* @brief Returns a list of the categories.
 			*
-			* @param[in] quizIdx The index of the quiz to load the categories from.
+			* @param[in] idx The index of the quiz to load the categories from.
 			*
 			* @return The quiz categories.
 			*/
 			static std::vector<MusicQuiz::QuizCategory*> loadQuizCategories(size_t idx);
+
+			/**
+			* @brief Returns a list of the row categories.
+			*
+			* @param[in] idx The index of the quiz to load the categories from.
+			*
+			* @return The quiz row categories.
+			*/
+			static std::vector<QString> loadQuizRowCategories(size_t idx);
 
 
 		protected:
