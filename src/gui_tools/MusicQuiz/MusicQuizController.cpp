@@ -133,7 +133,7 @@ void MusicQuiz::MusicQuizController::closeEvent(QCloseEvent* event)
 
 bool MusicQuiz::MusicQuizController::closeWindow()
 {
-	QMessageBox::StandardButton resBtn = QMessageBox::question(this, "Close Music Quiz?", "Are you sure you want to close the application?",
+	QMessageBox::StandardButton resBtn = QMessageBox::question(this, "Close Music Quiz?", "Are you sure you want to close the quiz?",
 		QMessageBox::No | QMessageBox::Yes, QMessageBox::Yes);
 
 	if ( resBtn == QMessageBox::Yes ) {
