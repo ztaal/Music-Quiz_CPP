@@ -10,7 +10,6 @@
 
 #include "widgets/QuizTeam.hpp"
 #include "widgets/QuizEntry.hpp"
-#include "widgets/QuizFactory.hpp"
 #include "widgets/QuizCategory.hpp"
 
 

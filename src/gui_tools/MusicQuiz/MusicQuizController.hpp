@@ -12,6 +12,7 @@
 #include "ui_MusicQuizGUI.h"
 
 #include "widgets/QuizBoard.hpp"
+#include "widgets/QuizFactory.hpp"
 #include "gui_tools/GuiUtil/QuizSelector.hpp"
 
 
