@@ -30,6 +30,13 @@ namespace MusicQuiz {
 		 */
 		virtual ~QuizTeam();
 
+		/**
+		 * @brief Sets if the team score is visiable during the quiz.
+		 *
+		 * @param[in] hide Set to true if the score should be hidden.
+		 */
+		void setHideScore(bool hide);
+
 	public slots:
 		/**
 		 * @brief Adds points to the team score.
@@ -76,5 +83,7 @@ namespace MusicQuiz {
 		std::atomic<size_t> _newPoints = 0;
 		std::atomic <size_t> _scoreCntRate = 0;
 		const size_t _scoreTimerDelay = 25; // ms
+
+		bool _hideScore = false;
 	};
 }

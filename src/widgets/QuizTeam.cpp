@@ -44,11 +44,24 @@ MusicQuiz::QuizTeam::~QuizTeam()
 	}
 }
 
+void MusicQuiz::QuizTeam::setHideScore(bool hide)
+{
+	_hideScore = hide;
+
+	/** Update Name */
+	QString str = _name + (_hideScore ? "" : ": " + QString::fromLocal8Bit(std::to_string(_score).c_str()));
+	setText(str);
+}
+
 void MusicQuiz::QuizTeam::addPoints(size_t points)
 {
 	/** Update Score */
-	_newPoints += points;
-	_scoreCntRate = _newPoints / _scoreTimerDelay;
+	if ( !_hideScore ) {
+		_newPoints += points;
+		_scoreCntRate = _newPoints / _scoreTimerDelay;
+	} else {
+		_score += points;
+	}
 
 	if ( !_scoreCntTimer.isActive() ) {
 		_scoreCntTimer.start(_scoreTimerDelay);
@@ -68,7 +81,7 @@ void MusicQuiz::QuizTeam::accumulateScore()
 	_newPoints -= val;
 
 	/** Update Text */
-	QString str = _name + ": " + QString::fromLocal8Bit(std::to_string(_score).c_str());
+	QString str = _name + (_hideScore ? "" : ": " + QString::fromLocal8Bit(std::to_string(_score).c_str()));
 	setText(str);
 
 	/** Check if points have been added */
