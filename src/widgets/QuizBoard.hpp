@@ -34,6 +34,20 @@ namespace MusicQuiz {
 		 */
 		virtual ~QuizBoard() = default;
 
+		/**
+		 * @brief Sets the quiz name.
+		 *
+		 * @param[in] name The quiz name.
+		 */
+		void setQuizName(const QString& name);
+
+		/**
+		 * @brief Get the quiz name.
+		 *
+		 * @return The quiz name.
+		 */
+		QString getQuizName();
+
 	public slots:
 		/**
 		 * @brief Handle answer.

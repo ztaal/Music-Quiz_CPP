@@ -193,3 +193,13 @@ void MusicQuiz::QuizBoard::keyPressEvent(QKeyEvent* event)
 		break;
 	}
 }
+
+void MusicQuiz::QuizBoard::setQuizName(const QString& name)
+{
+	_name = name;
+}
+
+QString MusicQuiz::QuizBoard::getQuizName()
+{
+	return _name;
+}
