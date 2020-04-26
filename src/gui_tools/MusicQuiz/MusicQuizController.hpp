@@ -73,11 +73,11 @@ namespace MusicQuiz {
 		/**
 		 * @brief Handles quiz selected.
 		 *
-		 * @param[in] quiz The selected quiz.
+		 * @param[in] quizIdx The selected quiz index.
 		 */
-		void quizSelected(const std::string& quiz);
+		void quizSelected(size_t quizIdx);
 
-	public:
+	private:
 
 		/** Variables */
 		QTimer _updateTimer;
@@ -90,6 +90,8 @@ namespace MusicQuiz {
 
 		MusicQuiz::QuizBoard* _quizBoard = nullptr;
 		MusicQuiz::QuizSelector* _quizSelector = nullptr;
+
+		size_t _selectedQuizIdx = 0;
 
 	};
 }

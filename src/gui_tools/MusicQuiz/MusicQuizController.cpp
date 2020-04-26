@@ -10,6 +10,7 @@
 
 #include "widgets/QuizTeam.hpp"
 #include "widgets/QuizEntry.hpp"
+#include "widgets/QuizFactory.hpp"
 #include "widgets/QuizCategory.hpp"
 
 
@@ -52,7 +53,7 @@ void MusicQuiz::MusicQuizController::executeQuiz()
 
 		/** Connect Signals */
 		connect(_quizSelector, SIGNAL(quitSignal()), this, SLOT(closeWindow()));
-		connect(_quizSelector, SIGNAL(quizSelectedSignal(std::string)), this, SLOT(quizSelected(std::string)));
+		connect(_quizSelector, SIGNAL(quizSelectedSignal(size_t)), this, SLOT(quizSelected(size_t)));
 
 		/** Execute widget */
 		_quizSelector->exec();
@@ -78,7 +79,7 @@ void MusicQuiz::MusicQuizController::executeQuiz()
 		}
 
 		// \todo remove
-		MusicQuiz::QuizEntry entry11("C:/Users/Ztaal/Desktop/5.mp3", "Song 1", 1000, 0, 30000, -1, -1, nullptr);
+		/*MusicQuiz::QuizEntry entry11("C:/Users/Ztaal/Desktop/5.mp3", "Song 1", 1000, 0, 30000, -1, -1, nullptr);
 		MusicQuiz::QuizEntry entry12("C:/Users/Ztaal/Desktop/test.wav", "Song 2", 2000, 0, 100, -1, -1, nullptr);
 		MusicQuiz::QuizEntry entry13("C:/Users/Ztaal/Desktop/5.mp3", "Song 3", 3000, 0, 50000, -1, -1, nullptr);
 
@@ -90,14 +91,20 @@ void MusicQuiz::MusicQuizController::executeQuiz()
 
 		MusicQuiz::QuizCategory* category2 = new MusicQuiz::QuizCategory("Category 2", { &entry21, &entry22, &entry23 }, nullptr);
 
-		MusicQuiz::QuizTeam* team1 = new MusicQuiz::QuizTeam("Team 1", QColor(255, 0, 0), nullptr);
-		MusicQuiz::QuizTeam* team2 = new MusicQuiz::QuizTeam("Team 2", QColor(0, 255, 0), nullptr);
 
 		std::vector< QString > rowCategories = { "Row Category 1", "Row Category 2", "Row Category 3" };
-		std::vector< MusicQuiz::QuizTeam* > teams = { team1, team2 };
 		std::vector< MusicQuiz::QuizCategory* > categories = { category1, category2 };
 
-		_quizBoard = new MusicQuiz::QuizBoard(categories, rowCategories, teams);
+		_quizBoard = new MusicQuiz::QuizBoard(categories, rowCategories, teams);*/
+
+		MusicQuiz::QuizTeam* team1 = new MusicQuiz::QuizTeam("Team 1", QColor(255, 0, 0), nullptr);
+		MusicQuiz::QuizTeam* team2 = new MusicQuiz::QuizTeam("Team 2", QColor(0, 255, 0), nullptr);
+		std::vector< MusicQuiz::QuizTeam* > teams = { team1, team2 };
+
+		MusicQuiz::QuizFactory::QuizSettings settings;
+		LOG_INFO("Quiz Selected2 #" << _selectedQuizIdx);
+		_quizBoard = MusicQuiz::QuizFactory::createQuiz(_quizSelected, settings, teams);
+		LOG_INFO("Quiz Selected3 #" << _selectedQuizIdx);
 		connect(_quizBoard, SIGNAL(quitSignal()), this, SLOT(closeWindow()));
 		_quizBoard->exec();
 
@@ -159,11 +166,12 @@ void MusicQuiz::MusicQuizController::keyPressEvent(QKeyEvent* event)
 	}
 }
 
-void MusicQuiz::MusicQuizController::quizSelected(const std::string &quiz)
+void MusicQuiz::MusicQuizController::quizSelected(const size_t quizIdx)
 {
 	/** Set Quiz Selected */
 	_quizSelected = true;
-	LOG_INFO("Quiz Selected: " << quiz);
+	_selectedQuizIdx = quizIdx;
+	LOG_INFO("Quiz Selected #" << _selectedQuizIdx);
 
 	/** Remove Quiz Selector */
 	_quizSelector->hide();
