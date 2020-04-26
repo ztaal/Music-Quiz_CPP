@@ -69,13 +69,12 @@ namespace MusicQuiz {
 
 		/** Variables */
 		QString _name = "";
-		size_t _score = 0;
+		std::atomic<size_t> _score = 0;
 		QColor _color = QColor(0, 0, 0);
 
 		QTimer _scoreCntTimer;
-		size_t _scoreCntRate = 0;
-		const size_t _scoreTimerDelay = 25; // ms
-
 		std::atomic<size_t> _newPoints = 0;
+		std::atomic <size_t> _scoreCntRate = 0;
+		const size_t _scoreTimerDelay = 25; // ms
 	};
 }

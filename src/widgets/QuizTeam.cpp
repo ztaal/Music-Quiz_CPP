@@ -48,9 +48,9 @@ void MusicQuiz::QuizTeam::addPoints(size_t points)
 {
 	/** Update Score */
 	_newPoints += points;
+	_scoreCntRate = _newPoints / _scoreTimerDelay;
 
 	if ( !_scoreCntTimer.isActive() ) {
-		_scoreCntRate = _newPoints / _scoreTimerDelay;
 		_scoreCntTimer.start(_scoreTimerDelay);
 	}
 }
