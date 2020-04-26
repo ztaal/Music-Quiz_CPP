@@ -23,10 +23,10 @@ namespace MusicQuiz {
 	public:
 		enum QuizState
 		{
-			INIT = 0,
-			SELECTING_QUIZ = 1,
-			SELECTING_TEAM = 2,
-			QUIZ_RUNNING   = 3,
+			SELECT_QUIZ = 0,
+			SELECT_TEAM = 1,
+			QUIZ_INTRO_SCREEN = 2,
+			RUN_QUIZ = 3,
 			VICTORY_SCREEN = 4
 		};
 
@@ -80,18 +80,23 @@ namespace MusicQuiz {
 	private:
 
 		/** Variables */
+		MusicQuiz::QuizBoard* _quizBoard = nullptr;
+		std::vector< MusicQuiz::QuizTeam* > _teams;
+		MusicQuiz::QuizSelector* _quizSelector = nullptr;
+
+		/** Update Timer */
 		QTimer _updateTimer;
 		const size_t _updateTimerDelay = 25; // ms
 
+		/** State Variables */
 		std::atomic<bool> _quizSelected = false;
 		std::atomic<bool> _teamSelected = true;
+		std::atomic<bool> _introScreenDone = true;
 		std::atomic<bool> _gameCompleted = false;
-		QuizState _quizState = QuizState::INIT;
+		QuizState _quizState = QuizState::SELECT_QUIZ;
 
-		MusicQuiz::QuizBoard* _quizBoard = nullptr;
-		MusicQuiz::QuizSelector* _quizSelector = nullptr;
-
+		/** Quiz Settings */
 		size_t _selectedQuizIdx = 0;
-
+		MusicQuiz::QuizFactory::QuizSettings _settings;
 	};
 }
