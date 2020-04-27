@@ -1,5 +1,6 @@
 #include "QuizSelector.hpp"
 
+#include <sstream>
 #include <stdexcept>
 
 #include <QLabel>
@@ -43,11 +44,15 @@ void MusicQuiz::QuizSelector::createLayout()
 	/** Layout */
 	QGridLayout* mainlayout = new QGridLayout;
 	QHBoxLayout* middleLayout = new QHBoxLayout;
+	QVBoxLayout* quizSelectionLayout = new QVBoxLayout;
 	QVBoxLayout* descriptionLayout = new QVBoxLayout;
+	QVBoxLayout* categoryLayout = new QVBoxLayout;
 	QHBoxLayout* buttonLayout = new QHBoxLayout;
 	mainlayout->setHorizontalSpacing(10);
 	mainlayout->setVerticalSpacing(5);
+	quizSelectionLayout->setSpacing(15);
 	descriptionLayout->setSpacing(15);
+	categoryLayout->setSpacing(15);
 	mainlayout->setColumnStretch(0, 1);
 	mainlayout->setColumnStretch(1, 1);
 	mainlayout->setColumnStretch(2, 1);
@@ -63,8 +68,14 @@ void MusicQuiz::QuizSelector::createLayout()
 	horizontalLine->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
 	/** Quiz Selection List */
+	QLabel* quizSelectionLabel = new QLabel("Quizzes");
+	quizSelectionLabel->setObjectName("descriptionLabel");
+	quizSelectionLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Minimum);
+	quizSelectionLabel->setAlignment(Qt::AlignHCenter);
+	quizSelectionLayout->addWidget(quizSelectionLabel);
+
 	_quizSelectionList = new QListWidget;
-	middleLayout->addWidget(_quizSelectionList, 0, 0);
+	quizSelectionLayout->addWidget(_quizSelectionList);
 	connect(_quizSelectionList, SIGNAL(itemSelectionChanged()), this, SLOT(selectionClicked()));
 
 	/** Add Quizzes */
@@ -88,6 +99,19 @@ void MusicQuiz::QuizSelector::createLayout()
 	_descriptionText->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Expanding);
 	descriptionLayout->addWidget(_descriptionText);
 	
+	/** Categories */
+	QLabel* categoryLabel = new QLabel("Categories");
+	categoryLabel->setObjectName("descriptionLabel");
+	categoryLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Minimum);
+	categoryLabel->setAlignment(Qt::AlignHCenter);
+	categoryLayout->addWidget(categoryLabel);
+
+	_categoryText = new QTextEdit;
+	_categoryText->setReadOnly(true);
+	_categoryText->setObjectName("descriptionTextLabel");
+	_categoryText->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Expanding);
+	categoryLayout->addWidget(_categoryText);
+
 	/** Buttons */
 	QPushButton* settingsBtn = new QPushButton("Settings");
 	//connect(settingsBtn, SIGNAL(released()), this, SLOT(selectionClicked()));
@@ -107,8 +131,9 @@ void MusicQuiz::QuizSelector::createLayout()
 	mainlayout->addWidget(topLabel, 0, 0, 1, 3, Qt::AlignCenter);
 	mainlayout->addWidget(horizontalLine, 1, 0, 1, 3);
 
-	mainlayout->addItem(middleLayout, 2, 0);
+	mainlayout->addItem(quizSelectionLayout, 2, 0);
 	mainlayout->addItem(descriptionLayout, 2, 1);
+	mainlayout->addItem(categoryLayout, 2, 2);
 
 	mainlayout->addItem(buttonLayout, 3, 0, 1, 3);
 
@@ -138,6 +163,24 @@ void MusicQuiz::QuizSelector::selectionClicked()
 
 	/** Update Description */
 	_descriptionText->setText(QString::fromStdString(_quizPreviews[currentIndex].quizDescription));
+
+	/** Update Categories */
+	std::stringstream ss("");
+	std::vector<std::string> categories = _quizPreviews[currentIndex].categories;
+	for ( size_t i = 0; i < categories.size(); ++i ) {
+		ss << i + 1 << ". " << categories[i] << "\n";
+	}
+
+	/** Row Cateogires */
+	std::vector<std::string> rowCategories = _quizPreviews[currentIndex].rowCategories;
+	if ( !rowCategories.empty() ) {
+		ss << "\n\nRow Categories:\n\n";
+		for ( size_t i = 0; i < rowCategories.size(); ++i ) {
+			ss << i + 1 << ". " << rowCategories[i] << "\n";
+		}
+	}
+
+	_categoryText->setText(QString::fromStdString(ss.str()));
 }
 
 void MusicQuiz::QuizSelector::quizSelected()

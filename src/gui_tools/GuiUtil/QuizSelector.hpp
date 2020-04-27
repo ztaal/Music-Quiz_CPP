@@ -65,6 +65,7 @@ namespace MusicQuiz {
 		void createLayout();
 
 		/** Variables */
+		QTextEdit* _categoryText = nullptr;
 		QTextEdit* _descriptionText = nullptr;
 		QListWidget* _quizSelectionList = nullptr;
 
