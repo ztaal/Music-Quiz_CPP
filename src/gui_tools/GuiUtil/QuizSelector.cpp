@@ -5,6 +5,7 @@
 
 #include <QLabel>
 #include <QWidget>
+#include <QCheckBox>
 #include <QGridLayout>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -16,7 +17,7 @@
 #include <QListWidgetItem>
 
 #include "common/Log.hpp"
-
+#include "widgets/QuizSettingsDialog.hpp"
 
 MusicQuiz::QuizSelector::QuizSelector(QWidget* parent) :
 	QDialog(parent)
@@ -54,7 +55,7 @@ void MusicQuiz::QuizSelector::createLayout()
 	descriptionLayout->setSpacing(15);
 	categoryLayout->setSpacing(15);
 	mainlayout->setColumnStretch(0, 1);
-	mainlayout->setColumnStretch(1, 1);
+	mainlayout->setColumnStretch(1, 3);
 	mainlayout->setColumnStretch(2, 1);
 
 	/** Label */
@@ -103,7 +104,7 @@ void MusicQuiz::QuizSelector::createLayout()
 	QLabel* categoryLabel = new QLabel("Categories");
 	categoryLabel->setObjectName("descriptionLabel");
 	categoryLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Minimum);
-	categoryLabel->setAlignment(Qt::AlignHCenter);
+	categoryLabel->setAlignment(Qt::AlignLeft);
 	categoryLayout->addWidget(categoryLabel);
 
 	_categoryText = new QTextEdit;
@@ -112,9 +113,22 @@ void MusicQuiz::QuizSelector::createLayout()
 	_categoryText->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Expanding);
 	categoryLayout->addWidget(_categoryText);
 
+	/** Row Categories */
+	QLabel* rowCategoryLabel = new QLabel("Row Categories");
+	rowCategoryLabel->setObjectName("descriptionLabel");
+	rowCategoryLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Minimum);
+	rowCategoryLabel->setAlignment(Qt::AlignLeft);
+	categoryLayout->addWidget(rowCategoryLabel);
+
+	_rowCategoryText = new QTextEdit;
+	_rowCategoryText->setReadOnly(true);
+	_rowCategoryText->setObjectName("descriptionTextLabel");
+	_rowCategoryText->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Expanding);
+	categoryLayout->addWidget(_rowCategoryText);
+
 	/** Buttons */
 	QPushButton* settingsBtn = new QPushButton("Settings");
-	//connect(settingsBtn, SIGNAL(released()), this, SLOT(selectionClicked()));
+	connect(settingsBtn, SIGNAL(released()), this, SLOT(openSettingsDialog()));
 	buttonLayout->addWidget(settingsBtn);
 
 	buttonLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Ignored));
@@ -170,17 +184,18 @@ void MusicQuiz::QuizSelector::selectionClicked()
 	for ( size_t i = 0; i < categories.size(); ++i ) {
 		ss << i + 1 << ". " << categories[i] << "\n";
 	}
+	_categoryText->setText(QString::fromStdString(ss.str()));
 
 	/** Row Cateogires */
 	std::vector<std::string> rowCategories = _quizPreviews[currentIndex].rowCategories;
 	if ( !rowCategories.empty() ) {
-		ss << "\n\nRow Categories:\n\n";
+		ss.str("");
 		for ( size_t i = 0; i < rowCategories.size(); ++i ) {
 			ss << i + 1 << ". " << rowCategories[i] << "\n";
 		}
 	}
 
-	_categoryText->setText(QString::fromStdString(ss.str()));
+	_rowCategoryText->setText(QString::fromStdString(ss.str()));
 }
 
 void MusicQuiz::QuizSelector::quizSelected()
@@ -210,6 +225,12 @@ void MusicQuiz::QuizSelector::quizSelected()
 	if ( resBtn == QMessageBox::Yes ) {
 		emit quizSelectedSignal(currentIndex);
 	}
+}
+
+void MusicQuiz::QuizSelector::openSettingsDialog()
+{
+	MusicQuiz::QuizSettingsDialog settingsDialog(_settings, this);
+	settingsDialog.exec();
 }
 
 void MusicQuiz::QuizSelector::quit()

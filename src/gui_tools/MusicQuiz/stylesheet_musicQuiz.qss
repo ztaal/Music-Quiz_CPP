@@ -55,6 +55,14 @@ QPushButton#QuizEntry_rowCategoryLabel
 	min-width			: 200px;
 }
 
+QPushButton#settingsInfo
+{
+	min-width			: 30px;
+	max-width			: 30px;
+	min-height			: 30px;
+	max-height			: 30px;
+}
+
 
 
 /****************************************/
@@ -70,6 +78,12 @@ QLabel#selectQuizlabel
 QLabel#descriptionLabel
 {
 	font-size			: 30px;
+	color				: Black;
+}
+
+QLabel#settingsLabel
+{
+	font-size			: 20px;
 	color				: Black;
 }
 

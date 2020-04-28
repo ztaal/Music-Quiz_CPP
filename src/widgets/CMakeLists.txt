@@ -5,5 +5,6 @@ SET ( SRC_FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/QuizEntry.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/QuizFactory.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/QuizCategory.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/QuizSettingsDialog.cpp
         CACHE INTERNAL ""
 )
