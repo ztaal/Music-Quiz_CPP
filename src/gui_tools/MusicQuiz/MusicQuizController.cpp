@@ -33,11 +33,13 @@ MusicQuiz::MusicQuizController::~MusicQuizController()
 	/** Close Quiz Creator */
 	if ( _quizSelector != nullptr ) {
 		_quizSelector->close();
+		_quizSelector = nullptr;
 	}
 
 	/** Close Quiz Board */
 	if ( _quizBoard != nullptr ) {
 		_quizBoard->close();
+		_quizBoard = nullptr;
 	}
 }
 
@@ -102,7 +104,7 @@ void MusicQuiz::MusicQuizController::executeQuiz()
 		}
 
 		/** Create Quiz Board */
-		_quizBoard = MusicQuiz::QuizFactory::createQuiz(_quizSelected, _settings, _teams);
+		_quizBoard = MusicQuiz::QuizFactory::createQuiz(_selectedQuizIdx, _settings, _teams);
 
 		/** Connect Signals */
 		connect(_quizBoard, SIGNAL(quitSignal()), this, SLOT(closeWindow()));
@@ -179,4 +181,5 @@ void MusicQuiz::MusicQuizController::quizSelected(const size_t quizIdx)
 	/** Remove Quiz Selector */
 	_quizSelector->hide();
 	delete _quizSelector;
+	_quizSelector = nullptr;
 }

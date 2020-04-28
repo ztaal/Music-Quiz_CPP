@@ -118,7 +118,7 @@ std::vector<MusicQuiz::QuizCategory*> MusicQuiz::util::QuizLoader::loadQuizCateg
 	}
 
 	/** Sanity Check */
-	if ( idx < 0 || idx >= quizList.size() ) {
+	if ( idx >= quizList.size() ) {
 		throw std::runtime_error("No quiz index requested does not exists.");
 	}
 
