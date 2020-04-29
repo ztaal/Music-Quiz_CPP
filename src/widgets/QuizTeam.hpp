@@ -81,7 +81,7 @@ namespace MusicQuiz {
 
 		QTimer _scoreCntTimer;
 		std::atomic<size_t> _newPoints = 0;
-		std::atomic <size_t> _scoreCntRate = 0;
+		std::atomic <size_t> _scoreCntRate = 1;
 		const size_t _scoreTimerDelay = 25; // ms
 
 		bool _hideScore = false;

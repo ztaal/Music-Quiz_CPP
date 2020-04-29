@@ -7,8 +7,10 @@
 #include <QWidget>
 #include <QDialog>
 #include <QCheckBox>
+#include <QKeyEvent>
 
-#include "widgets/QuizFactory.hpp"
+#include "util/QuizSettings.hpp"
+
 
 namespace MusicQuiz {
 	class QuizSettingsDialog : public QDialog
@@ -21,7 +23,7 @@ namespace MusicQuiz {
 		 * @param[in] settings The quiz settings.
 		 * @param[in] parent The parent widget.
 		 */
-		explicit QuizSettingsDialog(MusicQuiz::QuizFactory::QuizSettings settings, QWidget* parent = nullptr);
+		explicit QuizSettingsDialog(const MusicQuiz::QuizSettings& settings, QWidget* parent = nullptr);
 
 		/**
 		 * @brief Destructor
@@ -37,6 +39,11 @@ namespace MusicQuiz {
 		void keyPressEvent(QKeyEvent* event);
 
 	private slots:
+		/**
+		 * @brief Closes the dialog and emits a signal with the settings.
+		 */
+		void saveSettings();
+		
 		/**
 		 * @brief Emits the quit signal.
 		 */
@@ -57,16 +64,16 @@ namespace MusicQuiz {
 
 	signals:
 		void quitSignal();
+		void settingsUpdated(MusicQuiz::QuizSettings settings);
 	protected:
 		/**
 		 * @brief Creates the category layout.
+		 *
+		 * @param[in] settings The currently set settings.
 		 */
-		void createLayout();
+		void createLayout(const MusicQuiz::QuizSettings& settings);
 
 		/** Variables */
-		MusicQuiz::QuizFactory::QuizSettings _settings;
-
-		/** Hidden Teams */
 		QCheckBox* _hiddenTeam = nullptr;
 		QCheckBox* _hiddenAnswers = nullptr;
 	};

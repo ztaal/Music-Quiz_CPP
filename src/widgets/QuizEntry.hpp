@@ -59,6 +59,13 @@ namespace MusicQuiz {
 		 */
 		void setColor(const QColor &color);
 
+		/**
+		 * @brief Enables / disables the hidden answers setting.
+		 *
+		 * @param[in] hidden If true the answers will be hidden.
+		 */
+		void setHiddenAnswer(bool hidden);
+
 	signals:
 		void answered(size_t points);
 		void played();
@@ -106,5 +113,7 @@ namespace MusicQuiz {
 		EntryState _state = EntryState::IDLE;
 
 		audio::AudioPlayer _audioPlayer;
+
+		bool _hiddenAnswer = false; // setting
 	};
 }

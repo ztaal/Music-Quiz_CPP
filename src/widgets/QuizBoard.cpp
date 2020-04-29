@@ -16,9 +16,12 @@
 #include "widgets/QuizEntry.hpp"
 #include "widgets/QuizCategory.hpp"
 
+#include "util/QuizSettings.hpp"
 
-MusicQuiz::QuizBoard::QuizBoard(const std::vector<MusicQuiz::QuizCategory*>& categories, const std::vector<QString>& rowCategories, const std::vector<MusicQuiz::QuizTeam*>& teams, QWidget* parent) :
-	QDialog(parent), _categories(categories), _teams(teams)
+
+MusicQuiz::QuizBoard::QuizBoard(const std::vector<MusicQuiz::QuizCategory*>& categories, const std::vector<QString>& rowCategories, 
+	const std::vector<MusicQuiz::QuizTeam*>& teams, const MusicQuiz::QuizSettings& settings, QWidget* parent) :
+	QDialog(parent), _categories(categories), _teams(teams), _settings(settings)
 {
 	/** Set Window Flags */
 	setWindowFlags(windowFlags() | Qt::WindowMaximizeButtonHint | Qt::WindowMinimizeButtonHint);
@@ -148,7 +151,14 @@ void MusicQuiz::QuizBoard::handleAnswer(const size_t points)
 			team->addPoints(points);
 
 			/** Set button color */
-			button->setColor(team->getColor());
+			if ( _settings.hiddenTeamScore == false ) {
+				button->setColor(team->getColor());
+			}
+		} else {
+			/** Not guessed set button color to grey */
+			if ( _settings.hiddenTeamScore == false ) {
+				button->setColor(QColor(128, 128, 128));
+			}
 		}
 	}
 }

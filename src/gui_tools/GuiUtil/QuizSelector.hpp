@@ -11,9 +11,12 @@
 #include <QListWidget>
 
 #include "util/QuizLoader.hpp"
-#include "widgets/QuizFactory.hpp"
+#include "util/QuizSettings.hpp"
+
 
 namespace MusicQuiz {
+	class QuizSettingsDialog;
+
 	class QuizSelector : public QDialog
 	{
 		Q_OBJECT
@@ -57,13 +60,20 @@ namespace MusicQuiz {
 		void openSettingsDialog();
 
 		/**
+		 * @brief Updates the quiz settings.
+		 *
+		 * @param[in] settings The quiz settings.
+		 */
+		void updateSettings(const MusicQuiz::QuizSettings& settings);
+
+		/**
 		 * @brief Emits the quit signal.
 		 */
 		void quit();
 
 	signals:
 		void quitSignal();
-		void quizSelectedSignal(size_t quizIdx);
+		void quizSelectedSignal(size_t quizIdx, const MusicQuiz::QuizSettings& settings);
 	protected:
 		/**
 		 * @brief Creates the category layout.
@@ -76,7 +86,7 @@ namespace MusicQuiz {
 		QTextEdit* _descriptionText = nullptr;
 		QListWidget* _quizSelectionList = nullptr;
 
-		MusicQuiz::QuizFactory::QuizSettings _settings;
+		MusicQuiz::QuizSettings _settings;
 
 		std::vector<std::string> _quizList;
 		std::vector<MusicQuiz::util::QuizLoader::QuizPreview> _quizPreviews;

@@ -84,7 +84,10 @@ void MusicQuiz::QuizEntry::leftClickEvent()
 		} else {
 			_audioPlayer.play(_audioFile.toStdString(), _answerStartTime, _answerEndTime);
 		}
-		setText(QString::fromLocal8Bit(_answer.toStdString().c_str()));
+
+		if ( !_hiddenAnswer ) {
+			setText(QString::fromLocal8Bit(_answer.toStdString().c_str()));
+		}
 		break;
 	case EntryState::PLAYING_ANSWER: // Entry Answered
 		_state = EntryState::PLAYED;
@@ -121,7 +124,10 @@ void MusicQuiz::QuizEntry::rightClickEvent()
 	case EntryState::PLAYING_ANSWER: // Pause Song
 		_state = EntryState::PAUSED;
 		_audioPlayer.pause();
-		setText(QString::fromLocal8Bit(_answer.toStdString().c_str()));
+
+		if ( !_hiddenAnswer ) {
+			setText(QString::fromLocal8Bit(_answer.toStdString().c_str()));
+		}
 		break;
 	case QuizEntry::EntryState::PLAYED: // Back to idle
 		_entryAnswered = false;
@@ -150,4 +156,9 @@ void MusicQuiz::QuizEntry::applyColor(const QColor& color)
 MusicQuiz::QuizEntry::EntryState MusicQuiz::QuizEntry::getEntryState()
 {
 	return _state;
+}
+
+void MusicQuiz::QuizEntry::setHiddenAnswer(bool hidden)
+{
+	_hiddenAnswer = hidden;
 }

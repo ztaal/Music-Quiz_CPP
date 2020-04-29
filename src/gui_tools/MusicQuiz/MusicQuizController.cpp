@@ -54,7 +54,7 @@ void MusicQuiz::MusicQuizController::executeQuiz()
 
 		/** Connect Signals */
 		connect(_quizSelector, SIGNAL(quitSignal()), this, SLOT(closeWindow()));
-		connect(_quizSelector, SIGNAL(quizSelectedSignal(size_t)), this, SLOT(quizSelected(size_t)));
+		connect(_quizSelector, SIGNAL(quizSelectedSignal(size_t, const MusicQuiz::QuizSettings&)), this, SLOT(quizSelected(size_t, const MusicQuiz::QuizSettings&)));
 
 		/** Show widget */
 		_quizSelector->exec();
@@ -171,12 +171,15 @@ void MusicQuiz::MusicQuizController::keyPressEvent(QKeyEvent* event)
 	}
 }
 
-void MusicQuiz::MusicQuizController::quizSelected(const size_t quizIdx)
+void MusicQuiz::MusicQuizController::quizSelected(const size_t quizIdx, const MusicQuiz::QuizSettings& settings)
 {
 	/** Set Quiz Selected */
 	_quizSelected = true;
 	_selectedQuizIdx = quizIdx;
 	LOG_INFO("Quiz Selected #" << _selectedQuizIdx);
+
+	/** Set Settings */
+	_settings = settings;
 
 	/** Remove Quiz Selector */
 	_quizSelector->hide();

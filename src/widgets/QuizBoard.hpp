@@ -10,6 +10,8 @@
 #include <QDialog>
 #include <QKeyEvent>
 
+#include "util/QuizSettings.hpp"
+
 
 namespace MusicQuiz {
 	class QuizTeam;
@@ -27,7 +29,7 @@ namespace MusicQuiz {
 		 * @param[in] parent The parent widget.
 		 */
 		explicit QuizBoard(const std::vector<MusicQuiz::QuizCategory*> &categories, const std::vector<QString> &rowCategories,
-			const std::vector<MusicQuiz::QuizTeam*> &teams, QWidget* parent = nullptr);
+			const std::vector<MusicQuiz::QuizTeam*> &teams, const MusicQuiz::QuizSettings& settings, QWidget* parent = nullptr);
 
 		/**
 		 * @brief Default Destructor
@@ -80,6 +82,8 @@ namespace MusicQuiz {
 
 		/** Variables */
 		QString _name = "";
+
+		MusicQuiz::QuizSettings _settings;
 
 		std::vector<QuizTeam*> _teams;
 		std::vector<QString> _rowCategories;

@@ -17,13 +17,24 @@
 #include <QListWidgetItem>
 
 #include "common/Log.hpp"
+#include "util/QuizSettings.hpp"
 #include "widgets/QuizSettingsDialog.hpp"
+
 
 MusicQuiz::QuizSelector::QuizSelector(QWidget* parent) :
 	QDialog(parent)
 {
 	/** Set Window Flags */
 	setWindowFlags(windowFlags() | Qt::WindowMaximizeButtonHint | Qt::WindowMinimizeButtonHint);
+
+	/** Set Size */
+	const size_t width = 1200;
+	const size_t height = 600;
+	if ( parent == nullptr ) {
+		resize(width, height);
+	} else {
+		setGeometry(parent->x() + parent->width() / 2 - width / 2, parent->y() + parent->height() / 2 - height / 2, width, height);
+	}
 
 	/** Load Quizzes */
 	_quizList = MusicQuiz::util::QuizLoader::getListOfQuizzes();	
@@ -223,14 +234,20 @@ void MusicQuiz::QuizSelector::quizSelected()
 		QMessageBox::No | QMessageBox::Yes, QMessageBox::Yes);
 
 	if ( resBtn == QMessageBox::Yes ) {
-		emit quizSelectedSignal(currentIndex);
+		emit quizSelectedSignal(currentIndex, _settings);
 	}
 }
 
 void MusicQuiz::QuizSelector::openSettingsDialog()
 {
-	MusicQuiz::QuizSettingsDialog settingsDialog(_settings, this);
-	settingsDialog.exec();
+	MusicQuiz::QuizSettingsDialog* settingsDialog = new MusicQuiz::QuizSettingsDialog(_settings, this);
+	connect(settingsDialog, SIGNAL(settingsUpdated(const MusicQuiz::QuizSettings&)), this, SLOT(updateSettings(const MusicQuiz::QuizSettings&)));
+	settingsDialog->exec();
+}
+
+void MusicQuiz::QuizSelector::updateSettings(const MusicQuiz::QuizSettings& settings)
+{
+	_settings = settings;
 }
 
 void MusicQuiz::QuizSelector::quit()

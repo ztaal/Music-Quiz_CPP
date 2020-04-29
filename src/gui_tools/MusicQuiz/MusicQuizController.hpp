@@ -11,6 +11,7 @@
 
 #include "ui_MusicQuizGUI.h"
 
+#include "util/QuizSettings.hpp"
 #include "widgets/QuizBoard.hpp"
 #include "widgets/QuizFactory.hpp"
 #include "gui_tools/GuiUtil/QuizSelector.hpp"
@@ -75,8 +76,9 @@ namespace MusicQuiz {
 		 * @brief Handles quiz selected.
 		 *
 		 * @param[in] quizIdx The selected quiz index.
+		 * @param[in] settings The quiz settings.
 		 */
-		void quizSelected(size_t quizIdx);
+		void quizSelected(size_t quizIdx, const MusicQuiz::QuizSettings& settings);
 
 	private:
 
@@ -98,6 +100,6 @@ namespace MusicQuiz {
 
 		/** Quiz Settings */
 		size_t _selectedQuizIdx = 0;
-		MusicQuiz::QuizFactory::QuizSettings _settings;
+		MusicQuiz::QuizSettings _settings;
 	};
 }

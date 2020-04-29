@@ -14,17 +14,17 @@
 #include "common/Log.hpp"
 
 
-MusicQuiz::QuizSettingsDialog::QuizSettingsDialog(MusicQuiz::QuizFactory::QuizSettings settings, QWidget* parent) :
-	QDialog(parent), _settings(settings)
+MusicQuiz::QuizSettingsDialog::QuizSettingsDialog(const MusicQuiz::QuizSettings& settings, QWidget* parent) :
+	QDialog(parent)
 {
 	/** Set Window Flags */
 	setWindowFlags(windowFlags() | Qt::WindowMaximizeButtonHint | Qt::WindowMinimizeButtonHint);
 
 	/** Create Layout */
-	createLayout();
+	createLayout(settings);
 }
 
-void MusicQuiz::QuizSettingsDialog::createLayout()
+void MusicQuiz::QuizSettingsDialog::createLayout(const MusicQuiz::QuizSettings& settings)
 {
 	/** Layout */
 	QVBoxLayout* mainlayout = new QVBoxLayout;
@@ -35,7 +35,6 @@ void MusicQuiz::QuizSettingsDialog::createLayout()
 	label->setObjectName("settingsLabel");
 	label->setAlignment(Qt::AlignHCenter);
 	mainlayout->addWidget(label);
-	//mainlayout->addWidget(label, Qt::AlignHCenter);
 
 	/** Horizontal Line */
 	QWidget* horizontalLine = new QWidget(this);
@@ -48,7 +47,7 @@ void MusicQuiz::QuizSettingsDialog::createLayout()
 	QHBoxLayout* hiddenTeamLayout = new QHBoxLayout;
 	hiddenTeamLayout->setSpacing(10);
 	_hiddenTeam = new QCheckBox("Hidden Teams");
-	_hiddenTeam->setChecked(_settings.hiddenTeamScore);
+	_hiddenTeam->setChecked(settings.hiddenTeamScore);
 	hiddenTeamLayout->addWidget(_hiddenTeam);
 
 	QPushButton* infoBtn = new QPushButton("?");
@@ -61,7 +60,7 @@ void MusicQuiz::QuizSettingsDialog::createLayout()
 	QHBoxLayout* hiddenAnswersLayout = new QHBoxLayout;
 	hiddenAnswersLayout->setSpacing(10);
 	_hiddenAnswers = new QCheckBox("Hidden Answers");
-	_hiddenAnswers->setChecked(_settings.hiddenTeamScore);
+	_hiddenAnswers->setChecked(settings.hiddenTeamScore);
 	hiddenAnswersLayout->addWidget(_hiddenAnswers);
 
 	infoBtn = new QPushButton("?");
@@ -85,6 +84,18 @@ void MusicQuiz::QuizSettingsDialog::createLayout()
 	//bool guessTheCategory = false;
 	//size_t pointsPerCategory = 500;
 
+	/** Save Button */
+	QHBoxLayout* buttonLayout = new QHBoxLayout;
+	buttonLayout->setSpacing(10);
+	QPushButton* saveBtn = new QPushButton("Save");
+	connect(saveBtn, SIGNAL(released()), this, SLOT(saveSettings()));
+	buttonLayout->addWidget(saveBtn);
+
+	/** Close Button */
+	QPushButton* closeBtn = new QPushButton("Close");
+	connect(closeBtn, SIGNAL(released()), this, SLOT(close()));
+	buttonLayout->addWidget(closeBtn);
+	mainlayout->addItem(buttonLayout);
 
 	/** Set Layout */
 	setLayout(mainlayout);
@@ -96,6 +107,23 @@ void MusicQuiz::QuizSettingsDialog::quit()
 	emit quitSignal();
 
 	/** Call Destructor */
+	close();
+}
+
+void MusicQuiz::QuizSettingsDialog::saveSettings()
+{
+	MusicQuiz::QuizSettings settings;
+
+	/** Hidden Anwsers */
+	settings.hiddenAnswers = _hiddenAnswers->isChecked();
+
+	/** Hidden Teams */
+	settings.hiddenTeamScore = _hiddenTeam->isChecked();
+
+	/** Emit Signal with settings */
+	emit settingsUpdated(settings);
+
+	/** Close Dialog */
 	close();
 }
 
