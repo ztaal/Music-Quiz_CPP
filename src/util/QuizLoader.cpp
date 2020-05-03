@@ -70,6 +70,11 @@ MusicQuiz::util::QuizLoader::QuizPreview MusicQuiz::util::QuizLoader::getQuizPre
 	/** Description */
 	quizPreview.quizDescription = sub_tree.get<std::string>("QuizDescription");
 
+	/** Guess the Category */
+	try {
+		quizPreview.guessTheCategory = sub_tree.get<bool>("QuizGuessTheCateotry.<xmlattr>.enabled");
+	} catch ( ... ) {}
+
 	/** Categories & Row Categories */
 	boost::property_tree::ptree::const_iterator ctrl = sub_tree.begin();
 	for ( ; ctrl != sub_tree.end(); ++ctrl ) {

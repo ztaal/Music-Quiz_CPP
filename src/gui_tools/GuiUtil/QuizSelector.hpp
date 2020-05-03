@@ -6,6 +6,8 @@
 #include <QObject>
 #include <QWidget>
 #include <QDialog>
+#include <QCheckBox>
+#include <QLineEdit>
 #include <QTextEdit>
 #include <QKeyEvent>
 #include <QListWidget>
@@ -81,11 +83,16 @@ namespace MusicQuiz {
 		void createLayout();
 
 		/** Variables */
+		QLineEdit* _authorText = nullptr;
 		QTextEdit* _categoryText = nullptr;
 		QTextEdit* _rowCategoryText = nullptr;
 		QTextEdit* _descriptionText = nullptr;
 		QListWidget* _quizSelectionList = nullptr;
 
+		QCheckBox* _includeSongsCheckbox = nullptr;
+		QCheckBox* _includeVideosCheckbox = nullptr;
+		QCheckBox* _guessTheCategoryCheckbox = nullptr;
+		
 		MusicQuiz::QuizSettings _settings;
 
 		std::vector<std::string> _quizList;

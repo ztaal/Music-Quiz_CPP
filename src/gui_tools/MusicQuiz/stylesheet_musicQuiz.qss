@@ -87,6 +87,12 @@ QLabel#settingsLabel
 	color				: Black;
 }
 
+QLabel#authorLabel
+{
+	font-size			: 25px;
+	color				: Black;
+}
+
 
 
 /****************************************/
@@ -118,3 +124,34 @@ QTextEdit#descriptionTextLabel
 	selection-background-color		: rgba(0, 0, 0, 0);
 	border							: none;
 }
+
+
+
+/****************************************/
+/*****		    QLineEdit  			*****/
+/****************************************/
+
+QLineEdit#authorText
+{
+	font-size						: 25px;
+	background-color				: rgba(0, 0, 0, 0);
+	selection-background-color		: rgba(0, 0, 0, 0);
+	border							: none;
+}
+
+
+
+/****************************************/
+/*****		    QCheckBox  			*****/
+/****************************************/
+
+QCheckBox#infoCheckbox
+{
+	font-size						: 20px;
+	color							: Black;
+}
+
+/*QCheckBox::indicator {
+     width: 40px;
+     height: 40px;
+}*/

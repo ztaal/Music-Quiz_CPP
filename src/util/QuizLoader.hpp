@@ -21,6 +21,7 @@ namespace MusicQuiz {
 				std::string quizAuthor = "";
 				bool includeSongs = false;
 				bool includeVideos = false;
+				bool guessTheCategory = false;
 				std::string quizDescription = "";
 				std::vector<std::string> categories;
 				std::vector<std::string> rowCategories;
@@ -45,7 +46,8 @@ namespace MusicQuiz {
 					}
 
 					out << "Quiz Include Songs: " << (quizPreview.includeSongs ? "Yes" : "No") << "\n";
-					out << "Quiz Include Videos: " << (quizPreview.includeVideos ? "Yes" : "No") << "\n\n";
+					out << "Quiz Include Videos: " << (quizPreview.includeVideos ? "Yes" : "No") << "\n";
+					out << "Quiz Quess the Category: " << (quizPreview.guessTheCategory ? "Yes" : "No") << "\n\n";
 					return out;
 				}
 			};

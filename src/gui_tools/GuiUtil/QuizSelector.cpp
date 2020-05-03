@@ -58,6 +58,8 @@ void MusicQuiz::QuizSelector::createLayout()
 	QHBoxLayout* middleLayout = new QHBoxLayout;
 	QVBoxLayout* quizSelectionLayout = new QVBoxLayout;
 	QVBoxLayout* descriptionLayout = new QVBoxLayout;
+	QHBoxLayout* authorLayout = new QHBoxLayout;
+	QHBoxLayout* infoLayout = new QHBoxLayout;
 	QVBoxLayout* categoryLayout = new QVBoxLayout;
 	QHBoxLayout* buttonLayout = new QHBoxLayout;
 	mainlayout->setHorizontalSpacing(10);
@@ -110,7 +112,41 @@ void MusicQuiz::QuizSelector::createLayout()
 	_descriptionText->setObjectName("descriptionTextLabel");
 	_descriptionText->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Expanding);
 	descriptionLayout->addWidget(_descriptionText);
+
+	/** Author */
+	QLabel* authorLabel = new QLabel("Author:");
+	authorLabel->setObjectName("authorLabel");
+	authorLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Minimum);
+	authorLabel->setAlignment(Qt::AlignLeft);
+	authorLayout->addWidget(authorLabel);
 	
+	_authorText = new QLineEdit;
+	_authorText->setReadOnly(true);
+	_authorText->setObjectName("authorText");
+	_authorText->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Minimum);
+	authorLayout->addWidget(_authorText);
+	descriptionLayout->addItem(authorLayout);
+
+	/** Quiz Info */
+	_includeSongsCheckbox = new QCheckBox(" Songs");
+	_includeSongsCheckbox->setObjectName("infoCheckbox");
+	_includeSongsCheckbox->setAttribute(Qt::WA_TransparentForMouseEvents);
+	_includeSongsCheckbox->setFocusPolicy(Qt::NoFocus);
+	infoLayout->addWidget(_includeSongsCheckbox, Qt::AlignCenter);
+
+	_includeVideosCheckbox = new QCheckBox(" Videos");
+	_includeVideosCheckbox->setObjectName("infoCheckbox");
+	_includeVideosCheckbox->setAttribute(Qt::WA_TransparentForMouseEvents);
+	_includeVideosCheckbox->setFocusPolicy(Qt::NoFocus);
+	infoLayout->addWidget(_includeVideosCheckbox, Qt::AlignCenter);
+
+	_guessTheCategoryCheckbox = new QCheckBox(" Guess the Category");
+	_guessTheCategoryCheckbox->setObjectName("infoCheckbox");
+	_guessTheCategoryCheckbox->setAttribute(Qt::WA_TransparentForMouseEvents);
+	_guessTheCategoryCheckbox->setFocusPolicy(Qt::NoFocus);
+	infoLayout->addWidget(_guessTheCategoryCheckbox, Qt::AlignCenter);
+	descriptionLayout->addItem(infoLayout);
+
 	/** Categories */
 	QLabel* categoryLabel = new QLabel("Categories");
 	categoryLabel->setObjectName("descriptionLabel");
@@ -188,6 +224,14 @@ void MusicQuiz::QuizSelector::selectionClicked()
 
 	/** Update Description */
 	_descriptionText->setText(QString::fromStdString(_quizPreviews[currentIndex].quizDescription));
+
+	/** Update Author */
+	_authorText->setText(QString::fromStdString(_quizPreviews[currentIndex].quizAuthor));
+
+	/** Update Info Checkboxes */
+	_includeSongsCheckbox->setChecked(_quizPreviews[currentIndex].includeSongs);
+	_includeVideosCheckbox->setChecked(_quizPreviews[currentIndex].includeVideos);
+	_guessTheCategoryCheckbox->setChecked(_quizPreviews[currentIndex].guessTheCategory);
 
 	/** Update Categories */
 	std::stringstream ss("");
