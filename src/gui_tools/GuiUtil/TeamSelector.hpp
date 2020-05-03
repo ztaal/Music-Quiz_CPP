@@ -11,6 +11,7 @@
 #include <QTextEdit>
 #include <QKeyEvent>
 #include <QListWidget>
+#include <QPushButton>
 
 #include "gui_tools/widgets/QuizTeam.hpp"
 
@@ -47,6 +48,13 @@ namespace MusicQuiz {
 		void teamSelected();
 
 		/**
+		 * @brief Updates the color indicator.
+		 *
+		 * @param[in] color The selected color.
+		 */
+		void teamColorChanged(QColor color);
+
+		/**
 		 * @brief Emits the quit signal.
 		 */
 		void quit();
@@ -62,5 +70,6 @@ namespace MusicQuiz {
 
 		/** Variables */
 		QLineEdit* _authorText = nullptr;
+		QPushButton* _colorIndicator = nullptr;
 	};
 }
