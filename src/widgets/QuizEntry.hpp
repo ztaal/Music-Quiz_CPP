@@ -106,7 +106,7 @@ namespace MusicQuiz {
 
 		QString _answer = "";
 		bool _entryAnswered = false;
-		QColor _answeredColor = QColor(0, 0, 205);
+		QColor _answeredColor = QColor(0, 0, 120);
 
 		QString _audioFile = "";
 
