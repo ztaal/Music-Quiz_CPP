@@ -15,6 +15,7 @@
 #include "gui_tools/widgets/QuizBoard.hpp"
 #include "gui_tools/widgets/QuizFactory.hpp"
 #include "gui_tools/GuiUtil/QuizSelector.hpp"
+#include "gui_tools/GuiUtil/TeamSelector.hpp"
 
 
 namespace MusicQuiz {
@@ -80,12 +81,20 @@ namespace MusicQuiz {
 		 */
 		void quizSelected(size_t quizIdx, const MusicQuiz::QuizSettings& settings);
 
+		/**
+		 * @brief Handles team selected.
+		 *
+		 * @param[in] teams The list of teams.
+		 */
+		void teamSelected(const std::vector<MusicQuiz::QuizTeam*>& teams);
+
 	private:
 
 		/** Variables */
 		MusicQuiz::QuizBoard* _quizBoard = nullptr;
 		std::vector< MusicQuiz::QuizTeam* > _teams;
 		MusicQuiz::QuizSelector* _quizSelector = nullptr;
+		MusicQuiz::TeamSelector* _teamSelector = nullptr;
 
 		/** Update Timer */
 		QTimer _updateTimer;
@@ -93,7 +102,7 @@ namespace MusicQuiz {
 
 		/** State Variables */
 		std::atomic<bool> _quizSelected = false;
-		std::atomic<bool> _teamSelected = true;
+		std::atomic<bool> _teamSelected = false;
 		std::atomic<bool> _introScreenDone = true;
 		std::atomic<bool> _gameCompleted = false;
 		QuizState _quizState = QuizState::SELECT_QUIZ;

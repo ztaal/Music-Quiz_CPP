@@ -50,7 +50,7 @@ void MusicQuiz::MusicQuizController::executeQuiz()
 	case MusicQuiz::MusicQuizController::SELECT_QUIZ:
 	{
 		/** Create Quiz Selector */
-		_quizSelector = new MusicQuiz::QuizSelector();
+		_quizSelector = new MusicQuiz::QuizSelector;
 
 		/** Connect Signals */
 		connect(_quizSelector, SIGNAL(quitSignal()), this, SLOT(closeWindow()));
@@ -71,13 +71,14 @@ void MusicQuiz::MusicQuizController::executeQuiz()
 		}
 
 		/** Create Team Selector */
-		MusicQuiz::QuizTeam* team1 = new MusicQuiz::QuizTeam("Team 1", QColor(255, 0, 0), nullptr);
-		MusicQuiz::QuizTeam* team2 = new MusicQuiz::QuizTeam("Team 2", QColor(0, 255, 0), nullptr);
-		_teams = { team1, team2 };
+		_teamSelector = new MusicQuiz::TeamSelector;
 
 		/** Connect Signals */
+		connect(_teamSelector, SIGNAL(quitSignal()), this, SLOT(closeWindow()));
+		connect(_teamSelector, SIGNAL(teamSelectedSignal(const std::vector<MusicQuiz::QuizTeam*>&)), this, SLOT(teamSelected(const std::vector<MusicQuiz::QuizTeam*>&)));
 
 		/** Show Widget */
+		_teamSelector->exec();
 
 		/** Go to select quiz intro screen state */
 		_quizState = QUIZ_INTRO_SCREEN;
@@ -185,4 +186,29 @@ void MusicQuiz::MusicQuizController::quizSelected(const size_t quizIdx, const Mu
 	_quizSelector->hide();
 	delete _quizSelector;
 	_quizSelector = nullptr;
+}
+
+void MusicQuiz::MusicQuizController::teamSelected(const std::vector<MusicQuiz::QuizTeam*>& teams)
+{
+	/** Set Quiz Selected */
+	_teamSelected = true;
+	if ( !teams.empty() ) {
+		LOG_INFO("Selected teams:");
+		for ( size_t i = 0; i < teams.size(); ++i ) {
+			LOG_INFO("\t" << teams[i]->getName().toStdString());
+		}
+	} else {
+		LOG_INFO("Playing Quiz wihtout teams");
+	}
+
+	/** Set Teams */
+	MusicQuiz::QuizTeam* team1 = new MusicQuiz::QuizTeam("Team 1", QColor(255, 0, 0), nullptr);
+	MusicQuiz::QuizTeam* team2 = new MusicQuiz::QuizTeam("Team 2", QColor(0, 255, 0), nullptr);
+	_teams = { team1, team2 };
+	//_teams = teams;
+
+	/** Remove Team Selector */
+	_teamSelector->hide();
+	delete _teamSelector;
+	_teamSelector = nullptr;
 }
