@@ -93,6 +93,12 @@ QLabel#authorLabel
 	color				: Black;
 }
 
+QLabel#selectTeamsLabel
+{
+	font-size			: 40px;
+	color				: Black;
+}
+
 
 
 /****************************************/
