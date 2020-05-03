@@ -19,6 +19,7 @@
 #include "common/Log.hpp"
 #include "util/QuizSettings.hpp"
 #include "gui_tools/widgets/QuizSettingsDialog.hpp"
+#include "gui_tools/GuiUtil/ColorPicker/QHueSlider.hpp"
 
 
 MusicQuiz::TeamSelector::TeamSelector(QWidget* parent) :
@@ -50,8 +51,8 @@ void MusicQuiz::TeamSelector::createLayout()
 	mainlayout->setColumnStretch(1, 3);
 
 	/** Label */
-	QLabel* topLabel = new QLabel("Select Quiz");
-	topLabel->setObjectName("selectQuizlabel");
+	QLabel* topLabel = new QLabel("Select Teams");
+	topLabel->setObjectName("selectTeamsLabel");
 
 	/** Horizontal Line */
 	QWidget* horizontalLine = new QWidget(this);
@@ -59,9 +60,14 @@ void MusicQuiz::TeamSelector::createLayout()
 	horizontalLine->setStyleSheet("background-color: rgb(0, 0, 0);");
 	horizontalLine->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
+
+	/** Gradient Slider */
+	ColorPicker::QHueSlider* slider = new ColorPicker::QHueSlider(this);
+
 	/** Add Widgets */
 	mainlayout->addWidget(topLabel, 0, 0, 1, 3, Qt::AlignCenter);
 	mainlayout->addWidget(horizontalLine, 1, 0, 1, 3);
+	mainlayout->addWidget(slider, 3, 0, 1, 3);
 
 	/** Set Layout */
 	setLayout(mainlayout);

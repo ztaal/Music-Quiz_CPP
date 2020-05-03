@@ -12,6 +12,8 @@
 #include <QKeyEvent>
 #include <QListWidget>
 
+#include "gui_tools/widgets/QuizTeam.hpp"
+
 
 namespace MusicQuiz {
 	class TeamSelector : public QDialog
@@ -51,7 +53,7 @@ namespace MusicQuiz {
 
 	signals:
 		void quitSignal();
-		void teamSelectedSignal();
+		void teamSelectedSignal(const std::vector<MusicQuiz::QuizTeam*>&);
 	protected:
 		/**
 		 * @brief Creates the category layout.
