@@ -18,7 +18,7 @@
 
 #include "common/Log.hpp"
 #include "util/QuizSettings.hpp"
-#include "widgets/QuizSettingsDialog.hpp"
+#include "gui_tools/widgets/QuizSettingsDialog.hpp"
 
 
 MusicQuiz::QuizSelector::QuizSelector(QWidget* parent) :

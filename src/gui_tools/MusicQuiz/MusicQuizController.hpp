@@ -12,8 +12,8 @@
 #include "ui_MusicQuizGUI.h"
 
 #include "util/QuizSettings.hpp"
-#include "widgets/QuizBoard.hpp"
-#include "widgets/QuizFactory.hpp"
+#include "gui_tools/widgets/QuizBoard.hpp"
+#include "gui_tools/widgets/QuizFactory.hpp"
 #include "gui_tools/GuiUtil/QuizSelector.hpp"
 
 

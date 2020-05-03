@@ -2,9 +2,9 @@
 
 #include <string>
 
-#include "widgets/QuizTeam.hpp"
-#include "widgets/QuizBoard.hpp"
 #include "util/QuizSettings.hpp"
+#include "gui_tools/widgets/QuizTeam.hpp"
+#include "gui_tools/widgets/QuizBoard.hpp"
 
 
 namespace MusicQuiz {

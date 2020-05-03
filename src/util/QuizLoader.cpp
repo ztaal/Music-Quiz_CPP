@@ -8,7 +8,7 @@
 
 #include "common/Log.hpp"
 
-#include "widgets/QuizEntry.hpp"
+#include "gui_tools/widgets/QuizEntry.hpp"
 
 
 std::vector<std::string> MusicQuiz::util::QuizLoader::getListOfQuizzes()

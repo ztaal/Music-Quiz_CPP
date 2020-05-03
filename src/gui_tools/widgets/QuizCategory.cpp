@@ -7,7 +7,7 @@
 
 #include "common/Log.hpp"
 
-#include "widgets/QuizEntry.hpp"
+#include "gui_tools/widgets/QuizEntry.hpp"
 
 
 MusicQuiz::QuizCategory::QuizCategory(QString name, const std::vector<MusicQuiz::QuizEntry*>& entries, QWidget* parent) :

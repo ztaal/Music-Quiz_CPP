@@ -12,11 +12,11 @@
 
 #include "common/Log.hpp"
 
-#include "widgets/QuizTeam.hpp"
-#include "widgets/QuizEntry.hpp"
-#include "widgets/QuizCategory.hpp"
-
 #include "util/QuizSettings.hpp"
+#include "gui_tools/widgets/QuizTeam.hpp"
+#include "gui_tools/widgets/QuizEntry.hpp"
+#include "gui_tools/widgets/QuizCategory.hpp"
+
 
 
 MusicQuiz::QuizBoard::QuizBoard(const std::vector<MusicQuiz::QuizCategory*>& categories, const std::vector<QString>& rowCategories, 

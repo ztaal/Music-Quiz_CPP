@@ -8,9 +8,9 @@
 
 #include "common/Log.hpp"
 
-#include "widgets/QuizTeam.hpp"
-#include "widgets/QuizEntry.hpp"
-#include "widgets/QuizCategory.hpp"
+#include "gui_tools/widgets/QuizTeam.hpp"
+#include "gui_tools/widgets/QuizEntry.hpp"
+#include "gui_tools/widgets/QuizCategory.hpp"
 
 
 MusicQuiz::MusicQuizController::MusicQuizController(QWidget* parent) :

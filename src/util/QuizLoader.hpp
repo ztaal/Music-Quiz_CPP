@@ -7,7 +7,7 @@
 #include <QString>
 
 #include <boost/filesystem.hpp>
-#include "widgets/QuizCategory.hpp"
+#include "gui_tools/widgets/QuizCategory.hpp"
 
 
 namespace MusicQuiz {

@@ -8,8 +8,8 @@
 #include "common/Log.hpp"
 
 #include "util/QuizLoader.hpp"
-#include "widgets/QuizEntry.hpp"
-#include "widgets/QuizCategory.hpp"
+#include "gui_tools/widgets/QuizEntry.hpp"
+#include "gui_tools/widgets/QuizCategory.hpp"
 
 
 MusicQuiz::QuizBoard* MusicQuiz::QuizFactory::createQuiz(const size_t idx, const QuizSettings& settings, const std::vector<MusicQuiz::QuizTeam*>& teams)
