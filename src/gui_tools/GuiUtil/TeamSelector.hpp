@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 
+#include <QColor>
 #include <QObject>
 #include <QWidget>
 #include <QDialog>
@@ -12,6 +13,7 @@
 #include <QKeyEvent>
 #include <QListWidget>
 #include <QPushButton>
+#include <QTableWidget>
 
 #include "gui_tools/widgets/QuizTeam.hpp"
 
@@ -48,6 +50,16 @@ namespace MusicQuiz {
 		void teamSelected();
 
 		/**
+		 * @brief Adds a team to the team table.
+		 */
+		void addTeam();
+
+		/**
+		 * @brief Removes the selected team from the team table.
+		 */
+		void removeTeam();
+
+		/**
 		 * @brief Updates the color indicator.
 		 *
 		 * @param[in] color The selected color.
@@ -69,7 +81,8 @@ namespace MusicQuiz {
 		void createLayout();
 
 		/** Variables */
-		QLineEdit* _authorText = nullptr;
-		QPushButton* _colorIndicator = nullptr;
+		QTableWidget* _teamTable = nullptr;
+		QLineEdit* _teamNameLineEdit = nullptr;
+		QColor _currentColor = QColor(0, 0, 255);
 	};
 }

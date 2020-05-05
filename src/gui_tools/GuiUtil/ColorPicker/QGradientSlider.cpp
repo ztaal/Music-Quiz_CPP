@@ -4,8 +4,8 @@
 #include <QPixmap>
 #include <QPainter>
 #include <QMouseEvent>
-#include <QStyleOptionSlider>
 #include <QLinearGradient>
+#include <QStyleOptionSlider>
 
 
 ColorPicker::QGradientSlider::QGradientSlider(QWidget* parent) : 
