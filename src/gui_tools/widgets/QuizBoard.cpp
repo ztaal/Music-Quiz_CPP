@@ -176,7 +176,7 @@ void MusicQuiz::QuizBoard::handleGameComplete()
 		}
 	}
 
-	if ( isGameComplete ) {
+	if ( isGameComplete && !_teams.empty() ) {
 		/** Find Winner */
 		const size_t highScore = (*std::max_element(_teams.begin(), _teams.end(), [](const MusicQuiz::QuizTeam* a, const MusicQuiz::QuizTeam* b) {return a->getScore() < b->getScore(); }))->getScore();
 		std::vector<MusicQuiz::QuizTeam*> winningTeams;
@@ -188,6 +188,8 @@ void MusicQuiz::QuizBoard::handleGameComplete()
 		}
 
 		emit gameComplete(winningTeams);
+	} else if ( isGameComplete ) {
+		emit gameComplete(std::vector<MusicQuiz::QuizTeam*>());
 	}
 }
 
