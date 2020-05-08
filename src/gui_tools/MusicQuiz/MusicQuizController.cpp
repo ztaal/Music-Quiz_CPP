@@ -202,10 +202,7 @@ void MusicQuiz::MusicQuizController::teamSelected(const std::vector<MusicQuiz::Q
 	}
 
 	/** Set Teams */
-	MusicQuiz::QuizTeam* team1 = new MusicQuiz::QuizTeam("Team 1", QColor(255, 0, 0), nullptr);
-	MusicQuiz::QuizTeam* team2 = new MusicQuiz::QuizTeam("Team 2", QColor(0, 255, 0), nullptr);
-	_teams = { team1, team2 };
-	//_teams = teams;
+	_teams = teams;
 
 	/** Remove Team Selector */
 	_teamSelector->hide();

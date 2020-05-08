@@ -117,13 +117,21 @@ void MusicQuiz::TeamSelector::teamSelected()
 	}
 
 	/** Get Teams */
+	std::vector<MusicQuiz::QuizTeam*> teams;
+	for ( size_t i = 0; i < _teamTable->rowCount(); ++i ) {
+		const QString teamName = _teamTable->item(i, 0)->text();
+		const QColor teamColor = _teamTable->item(i, 0)->backgroundColor();
+		MusicQuiz::QuizTeam* teamEntry = new MusicQuiz::QuizTeam(teamName, teamColor);
+
+		teams.push_back(teamEntry);
+	}
 
 	QString msg = QString::fromStdString("Are you sure you want to start the quiz?");
 	QMessageBox::StandardButton resBtn = QMessageBox::question(this, "Start Quiz?", msg,
 		QMessageBox::No | QMessageBox::Yes, QMessageBox::Yes);
 
 	if ( resBtn == QMessageBox::Yes ) {
-		emit teamSelectedSignal(std::vector<MusicQuiz::QuizTeam*>());
+		emit teamSelectedSignal(teams);
 	}
 }
 
