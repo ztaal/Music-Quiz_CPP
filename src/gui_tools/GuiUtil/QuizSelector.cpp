@@ -25,16 +25,22 @@ MusicQuiz::QuizSelector::QuizSelector(QWidget* parent) :
 	QDialog(parent)
 {
 	/** Set Window Flags */
-	setWindowFlags(windowFlags() | Qt::WindowMaximizeButtonHint | Qt::WindowMinimizeButtonHint);
+	setWindowFlags(windowFlags() | Qt::Window | Qt::FramelessWindowHint | Qt::WindowMaximizeButtonHint | Qt::WindowMinimizeButtonHint);
+
+	/** Set Object Name */
+	setObjectName("QuizSelector");
+
+	/** Set Fullscreen */
+	showFullScreen();
 
 	/** Set Size */
-	const size_t width = 1200;
+	/*const size_t width = 1200;
 	const size_t height = 600;
 	if ( parent == nullptr ) {
 		resize(width, height);
 	} else {
 		setGeometry(parent->x() + parent->width() / 2 - width / 2, parent->y() + parent->height() / 2 - height / 2, width, height);
-	}
+	}*/
 
 	/** Load Quizzes */
 	_quizList = MusicQuiz::util::QuizLoader::getListOfQuizzes();	

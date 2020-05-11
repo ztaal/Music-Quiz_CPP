@@ -8,6 +8,11 @@ QDialog#QuizBoard
 	background-color	: rgb(0, 0, 100);
 }
 
+QDialog#QuizSelector
+{
+	color				: Yellow;
+	background-color	: rgb(0, 0, 200);
+}
 
 
 /****************************************/
@@ -17,7 +22,7 @@ QDialog#QuizBoard
 QPushButton[objectName^="QuizEntry"]
 {
 	color				: Yellow;
-	font-size			: 25px;
+	font-size			: 40px;
 
 	background-color	: rgb(0, 0, 255);
 
@@ -34,7 +39,8 @@ QPushButton[objectName^="QuizEntry"]
 
 QPushButton[objectName^="TeamEntry"]
 {
-	font-size			: 25px;
+	font-size			: 40px;
+	font-weight			: bold;
 
 	min-height			: 100px;
 	min-width			: 200px;
@@ -47,13 +53,15 @@ QPushButton[objectName^="_dayliDouble"]
 
 QPushButton#QuizEntry_categoryLabel
 {
-	font-size			: 30px;
+	font-size			: 40px;
 	font-weight			: bold;
 }
 
 QPushButton#QuizEntry_rowCategoryLabel
 {
-	font-size			: 25px;
+	font-size			: 40px;
+	font-weight			: bold;
+
 	min-width			: 200px;
 	min-height			: 100px;
 }
@@ -75,13 +83,13 @@ QPushButton#settingsInfo
 QLabel#selectQuizlabel
 {
 	font-size			: 40px;
-	color				: Black;
+	color				: Yellow;
 }
 
 QLabel#descriptionLabel
 {
 	font-size			: 30px;
-	color				: Black;
+	color				: Yellow;
 }
 
 QLabel#settingsLabel
@@ -93,7 +101,7 @@ QLabel#settingsLabel
 QLabel#authorLabel
 {
 	font-size			: 25px;
-	color				: Black;
+	color				: Yellow;
 }
 
 QLabel#selectTeamsLabel

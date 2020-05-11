@@ -61,7 +61,7 @@ void MusicQuiz::QuizBoard::createLayout()
 	QHBoxLayout* categorylayout = new QHBoxLayout;
 	QHBoxLayout* teamsLayout = new QHBoxLayout;
 	mainlayout->setHorizontalSpacing(0);
-	mainlayout->setVerticalSpacing(0);
+	mainlayout->setVerticalSpacing(15);
 	teamsLayout->setSpacing(10);
 	categorylayout->setSpacing(10);
 

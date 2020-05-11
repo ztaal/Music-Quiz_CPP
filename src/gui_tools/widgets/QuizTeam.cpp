@@ -18,7 +18,7 @@ MusicQuiz::QuizTeam::QuizTeam(const QString& name, const QColor& color, QWidget*
 	}
 
 	/** Set Team Text */
-	QString str = _name + ": " + QString::fromLocal8Bit(std::to_string(_score).c_str());
+	QString str = _name + ": " + QString::fromLocal8Bit(std::to_string(_score).c_str()) + "$";
 	setText(str);
 
 	/** Set Background Color */
@@ -49,7 +49,7 @@ void MusicQuiz::QuizTeam::setHideScore(bool hide)
 	_hideScore = hide;
 
 	/** Update Name */
-	QString str = _name + (_hideScore ? "" : ": " + QString::fromLocal8Bit(std::to_string(_score).c_str()));
+	QString str = _name + (_hideScore ? "" : ": " + QString::fromLocal8Bit(std::to_string(_score).c_str()) + "$");
 	setText(str);
 }
 
@@ -81,7 +81,7 @@ void MusicQuiz::QuizTeam::accumulateScore()
 	_newPoints -= val;
 
 	/** Update Text */
-	QString str = _name + (_hideScore ? "" : ": " + QString::fromLocal8Bit(std::to_string(_score).c_str()));
+	QString str = _name + (_hideScore ? "" : ": " + QString::fromLocal8Bit(std::to_string(_score).c_str()) + "$");
 	setText(str);
 
 	/** Check if points have been added */

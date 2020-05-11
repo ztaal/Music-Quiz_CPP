@@ -12,7 +12,7 @@ MusicQuiz::QuizEntry::QuizEntry(const QString &audioFile, const QString &answer,
 	QPushButton(parent), _audioFile(audioFile), _answer(answer), _points(points), _startTime(startTime), _answerStartTime(answerStartTime), _endTime(endTime), _answerEndTime(answerEndTime)
 {
 	/** Set Button Text */
-	setText(QString::fromLocal8Bit(std::to_string(_points).c_str()));
+	setText("$" + QString::fromLocal8Bit(std::to_string(_points).c_str()));
 
 	/** Set Start State */
 	_state = EntryState::IDLE;
@@ -132,7 +132,7 @@ void MusicQuiz::QuizEntry::rightClickEvent()
 	case QuizEntry::EntryState::PLAYED: // Back to idle
 		_entryAnswered = false;
 		_state = EntryState::IDLE;
-		setText(QString::fromLocal8Bit(std::to_string(_points).c_str()));
+		setText("$" + QString::fromLocal8Bit(std::to_string(_points).c_str()));
 		break;
 	default:
 		throw std::runtime_error("Unknown Quiz Entry State Encountered.");
