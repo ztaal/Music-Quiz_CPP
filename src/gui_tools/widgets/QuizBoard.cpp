@@ -26,6 +26,9 @@ MusicQuiz::QuizBoard::QuizBoard(const std::vector<MusicQuiz::QuizCategory*>& cat
 	/** Set Window Flags */
 	setWindowFlags(windowFlags() | Qt::WindowMaximizeButtonHint | Qt::WindowMinimizeButtonHint);
 
+	/** Set Object Name */
+	setObjectName("QuizBoard");
+
 	/** Sanity Check */
 	if ( _categories.empty() ) {
 		throw std::runtime_error("Cannot create quiz board without any categories.");
@@ -55,14 +58,13 @@ void MusicQuiz::QuizBoard::createLayout()
 	QHBoxLayout* categorylayout = new QHBoxLayout;
 	QHBoxLayout* teamsLayout = new QHBoxLayout;
 	mainlayout->setHorizontalSpacing(0);
-	mainlayout->setVerticalSpacing(5);
+	mainlayout->setVerticalSpacing(0);
 	teamsLayout->setSpacing(10);
-	categorylayout->setSpacing(0);
+	categorylayout->setSpacing(10);
 
 	/** Categories */
 	for ( size_t i = 0; i < _categories.size(); ++i ) {
 		categorylayout->addWidget(_categories[i]);
-		categorylayout->setStretch(i, 1);
 
 		/** Connect Buttons */
 		for ( size_t j = 0; j < _categories[i]->size(); ++j ) {
@@ -78,28 +80,28 @@ void MusicQuiz::QuizBoard::createLayout()
 	if ( !_rowCategories.empty() ) {
 		QVBoxLayout* rowCategorylayout = new QVBoxLayout;
 		rowCategorylayout->setSpacing(10);
-		rowCategorylayout->setSizeConstraint(QVBoxLayout::SetMinimumSize);
 
 		/** Add Empty Box */
 		QPushButton* rowCategoryBtn = new QPushButton("", this);
-		rowCategoryBtn->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+		rowCategoryBtn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 		rowCategoryBtn->setObjectName("QuizEntry_rowCategoryLabel");
 		rowCategorylayout->addWidget(rowCategoryBtn);
 
 		/** Add Row Categories */
 		for ( size_t i = 0; i < _rowCategories.size(); ++i ) {
 			rowCategoryBtn = new QPushButton(_rowCategories[i], this);
-			rowCategoryBtn->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+			rowCategoryBtn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 			rowCategoryBtn->setObjectName("QuizEntry_rowCategoryLabel");
 			rowCategorylayout->addWidget(rowCategoryBtn);
 		}
 
 		/** Add layouts to main layout */
 		QGridLayout* tmpLayout = new QGridLayout;
-		tmpLayout->setSizeConstraint(QGridLayout::SetMinimumSize);
+		tmpLayout->setSpacing(10);
 		tmpLayout->addItem(rowCategorylayout, 0, 0);
 		tmpLayout->addItem(categorylayout, 0, 1);
-		tmpLayout->setColumnStretch(1, 1);
+		tmpLayout->setColumnStretch(0, 1);
+		tmpLayout->setColumnStretch(1, _categories.size() * 2);
 		mainlayout->addItem(tmpLayout, 0, 0);
 	} else {
 		mainlayout->addItem(categorylayout, 0, 0);

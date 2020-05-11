@@ -30,6 +30,7 @@ void MusicQuiz::QuizCategory::createLayout()
 {
 	/** Layout */
 	QVBoxLayout* mainlayout = new QVBoxLayout;
+	mainlayout->setContentsMargins(0, 0, 0, 0);
 	mainlayout->setSpacing(10);
 
 	/** Category Name */
