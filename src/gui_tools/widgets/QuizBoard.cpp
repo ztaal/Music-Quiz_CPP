@@ -24,10 +24,13 @@ MusicQuiz::QuizBoard::QuizBoard(const std::vector<MusicQuiz::QuizCategory*>& cat
 	QDialog(parent), _categories(categories), _teams(teams), _settings(settings)
 {
 	/** Set Window Flags */
-	setWindowFlags(windowFlags() | Qt::WindowMaximizeButtonHint | Qt::WindowMinimizeButtonHint);
+	setWindowFlags(windowFlags() | Qt::Window | Qt::FramelessWindowHint | Qt::WindowMaximizeButtonHint | Qt::WindowMinimizeButtonHint);
 
 	/** Set Object Name */
 	setObjectName("QuizBoard");
+
+	/** Set Fullscreen */
+	showFullScreen();
 
 	/** Sanity Check */
 	if ( _categories.empty() ) {
