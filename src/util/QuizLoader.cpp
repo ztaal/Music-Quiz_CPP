@@ -114,7 +114,7 @@ MusicQuiz::util::QuizLoader::QuizPreview MusicQuiz::util::QuizLoader::getQuizPre
 	return quizPreview;
 }
 
-std::vector<MusicQuiz::QuizCategory*> MusicQuiz::util::QuizLoader::loadQuizCategories(const size_t idx)
+std::vector<MusicQuiz::QuizCategory*> MusicQuiz::util::QuizLoader::loadQuizCategories(const size_t idx, std::string& err)
 {
 	/** Get List of Quizzes */
 	const std::vector<std::string> quizList = getListOfQuizzes();
@@ -166,6 +166,13 @@ std::vector<MusicQuiz::QuizCategory*> MusicQuiz::util::QuizLoader::loadQuizCateg
 							const size_t endTime = it->second.get<size_t>("EndTime");
 							const size_t answerStartTime = it->second.get<size_t>("AnswerStartTime");
 							const size_t answerEndTime = it->second.get<size_t>("AnswerEndTime");
+
+							/** Check if file exsists */
+							if ( !boost::filesystem::exists(songFile.toStdString()) ) {
+								err += "Missing song file '" + songFile.toStdString() + "'\n";
+							}
+
+							/** Push Back Entry */
 							categorieEntries.push_back(new MusicQuiz::QuizEntry(songFile, answer, points, startTime, answerStartTime, endTime, answerEndTime));
 						}
 					}

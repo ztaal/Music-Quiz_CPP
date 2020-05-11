@@ -1,9 +1,11 @@
 #include "QuizFactory.hpp"
 
 #include <vector>
+#include <string>
 #include <stdexcept>
 
 #include <QString>
+#include <QMessageBox>
 
 #include "common/Log.hpp"
 
@@ -19,7 +21,11 @@ MusicQuiz::QuizBoard* MusicQuiz::QuizFactory::createQuiz(const size_t idx, const
 
 	try {
 		/** Load Categories */
-		std::vector<MusicQuiz::QuizCategory*> categories = MusicQuiz::util::QuizLoader::loadQuizCategories(idx);
+		std::string loadError;
+		std::vector<MusicQuiz::QuizCategory*> categories = MusicQuiz::util::QuizLoader::loadQuizCategories(idx, loadError);
+		if ( !loadError.empty() ) {
+			QMessageBox::information(nullptr, "Info", "Incomplete Quiz:\n\n" + QString::fromStdString(loadError));
+		}
 
 		/** Load Row Categories */
 		std::vector< QString > rowCategories = MusicQuiz::util::QuizLoader::loadQuizRowCategories(idx);
@@ -50,8 +56,6 @@ MusicQuiz::QuizBoard* MusicQuiz::QuizFactory::createQuiz(const size_t idx, const
 		
 		/** Set Quiz Name */
 		//quizBoard->setQuizName(QString::fromStdString(MusicQuiz::util::QuizLoader::getListOfQuizzes[idx]));
-
-
 
 		return quizBoard;
 	} catch ( const std::exception& err ) {

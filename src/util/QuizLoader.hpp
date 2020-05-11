@@ -82,10 +82,11 @@ namespace MusicQuiz {
 			* @brief Returns a list of the categories.
 			*
 			* @param[in] idx The index of the quiz to load the categories from.
+			* @param[out] err The error message.
 			*
 			* @return The quiz categories.
 			*/
-			static std::vector<MusicQuiz::QuizCategory*> loadQuizCategories(size_t idx);
+			static std::vector<MusicQuiz::QuizCategory*> loadQuizCategories(size_t idx, std::string& err);
 
 			/**
 			* @brief Returns a list of the row categories.

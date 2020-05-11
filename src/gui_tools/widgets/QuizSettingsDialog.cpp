@@ -142,7 +142,7 @@ void MusicQuiz::QuizSettingsDialog::keyPressEvent(QKeyEvent* event)
 
 void MusicQuiz::QuizSettingsDialog::informationMessageBox(const QString& info)
 {
-	QMessageBox::information(this, "info", info);
+	QMessageBox::information(this, "Info", info);
 }
 
 void MusicQuiz::QuizSettingsDialog::showHiddenTeamsInfo()
