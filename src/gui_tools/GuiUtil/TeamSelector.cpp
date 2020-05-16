@@ -1,11 +1,13 @@
 #include "TeamSelector.hpp"
 
+#include <random>
 #include <sstream>
 #include <stdexcept>
 
 #include <QColor>
 #include <QLabel>
 #include <QWidget>
+#include <QRegExp>
 #include <QCheckBox>
 #include <QGridLayout>
 #include <QHBoxLayout>
@@ -21,7 +23,6 @@
 #include "common/Log.hpp"
 #include "util/QuizSettings.hpp"
 #include "gui_tools/widgets/QuizSettingsDialog.hpp"
-#include "gui_tools/GuiUtil/ColorPicker/QHueSlider.hpp"
 
 
 MusicQuiz::TeamSelector::TeamSelector(QWidget* parent) :
@@ -66,14 +67,17 @@ void MusicQuiz::TeamSelector::createLayout()
 	horizontalLine->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
 	/** Team Line Edit */
+	QRegExp re(".{1,16}");
+	QRegExpValidator* validator = new QRegExpValidator(re);
 	_teamNameLineEdit = new QLineEdit;
+	_teamNameLineEdit->setValidator(validator);
 	_teamNameLineEdit->setObjectName("_teamLineEdit");
 	selectionLayout->addWidget(_teamNameLineEdit, 0, 0, 1, 2);
 
 	/** Gradient Slider */
-	ColorPicker::QHueSlider* hueSlider = new ColorPicker::QHueSlider(this);
-	connect(hueSlider, SIGNAL(colorChanged(QColor)), this, SLOT(teamColorChanged(QColor)));
-	selectionLayout->addWidget(hueSlider, 1, 0, 1, 2);
+	_hueSlider = new ColorPicker::QHueSlider(this);
+	connect(_hueSlider, SIGNAL(colorChanged(QColor)), this, SLOT(teamColorChanged(QColor)));
+	selectionLayout->addWidget(_hueSlider, 1, 0, 1, 2);
 
 	/** Add Button */
 	QPushButton* addBtn = new QPushButton("Add Team");
@@ -138,20 +142,51 @@ void MusicQuiz::TeamSelector::teamSelected()
 void MusicQuiz::TeamSelector::addTeam()
 {
 	/** Sanity Check */
-	if ( _teamTable == nullptr ) {
-		LOG_ERROR("Failed to add team. Team Table not created.");
+	if ( _teamTable == nullptr || _teamNameLineEdit == nullptr || _hueSlider == nullptr ) {
+		LOG_ERROR("Failed to add team. Team Selector not created correctly.");
 		return;
 	}
 
-	/** Insert Row */
+	QString teamName = _teamNameLineEdit->text();
+	if ( teamName == "" ) {
+		LOG_INFO("Can not add a team with a team name.");
+		return;
+	}
+
+	/** Limit Number of teams */
 	const int row = _teamTable->rowCount();
+	if ( row >= 8 ) {
+		LOG_INFO("Maximum number of teams reached.");
+		return;
+	}
+
+	/** Check if team exisis */
+	for ( size_t i = 0; i < row; ++i ) {
+		if ( teamName == _teamTable->item(i, 0)->text() ) {
+			LOG_INFO("Team name alredy exists.");
+			return;
+		}
+	}
+
+	/** Get Text color */
+	QColor textColor = QColor(255 - _currentColor.red(), 255 - _currentColor.green(), 255 - _currentColor.blue());
+
+	/** Insert Row */
 	_teamTable->insertRow(row);
 
 	/** Add Entry */
 	QTableWidgetItem* entry = new QTableWidgetItem;
-	entry->setData(Qt::DisplayRole, _teamNameLineEdit->text());
+	entry->setData(Qt::DisplayRole, teamName);
 	entry->setBackgroundColor(_currentColor);
+	entry->setTextAlignment(Qt::AlignCenter);
+	entry->setTextColor(textColor);
 	_teamTable->setItem(row, 0, entry);
+
+	/** Choose a random color for the team */
+	std::random_device dev;
+	std::mt19937 rng(dev());
+	std::uniform_int_distribution<std::mt19937::result_type> dist(_hueSlider->minimum(), _hueSlider->maximum());
+	_hueSlider->setValue(dist(rng));
 }
 
 void MusicQuiz::TeamSelector::removeTeam()

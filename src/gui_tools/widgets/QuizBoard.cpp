@@ -66,16 +66,23 @@ void MusicQuiz::QuizBoard::createLayout()
 	categorylayout->setSpacing(10);
 
 	/** Categories */
+	size_t maxNumberOfEntries = 0;
 	for ( size_t i = 0; i < _categories.size(); ++i ) {
 		categorylayout->addWidget(_categories[i]);
 
 		/** Connect Buttons */
-		for ( size_t j = 0; j < _categories[i]->size(); ++j ) {
+		const size_t categorySize = _categories[i]->size();
+		for ( size_t j = 0; j < categorySize; ++j ) {
 			MusicQuiz::QuizEntry* quizEntry = (*_categories[i])[j];
 			if ( quizEntry != nullptr ) {
 				connect(quizEntry, SIGNAL(answered(size_t)), this, SLOT(handleAnswer(size_t)));
 				connect(quizEntry, SIGNAL(played()), this, SLOT(handleGameComplete()));
 			}
+		}
+
+		/** Get Maximum Number of Entries */
+		if ( categorySize > maxNumberOfEntries ) {
+			maxNumberOfEntries = categorySize;
 		}
 	}
 
@@ -112,9 +119,14 @@ void MusicQuiz::QuizBoard::createLayout()
 
 	/** Teams */
 	for ( size_t i = 0; i < _teams.size(); ++i ) {
+		_teams[i]->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 		teamsLayout->addWidget(_teams[i]);
 	}
 	mainlayout->addItem(teamsLayout, 1, 0);
+
+	/** Set Row Stretch */
+	mainlayout->setRowStretch(0, (maxNumberOfEntries + 1) * 1.5);
+	mainlayout->setRowStretch(1, 1);
 
 	/** Set Layout */
 	setLayout(mainlayout);

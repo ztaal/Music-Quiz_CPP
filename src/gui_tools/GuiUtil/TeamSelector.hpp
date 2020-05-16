@@ -16,6 +16,7 @@
 #include <QTableWidget>
 
 #include "gui_tools/widgets/QuizTeam.hpp"
+#include "gui_tools/GuiUtil/ColorPicker/QHueSlider.hpp"
 
 
 namespace MusicQuiz {
@@ -84,5 +85,7 @@ namespace MusicQuiz {
 		QTableWidget* _teamTable = nullptr;
 		QLineEdit* _teamNameLineEdit = nullptr;
 		QColor _currentColor = QColor(0, 0, 255);
+
+		ColorPicker::QHueSlider* _hueSlider = nullptr;
 	};
 }
