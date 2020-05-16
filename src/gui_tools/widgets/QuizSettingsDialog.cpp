@@ -152,5 +152,5 @@ void MusicQuiz::QuizSettingsDialog::showHiddenTeamsInfo()
 
 void MusicQuiz::QuizSettingsDialog::showHiddenAnswersInfo()
 {
-	informationMessageBox("If enabled the quiz answers will be hidden after the song have been quessed.");
+	informationMessageBox("If enabled the quiz answers will be hidden after the song have been guessed.");
 }
