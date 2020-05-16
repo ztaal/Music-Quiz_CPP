@@ -125,8 +125,10 @@ void MusicQuiz::QuizBoard::createLayout()
 	mainlayout->addItem(teamsLayout, 1, 0);
 
 	/** Set Row Stretch */
-	mainlayout->setRowStretch(0, (maxNumberOfEntries + 1) * 1.5);
-	mainlayout->setRowStretch(1, 1);
+	if ( !_teams.empty() ) {
+		mainlayout->setRowStretch(0, (maxNumberOfEntries + 1) * 1.5);
+		mainlayout->setRowStretch(1, 1);
+	}
 
 	/** Set Layout */
 	setLayout(mainlayout);
