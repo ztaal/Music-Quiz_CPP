@@ -28,23 +28,10 @@ MusicQuiz::QuizSelector::QuizSelector(QWidget* parent) :
 	setWindowFlags(windowFlags() | Qt::Window | Qt::FramelessWindowHint | Qt::WindowMaximizeButtonHint | Qt::WindowMinimizeButtonHint);
 
 	/** Set Object Name */
-	setObjectName("QuizSelector"); 
-	setContentsMargins(30, 30, 30, 30);
-
-	/** Set Fullscreen */
-	//showFullScreen();
-
-	/** Set Size */
-	const size_t width = 1200;
-	const size_t height = 600;
-	if ( parent == nullptr ) {
-		resize(width, height);
-	} else {
-		setGeometry(parent->x() + parent->width() / 2 - width / 2, parent->y() + parent->height() / 2 - height / 2, width, height);
-	}
+	setObjectName("QuizSelector");
 
 	/** Load Quizzes */
-	_quizList = MusicQuiz::util::QuizLoader::getListOfQuizzes();	
+	_quizList = MusicQuiz::util::QuizLoader::getListOfQuizzes();
 	if ( _quizList.empty() ) {
 		throw std::runtime_error("No quizzes available.");
 	}
@@ -56,6 +43,9 @@ MusicQuiz::QuizSelector::QuizSelector(QWidget* parent) :
 
 	/** Create Layout */
 	createLayout();
+
+	/** Set Fullscreen */
+	showFullScreen();
 }
 
 void MusicQuiz::QuizSelector::createLayout()
@@ -126,7 +116,7 @@ void MusicQuiz::QuizSelector::createLayout()
 	authorLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Minimum);
 	authorLabel->setAlignment(Qt::AlignLeft);
 	authorLayout->addWidget(authorLabel);
-	
+
 	_authorText = new QLineEdit;
 	_authorText->setReadOnly(true);
 	_authorText->setObjectName("authorText");
@@ -214,19 +204,19 @@ void MusicQuiz::QuizSelector::selectionClicked()
 	/** Sanity Check */
 	if ( _quizPreviews.empty() ) {
 		LOG_ERROR("Can not update QuizSelection no previews loaded.")
-		return;
+			return;
 	}
 
 	if ( _descriptionText == nullptr || _quizSelectionList == nullptr ) {
 		LOG_ERROR("Can not update QuizSelection item are nullptr.")
-		return;
+			return;
 	}
 
 	/** Current Index */
 	size_t currentIndex = _quizSelectionList->currentRow();
 	if ( currentIndex < 0 || currentIndex >= _quizPreviews.size() ) {
 		LOG_ERROR("Can not update QuizSelection index out of range.")
-		return;
+			return;
 	}
 
 	/** Update Description */
@@ -303,11 +293,30 @@ void MusicQuiz::QuizSelector::updateSettings(const MusicQuiz::QuizSettings& sett
 
 void MusicQuiz::QuizSelector::quit()
 {
-	/** Send Quit Signal */
-	emit quitSignal();
+	closeWindow();
+}
 
-	/** Call Destructor */
-	close();
+void MusicQuiz::QuizSelector::closeEvent(QCloseEvent* event)
+{
+	if ( _quizClosed || closeWindow() ) {
+		event->accept();
+	} else {
+		event->ignore();
+	}
+}
+
+bool MusicQuiz::QuizSelector::closeWindow()
+{
+	QMessageBox::StandardButton resBtn = QMessageBox::question(this, "Close Music Quiz?", "Are you sure you want to close the quiz?",
+		QMessageBox::No | QMessageBox::Yes, QMessageBox::Yes);
+
+	if ( resBtn == QMessageBox::Yes ) {
+		_quizClosed = true;
+		emit quitSignal();
+		return true;
+	}
+
+	return false;
 }
 
 void MusicQuiz::QuizSelector::keyPressEvent(QKeyEvent* event)
@@ -315,7 +324,7 @@ void MusicQuiz::QuizSelector::keyPressEvent(QKeyEvent* event)
 	switch ( event->key() )
 	{
 	case Qt::Key_Escape:
-		emit quitSignal();
+		closeWindow();
 		break;
 	default:
 		QWidget::keyPressEvent(event);

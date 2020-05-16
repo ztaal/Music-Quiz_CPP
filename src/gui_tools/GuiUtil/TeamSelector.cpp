@@ -29,19 +29,16 @@ MusicQuiz::TeamSelector::TeamSelector(QWidget* parent) :
 	QDialog(parent)
 {
 	/** Set Window Flags */
-	setWindowFlags(windowFlags() | Qt::WindowMaximizeButtonHint | Qt::WindowMinimizeButtonHint);
+	setWindowFlags(windowFlags() | Qt::Window | Qt::FramelessWindowHint | Qt::WindowMaximizeButtonHint | Qt::WindowMinimizeButtonHint);
 
-	/** Set Size */
-	const size_t width = 800;
-	const size_t height = 600;
-	if ( parent == nullptr ) {
-		resize(width, height);
-	} else {
-		setGeometry(parent->x() + parent->width() / 2 - width / 2, parent->y() + parent->height() / 2 - height / 2, width, height);
-	}
+	/** Set Object Name */
+	setObjectName("TeamSelector");
 
 	/** Create Layout */
 	createLayout();
+
+	/** Set Fullscreen */
+	showFullScreen();
 }
 
 void MusicQuiz::TeamSelector::createLayout()
@@ -67,7 +64,7 @@ void MusicQuiz::TeamSelector::createLayout()
 	horizontalLine->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
 	/** Team Line Edit */
-	QRegExp re(".{1,16}");
+	QRegExp re(".{1,14}");
 	QRegExpValidator* validator = new QRegExpValidator(re);
 	_teamNameLineEdit = new QLineEdit;
 	_teamNameLineEdit->setValidator(validator);
@@ -225,13 +222,27 @@ void MusicQuiz::TeamSelector::teamColorChanged(QColor color)
 	_teamNameLineEdit->setStyleSheet(QString::fromStdString(ss.str()));
 }
 
-void MusicQuiz::TeamSelector::quit()
+void MusicQuiz::TeamSelector::closeEvent(QCloseEvent* event)
 {
-	/** Send Quit Signal */
-	emit quitSignal();
+	if ( _quizClosed || closeWindow() ) {
+		event->accept();
+	} else {
+		event->ignore();
+	}
+}
 
-	/** Call Destructor */
-	close();
+bool MusicQuiz::TeamSelector::closeWindow()
+{
+	QMessageBox::StandardButton resBtn = QMessageBox::question(this, "Close Music Quiz?", "Are you sure you want to close the quiz?",
+		QMessageBox::No | QMessageBox::Yes, QMessageBox::Yes);
+
+	if ( resBtn == QMessageBox::Yes ) {
+		_quizClosed = true;
+		emit quitSignal();
+		return true;
+	}
+
+	return false;
 }
 
 void MusicQuiz::TeamSelector::keyPressEvent(QKeyEvent* event)
@@ -239,7 +250,7 @@ void MusicQuiz::TeamSelector::keyPressEvent(QKeyEvent* event)
 	switch ( event->key() )
 	{
 	case Qt::Key_Escape:
-		emit quitSignal();
+		closeWindow();
 		break;
 	default:
 		QWidget::keyPressEvent(event);

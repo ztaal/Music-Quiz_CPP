@@ -38,6 +38,13 @@ namespace MusicQuiz {
 
 	public slots:
 		/**
+		 * @brief Handles the close event.
+		 *
+		 * @param[in] event The event.
+		 */
+		void closeEvent(QCloseEvent* event);
+
+		/**
 		 * @brief Handles the key press events.
 		 *
 		 * @param[in] event The event.
@@ -45,6 +52,13 @@ namespace MusicQuiz {
 		void keyPressEvent(QKeyEvent* event);
 
 	private slots:
+		/**
+		 * @brief Closes the window.
+		 *
+		 * @return True if the window should be closed.
+		 */
+		bool closeWindow();
+
 		/**
 		 * @brief Emits the quiz selected signal.
 		 */
@@ -67,11 +81,6 @@ namespace MusicQuiz {
 		 */
 		void teamColorChanged(QColor color);
 
-		/**
-		 * @brief Emits the quit signal.
-		 */
-		void quit();
-
 	signals:
 		void quitSignal();
 		void teamSelectedSignal(const std::vector<MusicQuiz::QuizTeam*>&);
@@ -82,6 +91,8 @@ namespace MusicQuiz {
 		void createLayout();
 
 		/** Variables */
+		bool _quizClosed = false;
+
 		QTableWidget* _teamTable = nullptr;
 		QLineEdit* _teamNameLineEdit = nullptr;
 		QColor _currentColor = QColor(0, 0, 255);

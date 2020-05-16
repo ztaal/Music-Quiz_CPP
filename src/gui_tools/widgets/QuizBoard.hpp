@@ -52,6 +52,13 @@ namespace MusicQuiz {
 
 	public slots:
 		/**
+		 * @brief Closes the window.
+		 *
+		 * @return True if the window should be closed.
+		 */
+		bool closeWindow();
+
+		/**
 		 * @brief Handle answer.
 		 *
 		 * @param[in] points The points from the entry.
@@ -62,6 +69,13 @@ namespace MusicQuiz {
 		 * @brief Checks if game is over.
 		 */
 		void handleGameComplete();
+
+		/**
+		 * @brief Handles the close event.
+		 *
+		 * @param[in] event The event.
+		 */
+		void closeEvent(QCloseEvent* event);
 
 		/**
 		 * @brief Handles the key press events.
@@ -81,6 +95,8 @@ namespace MusicQuiz {
 		void createLayout();
 
 		/** Variables */
+		bool _quizClosed = false;
+
 		QString _name = "";
 
 		MusicQuiz::QuizSettings _settings;

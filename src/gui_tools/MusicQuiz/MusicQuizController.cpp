@@ -53,7 +53,7 @@ void MusicQuiz::MusicQuizController::executeQuiz()
 		_quizSelector = new MusicQuiz::QuizSelector;
 
 		/** Connect Signals */
-		connect(_quizSelector, SIGNAL(quitSignal()), this, SLOT(closeWindow()));
+		connect(_quizSelector, SIGNAL(quitSignal()), this, SLOT(quitQuiz()));
 		connect(_quizSelector, SIGNAL(quizSelectedSignal(size_t, const MusicQuiz::QuizSettings&)), this, SLOT(quizSelected(size_t, const MusicQuiz::QuizSettings&)));
 
 		/** Show widget */
@@ -74,7 +74,7 @@ void MusicQuiz::MusicQuizController::executeQuiz()
 		_teamSelector = new MusicQuiz::TeamSelector;
 
 		/** Connect Signals */
-		connect(_teamSelector, SIGNAL(quitSignal()), this, SLOT(closeWindow()));
+		connect(_teamSelector, SIGNAL(quitSignal()), this, SLOT(quitQuiz()));
 		connect(_teamSelector, SIGNAL(teamSelectedSignal(const std::vector<MusicQuiz::QuizTeam*>&)), this, SLOT(teamSelected(const std::vector<MusicQuiz::QuizTeam*>&)));
 
 		/** Show Widget */
@@ -108,7 +108,7 @@ void MusicQuiz::MusicQuizController::executeQuiz()
 		_quizBoard = MusicQuiz::QuizFactory::createQuiz(_selectedQuizIdx, _settings, _teams);
 
 		/** Connect Signals */
-		connect(_quizBoard, SIGNAL(quitSignal()), this, SLOT(closeWindow()));
+		connect(_quizBoard, SIGNAL(quitSignal()), this, SLOT(quitQuiz()));
 
 		/** Show Widget */
 		_quizBoard->exec();
@@ -135,41 +135,10 @@ void MusicQuiz::MusicQuizController::executeQuiz()
 	}
 }
 
-void MusicQuiz::MusicQuizController::closeEvent(QCloseEvent* event)
+void MusicQuiz::MusicQuizController::quitQuiz()
 {
-	if ( closeWindow() ) {
-		event->accept();
-	} else {
-		event->ignore();
-	}
-}
-
-bool MusicQuiz::MusicQuizController::closeWindow()
-{
-	QMessageBox::StandardButton resBtn = QMessageBox::question(this, "Close Music Quiz?", "Are you sure you want to close the quiz?",
-		QMessageBox::No | QMessageBox::Yes, QMessageBox::Yes);
-
-	if ( resBtn == QMessageBox::Yes ) {
-		/** Call Destructor */
-		QApplication::quit();
-
-		return true;
-	}
-
-	return false;
-}
-
-void MusicQuiz::MusicQuizController::keyPressEvent(QKeyEvent* event)
-{
-	switch ( event->key() )
-	{
-	case Qt::Key_Escape:
-		closeWindow();
-		break;
-	default:
-		QWidget::keyPressEvent(event);
-		break;
-	}
+	/** Call Destructor */
+	QApplication::quit();
 }
 
 void MusicQuiz::MusicQuizController::quizSelected(const size_t quizIdx, const MusicQuiz::QuizSettings& settings)

@@ -210,19 +210,6 @@ void MusicQuiz::QuizBoard::handleGameComplete()
 	}
 }
 
-void MusicQuiz::QuizBoard::keyPressEvent(QKeyEvent* event)
-{
-	switch ( event->key() )
-	{
-	case Qt::Key_Escape:
-		emit quitSignal();
-		break;
-	default:
-		QWidget::keyPressEvent(event);
-		break;
-	}
-}
-
 void MusicQuiz::QuizBoard::setQuizName(const QString& name)
 {
 	_name = name;
@@ -231,4 +218,40 @@ void MusicQuiz::QuizBoard::setQuizName(const QString& name)
 QString MusicQuiz::QuizBoard::getQuizName()
 {
 	return _name;
+}
+
+void MusicQuiz::QuizBoard::closeEvent(QCloseEvent* event)
+{
+	if ( _quizClosed || closeWindow() ) {
+		event->accept();
+	} else {
+		event->ignore();
+	}
+}
+
+bool MusicQuiz::QuizBoard::closeWindow()
+{
+	QMessageBox::StandardButton resBtn = QMessageBox::question(this, "Close Music Quiz?", "Are you sure you want to close the quiz?",
+		QMessageBox::No | QMessageBox::Yes, QMessageBox::Yes);
+
+	if ( resBtn == QMessageBox::Yes ) {
+		_quizClosed = true;
+		emit quitSignal();
+		return true;
+	}
+
+	return false;
+}
+
+void MusicQuiz::QuizBoard::keyPressEvent(QKeyEvent* event)
+{
+	switch ( event->key() )
+	{
+	case Qt::Key_Escape:
+		closeWindow();
+		break;
+	default:
+		QWidget::keyPressEvent(event);
+		break;
+	}
 }

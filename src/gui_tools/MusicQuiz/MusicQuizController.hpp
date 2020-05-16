@@ -46,19 +46,6 @@ namespace MusicQuiz {
 		virtual ~MusicQuizController();
 
 	public slots:
-		/** 
-		 * @brief Handles the close event.
-		 *
-		 * @param[in] event The event.
-		 */
-		void closeEvent(QCloseEvent* event);
-
-		/**
-		 * @brief Handles the key press events.
-		 *
-		 * @param[in] event The event.
-		 */
-		void keyPressEvent(QKeyEvent* event);
 
 	private slots:
 		/**
@@ -67,11 +54,9 @@ namespace MusicQuiz {
 		void executeQuiz();
 
 		/**
-		 * @brief Closes the window.
-		 *
-		 * @return True if the window should be closed.
+		 * @brief Quizs the quiz.
 		 */
-		bool closeWindow();
+		void quitQuiz();
 
 		/**
 		 * @brief Handles quiz selected.

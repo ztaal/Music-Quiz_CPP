@@ -37,6 +37,13 @@ namespace MusicQuiz {
 
 	public slots:
 		/**
+		 * @brief Handles the close event.
+		 *
+		 * @param[in] event The event.
+		 */
+		void closeEvent(QCloseEvent* event);
+
+		/**
 		 * @brief Handles the key press events.
 		 *
 		 * @param[in] event The event.
@@ -44,6 +51,13 @@ namespace MusicQuiz {
 		void keyPressEvent(QKeyEvent* event);
 
 	private slots:
+		/**
+		 * @brief Closes the window.
+		 *
+		 * @return True if the window should be closed.
+		 */
+		bool closeWindow();
+
 		/**
 		 * @brief Updates the displayed information based on the quiz that is clicked.
 		 *
@@ -83,6 +97,8 @@ namespace MusicQuiz {
 		void createLayout();
 
 		/** Variables */
+		bool _quizClosed = false;
+
 		QLineEdit* _authorText = nullptr;
 		QTextEdit* _categoryText = nullptr;
 		QTextEdit* _rowCategoryText = nullptr;
