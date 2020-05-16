@@ -151,6 +151,11 @@ void MusicQuiz::QuizEntry::applyColor(const QColor& color)
 	std::stringstream ss;
 	ss << "background-color	: rgb(" << color.red() << ", " << color.green() << ", " << color.blue() << ");"
 		<< "border-color : rgb(" << color.red() << ", " << color.green() << ", " << color.blue() << ");";
+	if ( _state == QuizEntry::EntryState::PLAYED ) {
+		ss << "color : rgb(" << 255 - color.red() << ", " << 255 - color.green() << ", " << 255 - color.blue() << ");";
+	} else {
+		ss << "color : Yellow;";
+	}
 	setStyleSheet(QString::fromStdString(ss.str()));
 }
 

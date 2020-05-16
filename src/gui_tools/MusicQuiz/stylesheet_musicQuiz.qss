@@ -74,6 +74,15 @@ QPushButton#settingsInfo
 	max-height			: 30px;
 }
 
+QPushButton#menuButton
+{
+	color				: Yellow;
+	font-size			: 30px;
+
+	min-height			: 50px;
+	min-width			: 120px;
+}
+
 
 
 /****************************************/
