@@ -52,6 +52,14 @@ MusicQuiz::QuizBoard::QuizBoard(const std::vector<MusicQuiz::QuizCategory*>& cat
 
 	/** Create Widget Layout */
 	createLayout();
+
+	/** Install event filter in all child widgets */
+	QList<QWidget*> widgets = findChildren<QWidget*>();
+	for ( QWidget* widget : widgets ) {
+		if ( widget != nullptr ) {
+			widget->installEventFilter(this);
+		}
+	}
 }
 
 void MusicQuiz::QuizBoard::createLayout()
@@ -256,4 +264,17 @@ void MusicQuiz::QuizBoard::keyPressEvent(QKeyEvent* event)
 		QWidget::keyPressEvent(event);
 		break;
 	}
+}
+
+bool MusicQuiz::QuizBoard::eventFilter(QObject* target, QEvent* event)
+{
+	if ( event->type() == QEvent::KeyPress ) {
+		QKeyEvent* keyEvent = static_cast<QKeyEvent*>(event);
+		if ( keyEvent->key() == Qt::Key_Escape ) {
+			closeWindow();
+			return true;
+		}
+	}
+
+	return QDialog::eventFilter(target, event);
 }

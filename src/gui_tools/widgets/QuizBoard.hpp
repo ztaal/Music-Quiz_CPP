@@ -84,6 +84,14 @@ namespace MusicQuiz {
 		 */
 		void keyPressEvent(QKeyEvent* event);
 
+		/**
+		 * @brief Event filter used to grab the esc key press events.
+		 *
+		 * @param[in] target The target.
+		 * @param[in] event The event.
+		 */
+		bool eventFilter(QObject* target, QEvent* event);
+
 	signals:
 		void quitSignal();
 		void gameComplete(std::vector<MusicQuiz::QuizTeam*> winningTeam);
