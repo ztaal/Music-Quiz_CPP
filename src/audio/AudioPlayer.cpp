@@ -2,8 +2,6 @@
 
 #include <stdexcept>
 
-#include "common/Log.hpp"
-
 
 #if defined(_WIN32) || defined(WIN32)
 #define WINDOWS_INTERFACE true

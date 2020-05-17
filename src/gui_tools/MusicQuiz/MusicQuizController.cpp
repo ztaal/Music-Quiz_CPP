@@ -49,6 +49,9 @@ void MusicQuiz::MusicQuizController::executeQuiz()
 	{
 	case MusicQuiz::MusicQuizController::SELECT_QUIZ:
 	{
+		/** Start Quiz Theme Song */
+		_audioPlayer.play(_themeSongFile);
+
 		/** Create Quiz Selector */
 		_quizSelector = new MusicQuiz::QuizSelector;
 
@@ -109,6 +112,9 @@ void MusicQuiz::MusicQuizController::executeQuiz()
 
 		/** Connect Signals */
 		connect(_quizBoard, SIGNAL(quitSignal()), this, SLOT(quitQuiz()));
+
+		/** Stop Quiz Theme Song */
+		_audioPlayer.stop();
 
 		/** Show Widget */
 		_quizBoard->exec();

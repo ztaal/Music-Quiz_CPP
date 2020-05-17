@@ -1,5 +1,6 @@
 #pragma once 
 
+#include <string>
 #include <atomic>
 #include <memory>
 
@@ -78,6 +79,9 @@ namespace MusicQuiz {
 	private:
 
 		/** Variables */
+		std::string _themeSongFile = "./data/default/theme_song.mp3";
+		std::string _vicatorySongFile = "./data/default/victory_song.mp3";
+
 		MusicQuiz::QuizBoard* _quizBoard = nullptr;
 		std::vector< MusicQuiz::QuizTeam* > _teams;
 		MusicQuiz::QuizSelector* _quizSelector = nullptr;
