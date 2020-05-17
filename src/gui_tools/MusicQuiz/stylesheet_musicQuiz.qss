@@ -14,6 +14,13 @@ QDialog#QuizSelector
 	background-color	: rgb(25, 25, 255);
 }
 
+QDialog#TeamSelector
+{
+	color				: Yellow;
+	background-color	: rgb(25, 25, 255);
+}
+
+
 
 /****************************************/
 /*****		    QPushButton			*****/
@@ -84,6 +91,16 @@ QPushButton#menuButton
 	min-width			: 200px;
 }
 
+QPushButton#addButton
+{
+	color				: Yellow;
+	background-color	: rgb(96, 96, 96);
+	font-size			: 50px;
+
+	min-height			: 100px;
+	min-width			: 100px;
+}
+
 
 
 /****************************************/
@@ -107,6 +124,13 @@ QLabel#categoryLabel
 QLabel#infoLabel
 {
 	font-size			: 35px;
+	font-weight			: bold;
+	color				: Yellow;
+}
+
+QLabel#teamInfoLabel
+{
+	font-size			: 45px;
 	font-weight			: bold;
 	color				: Yellow;
 }
@@ -185,6 +209,13 @@ QLineEdit#authorText
 	border							: none;
 }
 
+QLineEdit#_teamLineEdit
+{
+	font-size						: 35px;
+	min-height						: 100px;
+	border							: 2px solid rgb(128, 128, 128)
+}
+
 
 
 /****************************************/
@@ -208,4 +239,29 @@ QCheckBox::indicator:checked#infoCheckbox {
 
 QCheckBox::indicator:unchecked#infoCheckbox {
 	image		: url(:/imgs/checkbox_unchecked_yellow.png);
+}
+
+
+
+/****************************************/
+/*****		    QTableWidget		*****/
+/****************************************/
+
+QTableWidget
+{
+	font-size				: 32px;
+	font-weight				: bold;
+	background-color		: rgb(5, 30, 190);
+	border-color			: rgb(128, 128, 128);
+	border-radius			: 0px;
+	border-width			: 2px;
+	border-style			: solid;
+}
+
+QTableWidget::Item
+{
+}
+
+QTableWidget::Item::Selected
+{
 }

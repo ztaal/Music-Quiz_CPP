@@ -47,21 +47,33 @@ void MusicQuiz::TeamSelector::createLayout()
 	QGridLayout* mainlayout = new QGridLayout;
 	QGridLayout* selectionLayout = new QGridLayout;
 	QGridLayout* tableLayout = new QGridLayout;
-	mainlayout->setHorizontalSpacing(10);
-	mainlayout->setVerticalSpacing(5);
+	mainlayout->setHorizontalSpacing(15);
+	mainlayout->setVerticalSpacing(15);
+	selectionLayout->setHorizontalSpacing(15);
+	selectionLayout->setVerticalSpacing(15);
 	mainlayout->setColumnStretch(0, 2);
 	mainlayout->setColumnStretch(1, 1);
 	size_t row = 0;
 
-	/** Label */
-	QLabel* topLabel = new QLabel("Select Teams");
-	topLabel->setObjectName("selectTeamsLabel");
+	/** Team Table */
+	_teamTable = new QTableWidget(0, 2); 
+	_teamTable->setFocusPolicy(Qt::NoFocus);
+	_teamTable->setSelectionMode(QAbstractItemView::NoSelection);
+	_teamTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+	_teamTable->setHorizontalHeaderLabels(QStringList("Teams"));
+	_teamTable->setColumnWidth(0, 200);
+	_teamTable->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch); 
+	_teamTable->horizontalHeader()->setStretchLastSection(true);
+	_teamTable->horizontalHeader()->setVisible(false);
+	_teamTable->horizontalHeader()->setEnabled(false);
+	_teamTable->verticalHeader()->setVisible(false);
+	_teamTable->verticalHeader()->setDefaultSectionSize(100);
 
-	/** Horizontal Line */
-	QWidget* horizontalLine = new QWidget(this);
-	horizontalLine->setFixedHeight(3);
-	horizontalLine->setStyleSheet("background-color: rgb(0, 0, 0);");
-	horizontalLine->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	/** Team Name */
+	QLabel* teamNameLabel = new QLabel("Team Name:");
+	teamNameLabel->setObjectName("teamInfoLabel");
+	teamNameLabel->setAlignment(Qt::AlignLeft);
+	selectionLayout->addWidget(teamNameLabel, 0, 0, Qt::AlignLeft);
 
 	/** Team Line Edit */
 	QRegExp re(".{1,14}");
@@ -69,41 +81,47 @@ void MusicQuiz::TeamSelector::createLayout()
 	_teamNameLineEdit = new QLineEdit;
 	_teamNameLineEdit->setValidator(validator);
 	_teamNameLineEdit->setObjectName("_teamLineEdit");
-	selectionLayout->addWidget(_teamNameLineEdit, 0, 0, 1, 2);
+	selectionLayout->addWidget(_teamNameLineEdit, 1, 0);
+
+	/** Team Color */
+	QLabel* teamColorLabel = new QLabel("Team Color:");
+	teamColorLabel->setObjectName("teamInfoLabel");
+	teamColorLabel->setAlignment(Qt::AlignLeft);
+	selectionLayout->addWidget(teamColorLabel, 0, 1, Qt::AlignLeft);
 
 	/** Gradient Slider */
 	_hueSlider = new ColorPicker::QHueSlider(this);
+	_hueSlider->setStyleSheet("	border: 2px solid rgb(128, 128, 128); min-height: 100px;");
 	connect(_hueSlider, SIGNAL(colorChanged(QColor)), this, SLOT(teamColorChanged(QColor)));
-	selectionLayout->addWidget(_hueSlider, 1, 0, 1, 2);
+	selectionLayout->addWidget(_hueSlider, 1, 1);
 
 	/** Add Button */
-	QPushButton* addBtn = new QPushButton("Add Team");
+	QPushButton* addBtn = new QPushButton("+");
+	addBtn->setObjectName("addButton");
 	connect(addBtn, SIGNAL(released()), this, SLOT(addTeam()));
-	selectionLayout->addWidget(addBtn, 2, 0, 1, 1);
+	selectionLayout->addWidget(addBtn, 1, 2);
 
 	/** Remove Button */
-	QPushButton* removeBtn = new QPushButton("Remove Team");
-	connect(removeBtn, SIGNAL(released()), this, SLOT(removeTeam()));
-	selectionLayout->addWidget(removeBtn, 2, 1, 1, 1);
+	//QPushButton* removeBtn = new QPushButton("Remove Team");
+	//connect(removeBtn, SIGNAL(released()), this, SLOT(removeTeam()));
+	//selectionLayout->addWidget(removeBtn, 2, 1, 1, 1);
 
-	/** Team Table */
-	_teamTable = new QTableWidget(0, 1);
-	_teamTable->setHorizontalHeaderLabels(QStringList("Teams"));
-	_teamTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-	_teamTable->horizontalHeader()->setEnabled(false);
-	_teamTable->verticalHeader()->setVisible(false);
-	_teamTable->verticalHeader()->setDefaultSectionSize(75);
 
 	/** Start Quiz Button */
 	QPushButton* startBtn = new QPushButton("Start Quiz");
+	startBtn->setObjectName("menuButton");
 	connect(startBtn, SIGNAL(released()), this, SLOT(teamSelected()));
 
+	/** Quit Button */
+	QPushButton* quitBtn = new QPushButton("Quit");
+	quitBtn->setObjectName("menuButton");
+	connect(quitBtn, SIGNAL(released()), this, SLOT(quit()));
+
 	/** Add Widgets */
-	mainlayout->addWidget(topLabel, ++row, 0, 1, 3, Qt::AlignCenter);
-	mainlayout->addWidget(horizontalLine, ++row, 0, 1, 3);
-	mainlayout->addItem(selectionLayout, ++row, 0, 1, 2);
-	mainlayout->addWidget(_teamTable, row, 2, 1, 1);
-	mainlayout->addWidget(startBtn, ++row, 0, 1, 3);
+	mainlayout->addItem(selectionLayout, ++row, 0, 1, 3);
+	mainlayout->addWidget(_teamTable, ++row, 0, 1, 3);
+	mainlayout->addWidget(startBtn, ++row, 0, 1, 2);
+	mainlayout->addWidget(quitBtn, row, 2, 1, 1);
 
 	/** Set Layout */
 	setLayout(mainlayout);
@@ -120,8 +138,8 @@ void MusicQuiz::TeamSelector::teamSelected()
 	/** Get Teams */
 	std::vector<MusicQuiz::QuizTeam*> teams;
 	for ( size_t i = 0; i < _teamTable->rowCount(); ++i ) {
-		const QString teamName = _teamTable->item(i, 0)->text();
-		const QColor teamColor = _teamTable->item(i, 0)->backgroundColor();
+		const QString teamName = _teamTable->item(i, 1)->text();
+		const QColor teamColor = _teamTable->item(i, 1)->backgroundColor();
 		MusicQuiz::QuizTeam* teamEntry = new MusicQuiz::QuizTeam(teamName, teamColor);
 
 		teams.push_back(teamEntry);
@@ -159,7 +177,7 @@ void MusicQuiz::TeamSelector::addTeam()
 
 	/** Check if team exisis */
 	for ( size_t i = 0; i < row; ++i ) {
-		if ( teamName == _teamTable->item(i, 0)->text() ) {
+		if ( teamName == _teamTable->item(i, 1)->text() ) {
 			LOG_INFO("Team name alredy exists.");
 			return;
 		}
@@ -171,19 +189,30 @@ void MusicQuiz::TeamSelector::addTeam()
 	/** Insert Row */
 	_teamTable->insertRow(row);
 
-	/** Add Entry */
+	/** Add Team Number */
 	QTableWidgetItem* entry = new QTableWidgetItem;
+	const QString teamNumber = " Team " + QString::number(row);
+	entry->setData(Qt::DisplayRole, teamNumber);
+	entry->setTextAlignment(Qt::AlignCenter);
+	entry->setTextColor(QColor(255, 255, 0));
+	_teamTable->setItem(row, 0, entry);
+
+	/** Add Entry */
+	entry = new QTableWidgetItem;
 	entry->setData(Qt::DisplayRole, teamName);
 	entry->setBackgroundColor(_currentColor);
 	entry->setTextAlignment(Qt::AlignCenter);
 	entry->setTextColor(textColor);
-	_teamTable->setItem(row, 0, entry);
+	_teamTable->setItem(row, 1, entry);
 
 	/** Choose a random color for the team */
 	std::random_device dev;
 	std::mt19937 rng(dev());
 	std::uniform_int_distribution<std::mt19937::result_type> dist(_hueSlider->minimum(), _hueSlider->maximum());
 	_hueSlider->setValue(dist(rng));
+
+	/** Clear Line Edit */
+	_teamNameLineEdit->setText("");
 }
 
 void MusicQuiz::TeamSelector::removeTeam()
@@ -220,6 +249,11 @@ void MusicQuiz::TeamSelector::teamColorChanged(QColor color)
 	std::stringstream ss;
 	ss << "background-color	: rgb(" << color.red() << ", " << color.green() << ", " << color.blue() << ");";
 	_teamNameLineEdit->setStyleSheet(QString::fromStdString(ss.str()));
+}
+
+void MusicQuiz::TeamSelector::quit()
+{
+	closeWindow();
 }
 
 void MusicQuiz::TeamSelector::closeEvent(QCloseEvent* event)

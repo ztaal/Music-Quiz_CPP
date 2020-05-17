@@ -60,6 +60,11 @@ namespace MusicQuiz {
 		bool closeWindow();
 
 		/**
+		 * @brief Emits the quit signal.
+		 */
+		void quit();
+
+		/**
 		 * @brief Emits the quiz selected signal.
 		 */
 		void teamSelected();

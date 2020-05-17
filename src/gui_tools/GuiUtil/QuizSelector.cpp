@@ -75,6 +75,7 @@ void MusicQuiz::QuizSelector::createLayout()
 	_quizSelectionList->setObjectName("quizSelectionList");
 	quizSelectionLayout->addWidget(_quizSelectionList);
 	connect(_quizSelectionList, SIGNAL(itemSelectionChanged()), this, SLOT(selectionClicked()));
+	_quizSelectionList->setCurrentRow(0);
 
 	/** Add Quizzes */
 	for ( size_t i = 0; i < _quizPreviews.size(); ++i ) {
@@ -171,12 +172,15 @@ void MusicQuiz::QuizSelector::createLayout()
 	/** Add Widgets */
 	mainlayout->addItem(quizSelectionLayout, 0, 0);
 	mainlayout->addItem(descriptionLayout, 0, 1);
-	//mainlayout->addItem(infoLayout, 0, 2);
-
 	mainlayout->addItem(buttonLayout, 1, 0, 1, 3);
 
 	/** Set Layout */
 	setLayout(mainlayout);
+
+	/** Set Selected Quiz */
+	if ( !_quizPreviews.empty() ) {
+		_quizSelectionList->setCurrentRow(0);
+	}
 }
 
 void MusicQuiz::QuizSelector::selectionClicked()
