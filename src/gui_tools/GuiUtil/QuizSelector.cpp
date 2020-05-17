@@ -54,7 +54,6 @@ void MusicQuiz::QuizSelector::createLayout()
 	QGridLayout* mainlayout = new QGridLayout;
 	QVBoxLayout* quizSelectionLayout = new QVBoxLayout;
 	QVBoxLayout* descriptionLayout = new QVBoxLayout;
-	QHBoxLayout* authorLayout = new QHBoxLayout;
 	QVBoxLayout* infoLayout = new QVBoxLayout;
 	QGridLayout* categoryLayout = new QGridLayout;
 	QHBoxLayout* buttonLayout = new QHBoxLayout;
@@ -153,20 +152,6 @@ void MusicQuiz::QuizSelector::createLayout()
 	categoryLayout->addItem(infoLayout, 1, 2, Qt::AlignHCenter);
 	descriptionLayout->addItem(categoryLayout);
 
-	/** Author */
-	QLabel* authorLabel = new QLabel("Author:");
-	authorLabel->setObjectName("authorLabel");
-	authorLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Minimum);
-	authorLabel->setAlignment(Qt::AlignLeft);
-	authorLayout->addWidget(authorLabel);
-
-	_authorText = new QLineEdit;
-	_authorText->setReadOnly(true);
-	_authorText->setObjectName("authorText");
-	_authorText->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Minimum);
-	authorLayout->addWidget(_authorText);
-	//descriptionLayout->addItem(authorLayout);
-
 	/** Buttons */
 	QPushButton* selectBtn = new QPushButton("Select Quiz");
 	selectBtn->setObjectName("menuButton");
@@ -216,9 +201,6 @@ void MusicQuiz::QuizSelector::selectionClicked()
 
 	/** Update Description */
 	_descriptionText->setText(QString::fromStdString(_quizPreviews[currentIndex].quizDescription));
-
-	/** Update Author */
-	_authorText->setText(QString::fromStdString(_quizPreviews[currentIndex].quizAuthor));
 
 	/** Update Info Checkboxes */
 	_includeSongsCheckbox->setChecked(_quizPreviews[currentIndex].includeSongs);
