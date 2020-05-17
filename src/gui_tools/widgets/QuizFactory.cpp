@@ -14,7 +14,7 @@
 #include "gui_tools/widgets/QuizCategory.hpp"
 
 
-MusicQuiz::QuizBoard* MusicQuiz::QuizFactory::createQuiz(const size_t idx, const QuizSettings& settings, const std::vector<MusicQuiz::QuizTeam*>& teams)
+MusicQuiz::QuizBoard* MusicQuiz::QuizFactory::createQuiz(const size_t idx, const QuizSettings& settings, const audio::AudioPlayer::Ptr& audioPlayer, const std::vector<MusicQuiz::QuizTeam*>& teams)
 {
 	/** Create Quiz Board */
 	MusicQuiz::QuizBoard* quizBoard = nullptr;
@@ -22,7 +22,7 @@ MusicQuiz::QuizBoard* MusicQuiz::QuizFactory::createQuiz(const size_t idx, const
 	try {
 		/** Load Categories */
 		std::string loadError;
-		std::vector<MusicQuiz::QuizCategory*> categories = MusicQuiz::util::QuizLoader::loadQuizCategories(idx, loadError);
+		std::vector<MusicQuiz::QuizCategory*> categories = MusicQuiz::util::QuizLoader::loadQuizCategories(idx, audioPlayer, loadError);
 		if ( !loadError.empty() ) {
 			QMessageBox::information(nullptr, "Info", "Incomplete Quiz:\n\n" + QString::fromStdString(loadError));
 		}

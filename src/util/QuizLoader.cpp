@@ -114,7 +114,7 @@ MusicQuiz::util::QuizLoader::QuizPreview MusicQuiz::util::QuizLoader::getQuizPre
 	return quizPreview;
 }
 
-std::vector<MusicQuiz::QuizCategory*> MusicQuiz::util::QuizLoader::loadQuizCategories(const size_t idx, std::string& err)
+std::vector<MusicQuiz::QuizCategory*> MusicQuiz::util::QuizLoader::loadQuizCategories(const size_t idx, const audio::AudioPlayer::Ptr& audioPlayer, std::string& err)
 {
 	/** Get List of Quizzes */
 	const std::vector<std::string> quizList = getListOfQuizzes();
@@ -173,7 +173,7 @@ std::vector<MusicQuiz::QuizCategory*> MusicQuiz::util::QuizLoader::loadQuizCateg
 							}
 
 							/** Push Back Entry */
-							categorieEntries.push_back(new MusicQuiz::QuizEntry(songFile, answer, points, startTime, answerStartTime, endTime, answerEndTime));
+							categorieEntries.push_back(new MusicQuiz::QuizEntry(songFile, answer, points, startTime, answerStartTime, endTime, answerEndTime, audioPlayer));
 						}
 					}
 

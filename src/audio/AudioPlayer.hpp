@@ -2,22 +2,34 @@
 
 #include <ctime>
 #include <string>
+#include <memory>
 
 
 namespace audio {
 	class AudioPlayer
 	{
 	public:
-		explicit AudioPlayer() = default;
-
-		virtual ~AudioPlayer();
-
 		enum class AudioPlayState
 		{
-			IDLE = 1,				// Default
+			IDLE = 1,		// Default
 			PLAYING = 2,
 			PAUSED = 3
 		};
+
+		/**
+		 * @brief Default Constructor 
+		 */
+		explicit AudioPlayer() = default;
+
+		/**
+		 * @brief destructor
+		 */
+		virtual ~AudioPlayer();
+
+		/**
+		 * @brief Shared Pointer
+		 */
+		typedef std::shared_ptr< AudioPlayer > Ptr;
 
 		/**
 		 * @brief Plays a song.

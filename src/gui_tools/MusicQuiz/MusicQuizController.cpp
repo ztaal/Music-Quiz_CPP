@@ -105,7 +105,7 @@ void MusicQuiz::MusicQuizController::executeQuiz()
 		}
 
 		/** Create Quiz Board */
-		_quizBoard = MusicQuiz::QuizFactory::createQuiz(_selectedQuizIdx, _settings, _teams);
+		_quizBoard = MusicQuiz::QuizFactory::createQuiz(_selectedQuizIdx, _settings, std::make_shared<audio::AudioPlayer>(_audioPlayer), _teams);
 
 		/** Connect Signals */
 		connect(_quizBoard, SIGNAL(quitSignal()), this, SLOT(quitQuiz()));

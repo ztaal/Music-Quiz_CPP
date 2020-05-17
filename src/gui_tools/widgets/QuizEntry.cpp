@@ -8,9 +8,15 @@
 #include "common/Log.hpp"
 
 
-MusicQuiz::QuizEntry::QuizEntry(const QString &audioFile, const QString &answer, const size_t points, const size_t startTime, const size_t answerStartTime, const size_t endTime, const size_t answerEndTime, QWidget* parent) :
-	QPushButton(parent), _audioFile(audioFile), _answer(answer), _points(points), _startTime(startTime), _answerStartTime(answerStartTime), _endTime(endTime), _answerEndTime(answerEndTime)
+MusicQuiz::QuizEntry::QuizEntry(const QString &audioFile, const QString &answer, const size_t points, const size_t startTime, const size_t answerStartTime, const size_t endTime, const size_t answerEndTime, 
+	const audio::AudioPlayer::Ptr& audioPlayer, QWidget* parent) :
+	QPushButton(parent), _audioFile(audioFile), _answer(answer), _points(points), _startTime(startTime), _answerStartTime(answerStartTime), _endTime(endTime), _answerEndTime(answerEndTime), _audioPlayer(audioPlayer)
 {
+	/** Sanity Check */
+	if ( _audioPlayer == nullptr ) {
+		throw std::runtime_error("Failed to create quiz entry. Invalid audio player.");
+	}
+
 	/** Set Button Text */
 	setText("$" + QString::fromLocal8Bit(std::to_string(_points).c_str()));
 
@@ -68,21 +74,21 @@ void MusicQuiz::QuizEntry::leftClickEvent()
 	case EntryState::IDLE: // Start Song
 		_state = EntryState::PLAYING;
 		if ( _endTime == -1 ) {
-			_audioPlayer.play(_audioFile.toStdString(), _startTime);
+			_audioPlayer->play(_audioFile.toStdString(), _startTime);
 		} else {
-			_audioPlayer.play(_audioFile.toStdString(), _startTime, _endTime);
+			_audioPlayer->play(_audioFile.toStdString(), _startTime, _endTime);
 		}
 		break;
 	case EntryState::PLAYING: // Pause Song
 		_state = EntryState::PAUSED;
-		_audioPlayer.pause();
+		_audioPlayer->pause();
 		break;
 	case EntryState::PAUSED: // Play Answer
 		_state = EntryState::PLAYING_ANSWER;
 		if ( _answerEndTime == -1 ) {
-			_audioPlayer.play(_audioFile.toStdString(), _answerStartTime);
+			_audioPlayer->play(_audioFile.toStdString(), _answerStartTime);
 		} else {
-			_audioPlayer.play(_audioFile.toStdString(), _answerStartTime, _answerEndTime);
+			_audioPlayer->play(_audioFile.toStdString(), _answerStartTime, _answerEndTime);
 		}
 
 		if ( !_hiddenAnswer ) {
@@ -91,13 +97,13 @@ void MusicQuiz::QuizEntry::leftClickEvent()
 		break;
 	case EntryState::PLAYING_ANSWER: // Entry Answered
 		_state = EntryState::PLAYED;
-		_audioPlayer.stop();
+		_audioPlayer->stop();
 		break;
 	case QuizEntry::EntryState::PLAYED: // Play Answer Again
 		if ( _answerEndTime == -1 ) {
-			_audioPlayer.play(_audioFile.toStdString(), _answerStartTime);
+			_audioPlayer->play(_audioFile.toStdString(), _answerStartTime);
 		} else {
-			_audioPlayer.play(_audioFile.toStdString(), _answerStartTime, _answerEndTime);
+			_audioPlayer->play(_audioFile.toStdString(), _answerStartTime, _answerEndTime);
 		}
 		_state = EntryState::PLAYING_ANSWER;
 		break;
@@ -115,15 +121,15 @@ void MusicQuiz::QuizEntry::rightClickEvent()
 		break;
 	case EntryState::PLAYING: // Back to initial state
 		_state = EntryState::IDLE;
-		_audioPlayer.pause();
+		_audioPlayer->pause();
 		break;
 	case EntryState::PAUSED: // Continue playing
 		_state = EntryState::PLAYING;
-		_audioPlayer.resume();
+		_audioPlayer->resume();
 		break;
 	case EntryState::PLAYING_ANSWER: // Pause Song
 		_state = EntryState::PAUSED;
-		_audioPlayer.pause();
+		_audioPlayer->pause();
 
 		if ( !_hiddenAnswer ) {
 			setText(QString::fromLocal8Bit(_answer.toStdString().c_str()));

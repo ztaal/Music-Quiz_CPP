@@ -1,6 +1,7 @@
 #pragma once 
 
 #include <atomic>
+#include <memory>
 
 #include <QtGui>
 #include <QTimer>
@@ -12,6 +13,7 @@
 #include "ui_MusicQuizGUI.h"
 
 #include "util/QuizSettings.hpp"
+#include "audio/AudioPlayer.hpp"
 #include "gui_tools/widgets/QuizBoard.hpp"
 #include "gui_tools/widgets/QuizFactory.hpp"
 #include "gui_tools/GuiUtil/QuizSelector.hpp"
@@ -95,5 +97,8 @@ namespace MusicQuiz {
 		/** Quiz Settings */
 		size_t _selectedQuizIdx = 0;
 		MusicQuiz::QuizSettings _settings;
+
+		/** Audio Player */
+		audio::AudioPlayer _audioPlayer;
 	};
 }

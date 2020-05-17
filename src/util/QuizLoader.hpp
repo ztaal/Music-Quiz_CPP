@@ -2,12 +2,16 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 #include <iostream>
 
 #include <QString>
 
 #include <boost/filesystem.hpp>
+
+#include "audio/AudioPlayer.hpp"
 #include "gui_tools/widgets/QuizCategory.hpp"
+
 
 
 namespace MusicQuiz {
@@ -86,7 +90,7 @@ namespace MusicQuiz {
 			*
 			* @return The quiz categories.
 			*/
-			static std::vector<MusicQuiz::QuizCategory*> loadQuizCategories(size_t idx, std::string& err);
+			static std::vector<MusicQuiz::QuizCategory*> loadQuizCategories(size_t idx, const std::shared_ptr< audio::AudioPlayer >& audioPlayer, std::string& err);
 
 			/**
 			* @brief Returns a list of the row categories.

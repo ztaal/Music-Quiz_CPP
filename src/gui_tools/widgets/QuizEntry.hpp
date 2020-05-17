@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <memory>
 
 #include <QString>
 #include <QObject>
@@ -28,7 +29,8 @@ namespace MusicQuiz {
 		 * @param[in] answerEndTime The answer media end time in [ms]. Set to -1 for no end time.
 		 * @param[in] parent The parent widget.
 		 */
-		explicit QuizEntry(const QString &audioFile, const QString &answer, size_t points, size_t startTime, size_t answerStartTime, size_t endTime, size_t answerEndTime, QWidget* parent = nullptr);
+		explicit QuizEntry(const QString &audioFile, const QString &answer, size_t points, size_t startTime, size_t answerStartTime, size_t endTime, size_t answerEndTime,
+			const std::shared_ptr< audio::AudioPlayer >& audioPlayer, QWidget* parent = nullptr);
 
 		/**
 		 * @brief Default Destructor
@@ -112,7 +114,7 @@ namespace MusicQuiz {
 
 		EntryState _state = EntryState::IDLE;
 
-		audio::AudioPlayer _audioPlayer;
+		std::shared_ptr< audio::AudioPlayer > _audioPlayer = nullptr;
 
 		bool _hiddenAnswer = false; // setting
 	};
