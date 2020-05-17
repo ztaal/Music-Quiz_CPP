@@ -25,6 +25,9 @@ MusicQuiz::MusicQuizController::MusicQuizController(QWidget* parent) :
 
 MusicQuiz::MusicQuizController::~MusicQuizController()
 {
+	/** Stop Audio */
+	_audioPlayer.stop();
+
 	/** Stop Update Timer */
 	if ( _updateTimer.isActive() ) {
 		_updateTimer.stop();
