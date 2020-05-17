@@ -23,7 +23,7 @@ audio::AudioPlayer::~AudioPlayer()
 #endif
 }
 
-void audio::AudioPlayer::play(const std::string& audioFile)
+void audio::AudioPlayer::play(const std::string& audioFile, bool loop)
 {
 	/** Sanity Check */
 	if ( audioFile.empty() ) {
@@ -38,7 +38,10 @@ void audio::AudioPlayer::play(const std::string& audioFile)
 	openFile(audioFile);
 
 	/** Play Audio */
-	const std::string playCommand = "play audioTrack";
+	std::string playCommand = "play audioTrack";
+	if ( loop ) {
+		playCommand += " repeat";
+	}
 	mciSendString(playCommand.c_str(), NULL, 0, NULL);
 #endif
 

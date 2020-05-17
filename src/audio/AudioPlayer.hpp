@@ -35,8 +35,9 @@ namespace audio {
 		 * @brief Plays a song.
 		 *
 		 * @param[in] audioFile The name of the audio file to play.
+		 * @param[in] loop True if the audio file should loop.
 		 */
-		void play(const std::string& audioFile);
+		void play(const std::string& audioFile, bool loop = false);
 
 		/**
 		 * @brief Plays a song.
