@@ -50,7 +50,7 @@ void MusicQuiz::MusicQuizController::executeQuiz()
 	case MusicQuiz::MusicQuizController::SELECT_QUIZ:
 	{
 		/** Start Quiz Theme Song */
-		_audioPlayer.play(_themeSongFile);
+		_audioPlayer.play(_themeSongFile, true);
 
 		/** Create Quiz Selector */
 		_quizSelector = new MusicQuiz::QuizSelector;
