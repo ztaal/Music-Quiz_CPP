@@ -52,47 +52,36 @@ void MusicQuiz::QuizSelector::createLayout()
 {
 	/** Layout */
 	QGridLayout* mainlayout = new QGridLayout;
-	QHBoxLayout* middleLayout = new QHBoxLayout;
 	QVBoxLayout* quizSelectionLayout = new QVBoxLayout;
 	QVBoxLayout* descriptionLayout = new QVBoxLayout;
 	QHBoxLayout* authorLayout = new QHBoxLayout;
-	QHBoxLayout* infoLayout = new QHBoxLayout;
-	QVBoxLayout* categoryLayout = new QVBoxLayout;
+	QVBoxLayout* infoLayout = new QVBoxLayout;
+	QGridLayout* categoryLayout = new QGridLayout;
 	QHBoxLayout* buttonLayout = new QHBoxLayout;
-	mainlayout->setHorizontalSpacing(10);
-	mainlayout->setVerticalSpacing(5);
+	mainlayout->setHorizontalSpacing(50);
+	mainlayout->setVerticalSpacing(15);
 	quizSelectionLayout->setSpacing(15);
+	buttonLayout->setSpacing(15);
+	infoLayout->setSpacing(30);
 	descriptionLayout->setSpacing(15);
-	categoryLayout->setSpacing(15);
+	categoryLayout->setHorizontalSpacing(15);
+	categoryLayout->setVerticalSpacing(15);
 	mainlayout->setColumnStretch(0, 1);
-	mainlayout->setColumnStretch(1, 3);
-	mainlayout->setColumnStretch(2, 1);
-
-	/** Label */
-	QLabel* topLabel = new QLabel("Select Quiz");
-	topLabel->setObjectName("selectQuizlabel");
-
-	/** Horizontal Line */
-	QWidget* horizontalLine = new QWidget(this);
-	horizontalLine->setFixedHeight(3);
-	horizontalLine->setStyleSheet("background-color: rgb(0, 0, 0);");
-	horizontalLine->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	mainlayout->setColumnStretch(1, 4);
+	//mainlayout->setColumnStretch(2, 1);
 
 	/** Quiz Selection List */
-	QLabel* quizSelectionLabel = new QLabel("Quizzes");
-	quizSelectionLabel->setObjectName("descriptionLabel");
-	quizSelectionLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Minimum);
-	quizSelectionLabel->setAlignment(Qt::AlignHCenter);
-	quizSelectionLayout->addWidget(quizSelectionLabel);
-
 	_quizSelectionList = new QListWidget;
+	_quizSelectionList->setSpacing(0);
+	_quizSelectionList->setObjectName("quizSelectionList");
 	quizSelectionLayout->addWidget(_quizSelectionList);
 	connect(_quizSelectionList, SIGNAL(itemSelectionChanged()), this, SLOT(selectionClicked()));
 
 	/** Add Quizzes */
 	for ( size_t i = 0; i < _quizPreviews.size(); ++i ) {
 		QListWidgetItem* quizName = new QListWidgetItem;
-		quizName->setTextAlignment(Qt::AlignVCenter | Qt::AlignLeft);
+		quizName->setSizeHint(QSize(100, 100));
+		quizName->setTextAlignment(Qt::AlignCenter);
 		quizName->setText(QString(" ") + QString::fromStdString(_quizPreviews[i].quizName));
 		_quizSelectionList->addItem(quizName);
 	}
@@ -110,6 +99,60 @@ void MusicQuiz::QuizSelector::createLayout()
 	_descriptionText->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Expanding);
 	descriptionLayout->addWidget(_descriptionText);
 
+	/** Categories */
+	QLabel* categoryLabel = new QLabel("Categories");
+	categoryLabel->setObjectName("categoryLabel");
+	categoryLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Minimum);
+	categoryLabel->setAlignment(Qt::AlignLeft);
+	categoryLayout->addWidget(categoryLabel, 0, 0, Qt::AlignLeft);
+
+	_categoryText = new QTextEdit;
+	_categoryText->setReadOnly(true);
+	_categoryText->setObjectName("descriptionTextLabel");
+	_categoryText->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Expanding);
+	categoryLayout->addWidget(_categoryText, 1, 0, Qt::AlignLeft);
+
+	/** Row Categories */
+	QLabel* rowCategoryLabel = new QLabel("Row Categories");
+	rowCategoryLabel->setObjectName("categoryLabel");
+	rowCategoryLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Minimum);
+	rowCategoryLabel->setAlignment(Qt::AlignLeft);
+	categoryLayout->addWidget(rowCategoryLabel, 0, 1, Qt::AlignLeft);
+
+	_rowCategoryText = new QTextEdit;
+	_rowCategoryText->setReadOnly(true);
+	_rowCategoryText->setObjectName("descriptionTextLabel");
+	_rowCategoryText->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Expanding);
+	categoryLayout->addWidget(_rowCategoryText, 1, 1, Qt::AlignLeft);
+
+	/** Quiz Info */
+	QLabel* infoLabel = new QLabel("Info");
+	infoLabel->setObjectName("infoLabel");
+	infoLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Minimum);
+	infoLabel->setAlignment(Qt::AlignCenter);
+	categoryLayout->addWidget(infoLabel, 0, 2, Qt::AlignLeft);
+
+	_includeSongsCheckbox = new QCheckBox(" Includes Songs");
+	_includeSongsCheckbox->setObjectName("infoCheckbox");
+	_includeSongsCheckbox->setAttribute(Qt::WA_TransparentForMouseEvents);
+	_includeSongsCheckbox->setFocusPolicy(Qt::NoFocus);
+	infoLayout->addWidget(_includeSongsCheckbox, Qt::AlignLeft);
+
+	_includeVideosCheckbox = new QCheckBox(" Includes Videos");
+	_includeVideosCheckbox->setObjectName("infoCheckbox");
+	_includeVideosCheckbox->setAttribute(Qt::WA_TransparentForMouseEvents);
+	_includeVideosCheckbox->setFocusPolicy(Qt::NoFocus);
+	infoLayout->addWidget(_includeVideosCheckbox, Qt::AlignLeft);
+
+	_guessTheCategoryCheckbox = new QCheckBox(" Guess the Category");
+	_guessTheCategoryCheckbox->setObjectName("infoCheckbox");
+	_guessTheCategoryCheckbox->setAttribute(Qt::WA_TransparentForMouseEvents);
+	_guessTheCategoryCheckbox->setFocusPolicy(Qt::NoFocus);
+	infoLayout->addWidget(_guessTheCategoryCheckbox, Qt::AlignHCenter);
+	infoLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Ignored, QSizePolicy::MinimumExpanding));
+	categoryLayout->addItem(infoLayout, 1, 2, Qt::AlignHCenter);
+	descriptionLayout->addItem(categoryLayout);
+
 	/** Author */
 	QLabel* authorLabel = new QLabel("Author:");
 	authorLabel->setObjectName("authorLabel");
@@ -122,78 +165,30 @@ void MusicQuiz::QuizSelector::createLayout()
 	_authorText->setObjectName("authorText");
 	_authorText->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Minimum);
 	authorLayout->addWidget(_authorText);
-	descriptionLayout->addItem(authorLayout);
-
-	/** Quiz Info */
-	_includeSongsCheckbox = new QCheckBox(" Songs");
-	_includeSongsCheckbox->setObjectName("infoCheckbox");
-	_includeSongsCheckbox->setAttribute(Qt::WA_TransparentForMouseEvents);
-	_includeSongsCheckbox->setFocusPolicy(Qt::NoFocus);
-	infoLayout->addWidget(_includeSongsCheckbox, Qt::AlignCenter);
-
-	_includeVideosCheckbox = new QCheckBox(" Videos");
-	_includeVideosCheckbox->setObjectName("infoCheckbox");
-	_includeVideosCheckbox->setAttribute(Qt::WA_TransparentForMouseEvents);
-	_includeVideosCheckbox->setFocusPolicy(Qt::NoFocus);
-	infoLayout->addWidget(_includeVideosCheckbox, Qt::AlignCenter);
-
-	_guessTheCategoryCheckbox = new QCheckBox(" Guess the Category");
-	_guessTheCategoryCheckbox->setObjectName("infoCheckbox");
-	_guessTheCategoryCheckbox->setAttribute(Qt::WA_TransparentForMouseEvents);
-	_guessTheCategoryCheckbox->setFocusPolicy(Qt::NoFocus);
-	infoLayout->addWidget(_guessTheCategoryCheckbox, Qt::AlignCenter);
-	descriptionLayout->addItem(infoLayout);
-
-	/** Categories */
-	QLabel* categoryLabel = new QLabel("Categories");
-	categoryLabel->setObjectName("descriptionLabel");
-	categoryLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Minimum);
-	categoryLabel->setAlignment(Qt::AlignLeft);
-	categoryLayout->addWidget(categoryLabel);
-
-	_categoryText = new QTextEdit;
-	_categoryText->setReadOnly(true);
-	_categoryText->setObjectName("descriptionTextLabel");
-	_categoryText->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Expanding);
-	categoryLayout->addWidget(_categoryText);
-
-	/** Row Categories */
-	QLabel* rowCategoryLabel = new QLabel("Row Categories");
-	rowCategoryLabel->setObjectName("descriptionLabel");
-	rowCategoryLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Minimum);
-	rowCategoryLabel->setAlignment(Qt::AlignLeft);
-	categoryLayout->addWidget(rowCategoryLabel);
-
-	_rowCategoryText = new QTextEdit;
-	_rowCategoryText->setReadOnly(true);
-	_rowCategoryText->setObjectName("descriptionTextLabel");
-	_rowCategoryText->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Expanding);
-	categoryLayout->addWidget(_rowCategoryText);
+	//descriptionLayout->addItem(authorLayout);
 
 	/** Buttons */
-	QPushButton* settingsBtn = new QPushButton("Settings");
-	connect(settingsBtn, SIGNAL(released()), this, SLOT(openSettingsDialog()));
-	buttonLayout->addWidget(settingsBtn);
-
-	buttonLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Ignored));
-
-	QPushButton* selectBtn = new QPushButton("Select");
+	QPushButton* selectBtn = new QPushButton("Select Quiz");
+	selectBtn->setObjectName("menuButton");
 	connect(selectBtn, SIGNAL(released()), this, SLOT(quizSelected()));
 	buttonLayout->addWidget(selectBtn);
 
+	QPushButton* settingsBtn = new QPushButton("Settings");
+	settingsBtn->setObjectName("menuButton");
+	connect(settingsBtn, SIGNAL(released()), this, SLOT(openSettingsDialog()));
+	buttonLayout->addWidget(settingsBtn);
+
 	QPushButton* quitBtn = new QPushButton("Quit");
+	quitBtn->setObjectName("menuButton");
 	connect(quitBtn, SIGNAL(released()), this, SLOT(quit()));
 	buttonLayout->addWidget(quitBtn);
 
 	/** Add Widgets */
-	mainlayout->addWidget(topLabel, 0, 0, 1, 3, Qt::AlignCenter);
-	mainlayout->addWidget(horizontalLine, 1, 0, 1, 3);
+	mainlayout->addItem(quizSelectionLayout, 0, 0);
+	mainlayout->addItem(descriptionLayout, 0, 1);
+	//mainlayout->addItem(infoLayout, 0, 2);
 
-	mainlayout->addItem(quizSelectionLayout, 2, 0);
-	mainlayout->addItem(descriptionLayout, 2, 1);
-	mainlayout->addItem(categoryLayout, 2, 2);
-
-	mainlayout->addItem(buttonLayout, 3, 0, 1, 3);
+	mainlayout->addItem(buttonLayout, 1, 0, 1, 3);
 
 	/** Set Layout */
 	setLayout(mainlayout);
@@ -231,19 +226,23 @@ void MusicQuiz::QuizSelector::selectionClicked()
 	_guessTheCategoryCheckbox->setChecked(_quizPreviews[currentIndex].guessTheCategory);
 
 	/** Update Categories */
-	std::stringstream ss("");
+	std::stringstream ss("\n");
 	std::vector<std::string> categories = _quizPreviews[currentIndex].categories;
 	for ( size_t i = 0; i < categories.size(); ++i ) {
-		ss << i + 1 << ". " << categories[i] << "\n";
+		if ( _quizPreviews[currentIndex].guessTheCategory ) {
+			ss << i + 1 << ". Hidden\n\n";
+		} else {
+			ss << i + 1 << ". " << categories[i] << "\n\n";
+		}
 	}
 	_categoryText->setText(QString::fromStdString(ss.str()));
 
 	/** Row Cateogires */
 	std::vector<std::string> rowCategories = _quizPreviews[currentIndex].rowCategories;
 	if ( !rowCategories.empty() ) {
-		ss.str("");
+		ss.str("\n");
 		for ( size_t i = 0; i < rowCategories.size(); ++i ) {
-			ss << i + 1 << ". " << rowCategories[i] << "\n";
+			ss << i + 1 << ". " << rowCategories[i] << "\n\n";
 		}
 	}
 
