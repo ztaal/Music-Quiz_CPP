@@ -97,6 +97,7 @@ namespace MusicQuiz {
 
 		/** Variables */
 		bool _quizClosed = false;
+		const size_t _maximumsNumberOfTeams = 6;
 
 		QTableWidget* _teamTable = nullptr;
 		QLineEdit* _teamNameLineEdit = nullptr;

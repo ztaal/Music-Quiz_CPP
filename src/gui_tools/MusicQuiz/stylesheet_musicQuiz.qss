@@ -101,6 +101,16 @@ QPushButton#addButton
 	min-width			: 100px;
 }
 
+QPushButton#removeBtn
+{
+	background-color	: rgba(0, 0, 0, 0);
+
+	min-height			: 50px;
+	min-width			: 50px;
+
+	image				: url(:/imgs/remove_icon.png);
+}
+
 
 
 /****************************************/
@@ -200,6 +210,11 @@ QTextEdit#descriptionTextLabel
 /****************************************/
 /*****		    QLineEdit  			*****/
 /****************************************/
+
+QLineEdit:disabled
+{
+	background-color				: rgb(100, 100, 100);
+}
 
 QLineEdit#authorText
 {

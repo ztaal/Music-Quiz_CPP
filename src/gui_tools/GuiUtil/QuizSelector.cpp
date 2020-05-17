@@ -58,13 +58,13 @@ void MusicQuiz::QuizSelector::createLayout()
 	QGridLayout* categoryLayout = new QGridLayout;
 	QHBoxLayout* buttonLayout = new QHBoxLayout;
 	mainlayout->setHorizontalSpacing(50);
-	mainlayout->setVerticalSpacing(15);
-	quizSelectionLayout->setSpacing(15);
-	buttonLayout->setSpacing(15);
+	mainlayout->setVerticalSpacing(20);
+	quizSelectionLayout->setSpacing(20);
+	buttonLayout->setSpacing(20);
 	infoLayout->setSpacing(30);
-	descriptionLayout->setSpacing(15);
-	categoryLayout->setHorizontalSpacing(15);
-	categoryLayout->setVerticalSpacing(15);
+	descriptionLayout->setSpacing(20);
+	categoryLayout->setHorizontalSpacing(20);
+	categoryLayout->setVerticalSpacing(20);
 	mainlayout->setColumnStretch(0, 1);
 	mainlayout->setColumnStretch(1, 4);
 	//mainlayout->setColumnStretch(2, 1);
@@ -176,6 +176,7 @@ void MusicQuiz::QuizSelector::createLayout()
 
 	/** Set Layout */
 	setLayout(mainlayout);
+	setContentsMargins(20, 20, 20, 20);
 
 	/** Set Selected Quiz */
 	if ( !_quizPreviews.empty() ) {

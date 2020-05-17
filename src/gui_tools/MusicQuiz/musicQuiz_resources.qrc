@@ -5,5 +5,6 @@
         <file>imgs/checkbox_unchecked_white.png</file>
         <file>imgs/checkbox_checked_yellow.png</file>
         <file>imgs/checkbox_unchecked_yellow.png</file>
+        <file>imgs/remove_icon.png</file>
     </qresource>
 </RCC>
