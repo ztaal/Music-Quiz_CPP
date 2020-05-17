@@ -33,10 +33,16 @@ MusicQuiz::MusicQuizController::~MusicQuizController()
 		_updateTimer.stop();
 	}
 
-	/** Close Quiz Creator */
+	/** Close Quiz Selector */
 	if ( _quizSelector != nullptr ) {
 		_quizSelector->close();
 		_quizSelector = nullptr;
+	}
+
+	/** Close Team Selector */
+	if ( _teamSelector != nullptr ) {
+		_teamSelector->close();
+		_teamSelector = nullptr;
 	}
 
 	/** Close Quiz Board */
@@ -53,7 +59,7 @@ void MusicQuiz::MusicQuizController::executeQuiz()
 	case MusicQuiz::MusicQuizController::SELECT_QUIZ:
 	{
 		/** Start Quiz Theme Song */
-		_audioPlayer.play(_themeSongFile, true);
+		//_audioPlayer.play(_themeSongFile, true);
 
 		/** Create Quiz Selector */
 		_quizSelector = new MusicQuiz::QuizSelector;
