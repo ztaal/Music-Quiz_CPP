@@ -15,13 +15,19 @@
 
 #include "util/QuizSettings.hpp"
 #include "audio/AudioPlayer.hpp"
+
+#include "gui_tools/widgets/QuizTeam.hpp"
+#include "gui_tools/widgets/QuizEntry.hpp"
 #include "gui_tools/widgets/QuizBoard.hpp"
-#include "gui_tools/widgets/QuizFactory.hpp"
-#include "gui_tools/GuiUtil/QuizSelector.hpp"
-#include "gui_tools/GuiUtil/TeamSelector.hpp"
 
 
 namespace MusicQuiz {
+	class QuizBoard;
+	class QuizFactory;
+	class QuizSelector;
+	class TeamSelector;
+	class QuizIntroScreen;
+
 	class MusicQuizController : public QWidget
 	{
 		Q_OBJECT
@@ -76,6 +82,11 @@ namespace MusicQuiz {
 		 */
 		void teamSelected(const std::vector<MusicQuiz::QuizTeam*>& teams);
 
+		/**
+		 * @brief Handles the intro complete event.
+		 */
+		void introComplete();
+
 	private:
 
 		/** Variables */
@@ -86,6 +97,7 @@ namespace MusicQuiz {
 		std::vector< MusicQuiz::QuizTeam* > _teams;
 		MusicQuiz::QuizSelector* _quizSelector = nullptr;
 		MusicQuiz::TeamSelector* _teamSelector = nullptr;
+		MusicQuiz::QuizIntroScreen* _quizIntro = nullptr;
 
 		/** Update Timer */
 		QTimer _updateTimer;
@@ -94,7 +106,7 @@ namespace MusicQuiz {
 		/** State Variables */
 		std::atomic<bool> _quizSelected = false;
 		std::atomic<bool> _teamSelected = false;
-		std::atomic<bool> _introScreenDone = true;
+		std::atomic<bool> _introScreenDone = false;
 		std::atomic<bool> _gameCompleted = false;
 		QuizState _quizState = QuizState::SELECT_QUIZ;
 

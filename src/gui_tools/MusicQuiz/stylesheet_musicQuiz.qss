@@ -20,6 +20,12 @@ QDialog#TeamSelector
 	background-color	: rgb(25, 25, 255);
 }
 
+QDialog#QuizIntroScreen
+{
+	color				: Yellow;
+	background-color	: rgb(25, 25, 255);
+}
+
 
 
 /****************************************/
@@ -157,10 +163,10 @@ QLabel#authorLabel
 	color				: Yellow;
 }
 
-QLabel#selectTeamsLabel
+QLabel#quizIntroLabel
 {
-	font-size			: 40px;
-	color				: Black;
+	font-size			: 100px;
+	color				: Yellow;
 }
 
 

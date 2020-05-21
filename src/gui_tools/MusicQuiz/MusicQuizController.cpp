@@ -7,10 +7,11 @@
 #include <QMessageBox>
 
 #include "common/Log.hpp"
-
-#include "gui_tools/widgets/QuizTeam.hpp"
-#include "gui_tools/widgets/QuizEntry.hpp"
+#include "gui_tools/widgets/QuizFactory.hpp"
 #include "gui_tools/widgets/QuizCategory.hpp"
+#include "gui_tools/GuiUtil/QuizSelector.hpp"
+#include "gui_tools/GuiUtil/TeamSelector.hpp"
+#include "gui_tools/GuiUtil/QuizIntroScreen.hpp"
 
 
 MusicQuiz::MusicQuizController::MusicQuizController(QWidget* parent) :
@@ -104,6 +105,13 @@ void MusicQuiz::MusicQuizController::executeQuiz()
 		}
 
 		/** Show Intro Screen */
+		_quizIntro = new MusicQuiz::QuizIntroScreen;
+
+		/** Connect Signals */
+		connect(_quizIntro, SIGNAL(introCompleteSignal()), this, SLOT(introComplete()));
+
+		/** Show Widget */
+		_quizIntro->exec();
 
 		/** Go to select team state */
 		_quizState = RUN_QUIZ;
@@ -193,3 +201,15 @@ void MusicQuiz::MusicQuizController::teamSelected(const std::vector<MusicQuiz::Q
 	delete _teamSelector;
 	_teamSelector = nullptr;
 }
+
+void MusicQuiz::MusicQuizController::introComplete()
+{
+	/** Set Intro Done */
+	_introScreenDone = true;
+
+	/** Remove Intro Screen */
+	_quizIntro->hide();
+	delete _quizIntro;
+	_quizIntro = nullptr;
+}
+
