@@ -42,7 +42,6 @@ void MusicQuiz::QuizIntroScreen::createLayout()
 {
 	/** Layout */
 	QGridLayout* mainlayout = new QGridLayout;
-	size_t row = 0;
 
 	/** Quiz Label */
 	QLabel* quizLabel = new QLabel("Music Quiz"); 
