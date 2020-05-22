@@ -73,7 +73,7 @@ void MusicQuiz::MusicQuizController::executeQuiz()
 	case MusicQuiz::MusicQuizController::SELECT_QUIZ:
 	{
 		/** Start Quiz Theme Song */
-		//_audioPlayer.play(_themeSongFile, true);
+		_audioPlayer.play(_themeSongFile, true);
 
 		/** Create Quiz Selector */
 		_quizSelector = new MusicQuiz::QuizSelector;
@@ -116,6 +116,9 @@ void MusicQuiz::MusicQuizController::executeQuiz()
 		if ( !_teamSelected ) {
 			break;
 		}
+
+		/** Play Part of the Quiz Theme Song */
+		_audioPlayer.play(_themeSongFile, 0, 3300);
 
 		/** Show Intro Screen */
 		_quizIntro = new MusicQuiz::QuizIntroScreen;

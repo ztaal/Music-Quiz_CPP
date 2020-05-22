@@ -43,6 +43,6 @@ namespace MusicQuiz {
 
 		/** Variables */
 		QTimer _timer;
-		const size_t _introDisplayTime = 5000; // in ms
+		const size_t _introDisplayTime = 2500; // in ms
 	};
 }
