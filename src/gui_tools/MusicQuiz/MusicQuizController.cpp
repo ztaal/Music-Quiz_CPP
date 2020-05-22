@@ -117,9 +117,6 @@ void MusicQuiz::MusicQuizController::executeQuiz()
 			break;
 		}
 
-		/** Play Part of the Quiz Theme Song */
-		_audioPlayer.play(_themeSongFile, 0, 3300);
-
 		/** Show Intro Screen */
 		_quizIntro = new MusicQuiz::QuizIntroScreen;
 
