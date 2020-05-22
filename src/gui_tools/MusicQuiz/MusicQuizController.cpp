@@ -12,6 +12,7 @@
 #include "gui_tools/GuiUtil/QuizSelector.hpp"
 #include "gui_tools/GuiUtil/TeamSelector.hpp"
 #include "gui_tools/GuiUtil/QuizIntroScreen.hpp"
+#include "gui_tools/GuiUtil/QuizWinningScreen.hpp"
 
 
 MusicQuiz::MusicQuizController::MusicQuizController(QWidget* parent) :
@@ -48,8 +49,20 @@ MusicQuiz::MusicQuizController::~MusicQuizController()
 
 	/** Close Quiz Board */
 	if ( _quizBoard != nullptr ) {
-		_quizBoard->close();
 		_quizBoard = nullptr;
+		delete _quizBoard;
+	}
+
+	/** Close Quiz Intro */
+	if ( _quizIntro != nullptr ) {
+		_quizIntro->close();
+		_quizIntro = nullptr;
+	}
+
+	/** Close Quiz Winning Screen */
+	if ( _quizWinningScreen != nullptr ) {
+		_quizWinningScreen->close();
+		_quizWinningScreen = nullptr;
 	}
 }
 
@@ -129,6 +142,7 @@ void MusicQuiz::MusicQuizController::executeQuiz()
 
 		/** Connect Signals */
 		connect(_quizBoard, SIGNAL(quitSignal()), this, SLOT(quitQuiz()));
+		connect(_quizBoard, SIGNAL(gameComplete(std::vector<MusicQuiz::QuizTeam*>)), this, SLOT(quizCompleted(std::vector<MusicQuiz::QuizTeam*>)));
 
 		/** Stop Quiz Theme Song */
 		_audioPlayer.stop();
@@ -148,6 +162,19 @@ void MusicQuiz::MusicQuizController::executeQuiz()
 		}
 
 		/** Show Victory Screen */
+		if ( !_winningTeams.empty() ) {
+			/** Create Winning Screen */
+			_quizWinningScreen = new QuizWinningScreen(_winningTeams);
+
+			/** Connect Signals */
+			connect(_quizWinningScreen, SIGNAL(winningScreenCompleteSignal()), this, SLOT(quitQuiz()));
+				
+			/** Start Winning Song */
+			_audioPlayer.play(_vicatorySongFile, true);
+
+			/** Show Widget */
+			_quizWinningScreen->exec();
+		}
 
 		/** Go to victory screen state */
 		_quizState = VICTORY_SCREEN;
@@ -213,3 +240,14 @@ void MusicQuiz::MusicQuizController::introComplete()
 	_quizIntro = nullptr;
 }
 
+void MusicQuiz::MusicQuizController::quizCompleted(std::vector<MusicQuiz::QuizTeam*> winningTeam)
+{
+	/** Set Game Done */
+	_gameCompleted = true;
+
+	/** Set Winning Teams */
+	_winningTeams = winningTeam;
+
+	/** Hide Quiz Board */
+	_quizBoard->hide();
+}

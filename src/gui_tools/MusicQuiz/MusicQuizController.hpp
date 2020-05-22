@@ -27,6 +27,7 @@ namespace MusicQuiz {
 	class QuizSelector;
 	class TeamSelector;
 	class QuizIntroScreen;
+	class QuizWinningScreen;
 
 	class MusicQuizController : public QWidget
 	{
@@ -87,6 +88,11 @@ namespace MusicQuiz {
 		 */
 		void introComplete();
 
+		/**
+		 * @brief Handles the quiz complete .
+		 */
+		void quizCompleted(std::vector<MusicQuiz::QuizTeam*> winningTeam);
+
 	private:
 
 		/** Variables */
@@ -98,6 +104,9 @@ namespace MusicQuiz {
 		MusicQuiz::QuizSelector* _quizSelector = nullptr;
 		MusicQuiz::TeamSelector* _teamSelector = nullptr;
 		MusicQuiz::QuizIntroScreen* _quizIntro = nullptr;
+		MusicQuiz::QuizWinningScreen* _quizWinningScreen = nullptr;
+
+		std::vector<MusicQuiz::QuizTeam*> _winningTeams;
 
 		/** Update Timer */
 		QTimer _updateTimer;

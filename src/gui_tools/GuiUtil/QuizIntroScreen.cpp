@@ -1,14 +1,9 @@
 #include "QuizIntroScreen.hpp"
 
-#include <random>
-#include <sstream>
-#include <stdexcept>
-
 #include <QColor>
 #include <QLabel>
 #include <QWidget>
 #include <QGridLayout>
-#include <QSpacerItem>
 
 
 MusicQuiz::QuizIntroScreen::QuizIntroScreen(QWidget* parent) :

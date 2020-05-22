@@ -26,6 +26,12 @@ QDialog#QuizIntroScreen
 	background-color	: rgb(25, 25, 255);
 }
 
+QDialog#QuizWinningScreen
+{
+	color				: Yellow;
+	background-color	: rgb(25, 25, 255);
+}
+
 
 
 /****************************************/
@@ -164,6 +170,12 @@ QLabel#authorLabel
 }
 
 QLabel#quizIntroLabel
+{
+	font-size			: 100px;
+	color				: Yellow;
+}
+
+QLabel#winningScreenTextLabel
 {
 	font-size			: 100px;
 	color				: Yellow;

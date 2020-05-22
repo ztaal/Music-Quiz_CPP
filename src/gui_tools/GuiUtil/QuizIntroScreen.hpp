@@ -1,10 +1,8 @@
 #pragma once
 
-#include <string>
 #include <vector>
 
 #include <QTimer>
-#include <QColor>
 #include <QObject>
 #include <QWidget>
 #include <QDialog>

@@ -104,6 +104,7 @@ namespace MusicQuiz {
 
 		/** Variables */
 		bool _quizClosed = false;
+		bool _quizStopped = false;
 
 		QString _name = "";
 

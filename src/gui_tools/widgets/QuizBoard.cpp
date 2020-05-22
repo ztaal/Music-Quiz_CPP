@@ -203,7 +203,7 @@ void MusicQuiz::QuizBoard::handleGameComplete()
 		}
 	}
 
-	if ( isGameComplete && !_teams.empty() ) {
+	if ( (isGameComplete || _quizStopped) && !_teams.empty() ) {
 		/** Find Winner */
 		const size_t highScore = (*std::max_element(_teams.begin(), _teams.end(), [](const MusicQuiz::QuizTeam* a, const MusicQuiz::QuizTeam* b) {return a->getScore() < b->getScore(); }))->getScore();
 		std::vector<MusicQuiz::QuizTeam*> winningTeams;
@@ -215,8 +215,8 @@ void MusicQuiz::QuizBoard::handleGameComplete()
 		}
 
 		emit gameComplete(winningTeams);
-	} else if ( isGameComplete ) {
-		emit gameComplete(std::vector<MusicQuiz::QuizTeam*>());
+	} else if ( isGameComplete || _quizStopped ) {
+		emit gameComplete({});
 	}
 }
 
@@ -259,6 +259,10 @@ void MusicQuiz::QuizBoard::keyPressEvent(QKeyEvent* event)
 	{
 	case Qt::Key_Escape:
 		closeWindow();
+		break;
+	case Qt::Key_Q: // Stop Quiz Before it is complete
+		_quizStopped = true;
+		handleGameComplete();
 		break;
 	default:
 		QWidget::keyPressEvent(event);
