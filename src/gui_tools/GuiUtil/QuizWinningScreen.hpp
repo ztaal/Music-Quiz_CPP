@@ -60,7 +60,8 @@ namespace MusicQuiz {
 		QTimer _sizeTimer;
 		const size_t _winnerDisplayTime = 150000; // in ms
 
-		QLabel* _winnersLabel = nullptr;
+		std::vector< QLabel* > _andLabels;
+		std::vector< QLabel* > _winnersLabels;
 		std::vector<MusicQuiz::QuizTeam*> _winningTeams;
 	};
 }

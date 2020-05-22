@@ -5,6 +5,7 @@
 #include <QWidget>
 #include <QString>
 #include <QGridLayout>
+#include <QSpacerItem>
 
 
 MusicQuiz::QuizWinningScreen::QuizWinningScreen(const std::vector<MusicQuiz::QuizTeam*>& winningTeams, QWidget* parent) :
@@ -40,7 +41,7 @@ MusicQuiz::QuizWinningScreen::QuizWinningScreen(const std::vector<MusicQuiz::Qui
 	}
 
 	if ( !_sizeTimer.isActive() ) {
-		_sizeTimer.start(20);
+		_sizeTimer.start(15);
 	}
 }
 
@@ -54,28 +55,40 @@ MusicQuiz::QuizWinningScreen::~QuizWinningScreen()
 
 void MusicQuiz::QuizWinningScreen::createLayout()
 {
-
 	/** Layout */
 	QGridLayout* mainlayout = new QGridLayout;
+	QGridLayout* topLayout = new QGridLayout;
+	QGridLayout* bottomLayout = new QGridLayout;
 	mainlayout->setRowStretch(0, 1);
 	mainlayout->setRowStretch(1, 5);
-	size_t row = 0;
 
 	/** Text Label */
 	QLabel* textLabel = new QLabel("The Winner!");
 	textLabel->setObjectName("winningScreenTextLabel");
-	mainlayout->addWidget(textLabel, 0, 0, Qt::AlignCenter);
+	topLayout->addWidget(textLabel, 0, 0, Qt::AlignCenter);
 
 	/** Winners Label */
-	_winnersLabel = new QLabel;
-	QString winnersStr = _winningTeams[0]->getName();
-	for ( size_t i = 1; i < _winningTeams.size(); ++i ) {
-		winnersStr += " & " + _winningTeams[i]->getName();
-	}
-	_winnersLabel->setText(winnersStr);
-	mainlayout->addWidget(_winnersLabel, 1, 0, Qt::AlignCenter);
+	QLabel* label = new QLabel(_winningTeams[0]->getName());
+	bottomLayout->addWidget(label, 0, 0, Qt::AlignCenter);
+	_winnersLabels.push_back(label);
 
-	/** Set Layout */	
+	for ( size_t i = 0; i < _winningTeams.size() - 1; ++i ) {
+		/** & Label */
+		label = new QLabel("&");
+		bottomLayout->addWidget(label, 0, i * 2 + 1, Qt::AlignCenter);
+		_andLabels.push_back(label);
+
+		/** Team Name Label */
+		label = new QLabel(_winningTeams[i + 1]->getName());
+		bottomLayout->addWidget(label, 0, i * 2 + 2, Qt::AlignCenter);
+		_winnersLabels.push_back(label);
+	}
+
+	/** Add Layouts */
+	mainlayout->addItem(topLayout, 0, 0);
+	mainlayout->addItem(bottomLayout, 1, 0);
+
+	/** Set Layout */
 	setLayout(mainlayout);
 	setContentsMargins(20, 20, 20, 20);
 }
@@ -83,18 +96,29 @@ void MusicQuiz::QuizWinningScreen::createLayout()
 void MusicQuiz::QuizWinningScreen::increaseTextSize()
 {
 	/** Sanity Check */
-	if ( _winnersLabel == nullptr ) {
+	if ( _winnersLabels.empty() ) {
 		return;
 	}
 
+	/** Get Text Width */
+	size_t width = 0;
+	for ( size_t i = 0; i < _winnersLabels.size(); ++i ) {
+		width += _winnersLabels[i]->fontMetrics().boundingRect(_winnersLabels[i]->text()).width();
+	}
+
+	for ( size_t i = 0; i < _andLabels.size(); ++i ) {
+		width += _andLabels[i]->fontMetrics().boundingRect(_andLabels[i]->text()).width() + 20;
+	}
+
 	/** Increase Size */
-	if ( _textSize < 1200 ) {
+	const size_t screenWidth = size().width();
+	if ( width < screenWidth - 200 ) {
 		++_textSize;
 	}
 
 	/** Choose Random Color */
 	_textColor.setHsv(_hueCounter, _textColor.saturation(), _textColor.value());
-	++_hueCounter;
+	_hueCounter += 2;
 	if ( _hueCounter > 200 && _hueCounter < 270 ) { // Skip Blue
 		_hueCounter = 270;
 	} else if ( _hueCounter >= 359 ) { // Loop Color
@@ -102,8 +126,16 @@ void MusicQuiz::QuizWinningScreen::increaseTextSize()
 	}
 
 	/** Set Stylesheet */
-	_winnersLabel->setStyleSheet("font-size: " + QString::number(_textSize / 4) + "px; font-weight: bold;" +
-		"color: rgb(" + QString::number(_textColor.red()) + "," + QString::number(_textColor.green()) + "," + QString::number(_textColor.blue()) + ");");
+	if ( !_andLabels.empty() ) {
+		for ( size_t i = 0; i < _andLabels.size(); ++i ) {
+			_andLabels[i]->setStyleSheet("font-size: " + QString::number((_textSize > 600 ? 150 : _textSize / 4)) + "px; color: yellow;");
+		}
+	}
+
+	for ( size_t i = 0; i < _winnersLabels.size(); ++i ) {
+		_winnersLabels[i]->setStyleSheet("font-size: " + QString::number(_textSize / 4) + "px; font-weight: bold;" +
+			"color: rgb(" + QString::number(_textColor.red()) + "," + QString::number(_textColor.green()) + "," + QString::number(_textColor.blue()) + ");");
+	}
 }
 
 void MusicQuiz::QuizWinningScreen::screenComplete()
