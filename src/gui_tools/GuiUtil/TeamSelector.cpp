@@ -58,6 +58,7 @@ void MusicQuiz::TeamSelector::createLayout()
 
 	/** Team Table */
 	_teamTable = new QTableWidget(0, 3);
+	_teamTable->setObjectName("teamTable");
 	_teamTable->setFocusPolicy(Qt::NoFocus);
 	_teamTable->setSelectionMode(QAbstractItemView::NoSelection);
 	_teamTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
