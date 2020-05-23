@@ -123,6 +123,14 @@ QPushButton#removeBtn
 	image				: url(:/imgs/remove_icon.png);
 }
 
+QPushButton#quizCreatorRemoveBtn
+{
+	font-size			: 12px;
+
+	min-height			: 15px;
+	min-width			: 15px;
+}
+
 
 
 /****************************************/
@@ -181,6 +189,11 @@ QLabel#winningScreenTextLabel
 	color				: Yellow;
 }
 
+QLabel#quizCreatorLabel
+{
+	font-size			: 25px;
+}
+
 
 
 /****************************************/
@@ -223,6 +236,12 @@ QTextEdit#descriptionTextLabel
 	border							: none;
 }
 
+QTextEdit#quizCreatorTextEdit
+{
+	font-size						: 20px;
+	min-height						: 80px;
+}
+
 
 
 /****************************************/
@@ -247,6 +266,12 @@ QLineEdit#_teamLineEdit
 	font-size						: 35px;
 	min-height						: 100px;
 	border							: 2px solid rgb(128, 128, 128)
+}
+
+QLineEdit#quizCreatorLineEdit
+{
+	font-size						: 20px;
+	min-height						: 40px;
 }
 
 
@@ -280,7 +305,7 @@ QCheckBox::indicator:unchecked#infoCheckbox {
 /*****		    QTableWidget		*****/
 /****************************************/
 
-QTableWidget
+QTableWidget#teamTable
 {
 	font-size				: 32px;
 	font-weight				: bold;
@@ -289,14 +314,6 @@ QTableWidget
 	border-radius			: 0px;
 	border-width			: 2px;
 	border-style			: solid;
-}
-
-QTableWidget::Item
-{
-}
-
-QTableWidget::Item::Selected
-{
 }
 
 
