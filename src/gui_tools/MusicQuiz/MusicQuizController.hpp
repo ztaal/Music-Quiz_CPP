@@ -51,7 +51,7 @@ namespace MusicQuiz {
 		explicit MusicQuizController(QWidget *parent = nullptr);
 
 		/**
-		 * @brief Default destructor
+		 * @brief Destructor
 		 */
 		virtual ~MusicQuizController();
 
@@ -64,7 +64,7 @@ namespace MusicQuiz {
 		void executeQuiz();
 
 		/**
-		 * @brief Quizs the quiz.
+		 * @brief Quits the quiz.
 		 */
 		void quitQuiz();
 
