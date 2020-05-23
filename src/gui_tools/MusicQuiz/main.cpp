@@ -7,6 +7,7 @@
 #include "common/Log.hpp"
 
 #include "MusicQuizController.hpp"
+#include "gui_tools/QuizCreator/QuizCreator.hpp"
 
 
 #if defined(_WIN32) || defined(WIN32)
@@ -69,7 +70,9 @@ int main(int argc, char* argv[])
 		LOG_INFO("Quiz Creator Selected.");
 
 		try {
-
+			MusicQuiz::QuizCreator w;
+			w.show();
+			app.exec();
 		} catch ( const std::exception& err ) {
 			LOG_ERROR("Failed to start Quiz Creator. " << err.what());
 			errorMessage("Quiz Creator", "Quiz Creator Error. " + std::string(err.what()));

@@ -298,3 +298,14 @@ QTableWidget::Item
 QTableWidget::Item::Selected
 {
 }
+
+
+
+/****************************************/
+/*****		    QMessageBox			*****/
+/****************************************/
+
+QMessageBox
+{
+	font-size			: 25px;
+}

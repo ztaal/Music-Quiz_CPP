@@ -20,6 +20,7 @@ namespace MusicQuiz {
 		/**
 		 * @brief Constructor
 		 *
+		 * @param[in] winningTeams The list of teams that won.
 		 * @param[in] parent The parent widget.
 		 */
 		explicit QuizWinningScreen(const std::vector<MusicQuiz::QuizTeam*>& winningTeams, QWidget* parent = nullptr);
