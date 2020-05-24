@@ -8,3 +8,4 @@ SET ( SRC_FILES
 )
 
 ADD_SUBDIRECTORY(ColorPicker)
+ADD_SUBDIRECTORY(QExtensions)

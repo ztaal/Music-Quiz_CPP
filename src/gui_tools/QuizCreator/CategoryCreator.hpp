@@ -1,18 +1,16 @@
 #pragma once 
 
-#include <vector>
-
+#include <QLabel>
 #include <QObject>
 #include <QWidget>
-#include <QDialog>
-#include <QTextEdit>
 #include <QLineEdit>
-#include <QCheckBox>
-#include <QTabWidget>
 #include <QTableWidget>
+
+#include "gui_tools/GuiUtil/QExtensions/QTabWidgetExtender.hpp"
 
 
 namespace MusicQuiz {
+
 	class CategoryCreator : public QWidget
 	{
 		Q_OBJECT
@@ -21,9 +19,10 @@ namespace MusicQuiz {
 		/**
 		 * @brief Constructor
 		 *
+		 * @param[in] name The category name.
 		 * @param[in] parent The parent widget.
 		 */
-		explicit CategoryCreator(QWidget* parent = nullptr);
+		explicit CategoryCreator(const QString& name, QWidget* parent = nullptr);
 
 		/**
 		 * @brief Default destructor
@@ -31,8 +30,30 @@ namespace MusicQuiz {
 		virtual ~CategoryCreator() = default;
 
 	public slots:
+		/**
+		 * @brief Updates the category name
+		 *
+		 * @param[in] name The name.
+		 */
+		void setName(const QString& name);
 
 	private slots:
+		/**
+		 * @brief Adds a entry to the category.
+		 */
+		void addEntry();
+
+		/**
+		 * @brief Removes a entry.
+		 */
+		void removeEntry();
+
+		/**
+		 * @brief Updates the name of the tab.
+		 *
+		 * param[in] str The new name.
+		 */
+		void updateEntryTabName(const QString& str);
 
 	private:
 		/**
@@ -41,5 +62,11 @@ namespace MusicQuiz {
 		void createLayout();
 
 		/** Variables */
+		QString _categoryName = "";
+		QLabel* _categoryNameLabel = nullptr;
+
+		QExtensions::QTabWidgetExtender* _tabWidget = nullptr;
+
+		QTableWidget* _entriesTable = nullptr;
 	};
 }

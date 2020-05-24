@@ -3,15 +3,16 @@
 #include <QLabel>
 #include <QString>
 #include <QGridLayout>
-#include <QSpacerItem>
 #include <QPushButton>
 #include <QHeaderView>
-#include <QApplication>
+#include <QMessageBox>
 #include <QTableWidgetItem>
 
+#include "gui_tools/QuizCreator/EntryCreator.hpp"
 
-MusicQuiz::CategoryCreator::CategoryCreator(QWidget* parent) :
-	QWidget(parent)
+
+MusicQuiz::CategoryCreator::CategoryCreator(const QString& name, QWidget* parent) :
+	QWidget(parent), _categoryName(name)
 {
 	/** Create Layout */
 	createLayout();
@@ -22,9 +23,180 @@ void MusicQuiz::CategoryCreator::createLayout()
 	/** Layout */
 	QGridLayout* mainlayout = new QGridLayout;
 
-	QLabel* test = new QLabel("Fisk");
-	mainlayout->addWidget(test);
+	/** Vertical Tab Bar */
+	_tabWidget = new QExtensions::QTabWidgetExtender;
+	_tabWidget->tabBar()->setObjectName("_verticalTabBar");
+	mainlayout->addWidget(_tabWidget);
+
+	/** Setup Tab */
+	QWidget* setupTab = new QWidget;
+	QGridLayout* setupTabLayout = new QGridLayout;
+	setupTab->setLayout(setupTabLayout);
+	_tabWidget->addTab(setupTab, "Setup");
+	size_t row = 0;
+
+	/** Setup Tab - Category Name */
+	_categoryNameLabel = new QLabel(_categoryName);
+	_categoryNameLabel->setObjectName("quizCreatorLabel");
+	setupTabLayout->addWidget(_categoryNameLabel, ++row, 0, 1, 2, Qt::AlignCenter);
+
+	/** Setup Tab - Entries */
+	QLabel* label = new QLabel("Entries:");
+	label->setObjectName("quizCreatorLabel");
+	setupTabLayout->addWidget(label, ++row, 0, 1, 1, Qt::AlignLeft);
+
+	QPushButton* addEntryBtn = new QPushButton("+");
+	addEntryBtn->setFocusPolicy(Qt::FocusPolicy::NoFocus);
+	connect(addEntryBtn, SIGNAL(released()), this, SLOT(addEntry()));
+	setupTabLayout->addWidget(addEntryBtn, row, 1, 1, 1, Qt::AlignRight);
+
+	_entriesTable = new QTableWidget(0, 2);
+	_entriesTable->setObjectName("quizCreatorTable");
+	_entriesTable->horizontalHeader()->setVisible(false);
+	_entriesTable->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+	_entriesTable->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+	setupTabLayout->addWidget(_entriesTable, ++row, 0, 1, 2);
 
 	/** Set Layout */
 	setLayout(mainlayout);
+}
+
+void MusicQuiz::CategoryCreator::addEntry()
+{
+	/** Sanity Check */
+	if ( _entriesTable == nullptr ) {
+		return;
+	}
+
+	/** Get Number of Entries */
+	const size_t entryCount = _entriesTable->rowCount();
+
+	/** Insert New Entry */
+	_entriesTable->insertRow(entryCount);
+
+	/** Add Line Edit */
+	const QString entryNameStr = "Entry " + QString::number(entryCount + 1);
+	QLineEdit* entryName = new QLineEdit(entryNameStr);
+	entryName->setObjectName("quizCreatorCategoryLineEdit");
+	entryName->setProperty("index", entryCount);
+	connect(entryName, SIGNAL(textChanged(const QString&)), this, SLOT(updateEntryTabName(const QString&)));
+	_entriesTable->setCellWidget(entryCount, 0, entryName);
+
+	/** Add Remove Entry Button */
+	QPushButton* removeBtn = new QPushButton("X");
+	removeBtn->setObjectName("quizCreatorRemoveBtn");
+	removeBtn->setProperty("index", entryCount);
+	connect(removeBtn, SIGNAL(released()), this, SLOT(removeEntry()));
+
+	QHBoxLayout* removeBtnLayout = new QHBoxLayout;
+	removeBtnLayout->addWidget(removeBtn, Qt::AlignCenter);
+
+	QWidget* layoutWidget = new QWidget;
+	layoutWidget->setLayout(removeBtnLayout);
+	_entriesTable->setCellWidget(entryCount, 1, layoutWidget);
+
+	/** Add Tab */
+	const size_t points = (entryCount + 1) * 100;
+	MusicQuiz::EntryCreator* entry = new MusicQuiz::EntryCreator(entryNameStr, points);
+	_tabWidget->addTab(entry, entryNameStr);
+}
+
+void MusicQuiz::CategoryCreator::removeEntry()
+{
+	/** Sanity Check */
+	if ( _entriesTable == nullptr ) {
+		return;
+	}
+
+	QPushButton* button = qobject_cast<QPushButton*>(sender());
+	if ( button == nullptr ) {
+		return;
+	}
+
+	/** Get Number of Entries */
+	const size_t entryCount = _entriesTable->rowCount();
+
+	/** Get Index */
+	const size_t index = button->property("index").toInt();
+	if ( index >= _tabWidget->count() || index >= entryCount ) {
+		return;
+	}
+
+	/** Get Entry Name */
+	QLineEdit* lineEdit = qobject_cast<QLineEdit*>(_entriesTable->cellWidget(index, 0));
+	if ( lineEdit == nullptr ) {
+		return;
+	}
+
+	/** Popup to ensure the user wants to delete the entry */
+	QMessageBox::StandardButton resBtn = QMessageBox::question(this, "Delete Entry?", "Are you sure you want to delete entry '" + lineEdit->text() + "'?",
+		QMessageBox::No | QMessageBox::Yes, QMessageBox::Yes);
+	if ( resBtn != QMessageBox::Yes ) {
+		return;
+	}
+
+	/** Delete Entry in table */
+	_entriesTable->removeRow(index);
+
+	/** Delete Tab */
+	_tabWidget->removeTab(index + 1);
+
+	/** Update Indices */
+	for ( size_t i = 0; i < _entriesTable->rowCount(); ++i ) {
+		/** Line Edit */
+		QLineEdit* tmpLineEdit = qobject_cast<QLineEdit*>(_entriesTable->cellWidget(i, 0));
+		if ( tmpLineEdit != nullptr ) {
+			tmpLineEdit->setProperty("index", i);
+		}
+
+		/** Button */
+		QList<QPushButton*> buttons = _entriesTable->cellWidget(i, 1)->findChildren<QPushButton*>();
+		for ( QPushButton* tmpButton : buttons ) {
+			if ( tmpButton != nullptr ) {
+				tmpButton->setProperty("index", i);
+			}
+		}
+	}
+}
+
+void MusicQuiz::CategoryCreator::updateEntryTabName(const QString& str)
+{
+	/** Sanity Check */
+	if ( _tabWidget == nullptr ) {
+		return;
+	}
+
+	QLineEdit* lineEdit = qobject_cast<QLineEdit*>(sender());
+	if ( lineEdit == nullptr ) {
+		return;
+	}
+
+	/** Get Index */
+	const size_t index = lineEdit->property("index").toInt() + 1;
+	if ( index >= _tabWidget->count() ) {
+		return;
+	}
+
+	/** Set Tab Text */
+	_tabWidget->setTabText(index, lineEdit->text());
+
+	/** Update Category Name */
+	MusicQuiz::EntryCreator* entryWidget = qobject_cast<MusicQuiz::EntryCreator*>(_tabWidget->widget(index));
+	if ( entryWidget != nullptr ) {
+		entryWidget->setName(str);
+	}
+}
+
+void MusicQuiz::CategoryCreator::setName(const QString& name)
+{
+	/** Sanity Check */
+	if ( _categoryNameLabel == nullptr ) {
+		return;
+	}
+
+	/** Set Name */
+	_categoryName = name;
+
+	/** Update Label */
+	_categoryNameLabel->setText(_categoryName);
 }

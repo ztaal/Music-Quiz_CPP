@@ -143,7 +143,8 @@ void MusicQuiz::QuizCreator::addCategory()
 	_categoriesTable->insertRow(categoryCount);
 
 	/** Add Line Edit */
-	QLineEdit* categoryName = new QLineEdit("Category " + QString::number(categoryCount + 1));
+	const QString categoryNameStr = "Category " + QString::number(categoryCount + 1);
+	QLineEdit* categoryName = new QLineEdit(categoryNameStr);
 	categoryName->setObjectName("quizCreatorCategoryLineEdit"); 
 	categoryName->setProperty("index", categoryCount);
 	connect(categoryName, SIGNAL(textChanged(const QString&)), this, SLOT(updateCategoryTabName(const QString&)));
@@ -163,8 +164,8 @@ void MusicQuiz::QuizCreator::addCategory()
 	_categoriesTable->setCellWidget(categoryCount, 1, layoutWidget);
 
 	/** Add Tab */
-	MusicQuiz::CategoryCreator* category = new MusicQuiz::CategoryCreator();
-	_tabWidget->addTab(category, categoryName->text());
+	MusicQuiz::CategoryCreator* category = new MusicQuiz::CategoryCreator(categoryNameStr);
+	_tabWidget->addTab(category, categoryNameStr);
 }
 
 void MusicQuiz::QuizCreator::addRowCategory()
@@ -225,10 +226,9 @@ void MusicQuiz::QuizCreator::removeCategory()
 	if ( lineEdit == nullptr ) {
 		return;
 	}
-	const QString categoryName = lineEdit->text();
 
 	/** Popup to ensure the user wants to delete the category */
-	QMessageBox::StandardButton resBtn = QMessageBox::question(this, "Delete Category?", "Are you sure you want to delete category '" + categoryName + "'?",
+	QMessageBox::StandardButton resBtn = QMessageBox::question(this, "Delete Category?", "Are you sure you want to delete category '" + lineEdit->text() + "'?",
 		QMessageBox::No | QMessageBox::Yes, QMessageBox::Yes);
 	if ( resBtn != QMessageBox::Yes ) {
 		return;
@@ -327,6 +327,12 @@ void MusicQuiz::QuizCreator::updateCategoryTabName(const QString& str)
 
 	/** Set Tab Text */
 	_tabWidget->setTabText(index, lineEdit->text());
+
+	/** Update Category Name */
+	MusicQuiz::CategoryCreator* categoryWidget = qobject_cast<MusicQuiz::CategoryCreator*>(_tabWidget->widget(index));
+	if ( categoryWidget != nullptr ) {
+		categoryWidget->setName(str);
+	}
 }
 
 void MusicQuiz::QuizCreator::quitCreator()
