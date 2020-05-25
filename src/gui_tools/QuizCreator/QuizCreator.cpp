@@ -28,6 +28,15 @@ MusicQuiz::QuizCreator::QuizCreator(QWidget* parent) :
 	/** Set Object Name */
 	setObjectName("QuizCreator");
 
+	/** Set Size */
+	const size_t width = 1000;
+	const size_t height = 800;
+	if ( parent == nullptr ) {
+		resize(width, height);
+	} else {
+		setGeometry(parent->x() + parent->width() / 2 - width / 2, parent->y() + parent->height() / 2 - height / 2, width, height);
+	}
+
 	/** Create Layout */
 	createLayout();
 }
@@ -164,7 +173,7 @@ void MusicQuiz::QuizCreator::addCategory()
 	_categoriesTable->setCellWidget(categoryCount, 1, layoutWidget);
 
 	/** Add Tab */
-	MusicQuiz::CategoryCreator* category = new MusicQuiz::CategoryCreator(categoryNameStr);
+	MusicQuiz::CategoryCreator* category = new MusicQuiz::CategoryCreator(categoryNameStr, std::make_shared<audio::AudioPlayer>(_audioPlayer));
 	_tabWidget->addTab(category, categoryNameStr);
 }
 

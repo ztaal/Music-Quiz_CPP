@@ -11,8 +11,8 @@
 #include "gui_tools/QuizCreator/EntryCreator.hpp"
 
 
-MusicQuiz::CategoryCreator::CategoryCreator(const QString& name, QWidget* parent) :
-	QWidget(parent), _categoryName(name)
+MusicQuiz::CategoryCreator::CategoryCreator(const QString& name, const audio::AudioPlayer::Ptr& audioPlayer, QWidget* parent) :
+	QWidget(parent), _categoryName(name), _audioPlayer(audioPlayer)
 {
 	/** Create Layout */
 	createLayout();
@@ -97,7 +97,7 @@ void MusicQuiz::CategoryCreator::addEntry()
 
 	/** Add Tab */
 	const size_t points = (entryCount + 1) * 100;
-	MusicQuiz::EntryCreator* entry = new MusicQuiz::EntryCreator(entryNameStr, points);
+	MusicQuiz::EntryCreator* entry = new MusicQuiz::EntryCreator(entryNameStr, points, _audioPlayer);
 	_tabWidget->addTab(entry, entryNameStr);
 }
 

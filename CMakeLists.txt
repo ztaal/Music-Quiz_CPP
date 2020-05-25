@@ -28,6 +28,7 @@ MESSAGE("-- Build type: " ${CMAKE_BUILD_TYPE})
 
 ### Find Qt
 include("cmake/FindQt.cmake")
+find_package(Qt5Multimedia REQUIRED)
 
 ### Boost
 include("cmake/FindBoost.cmake")

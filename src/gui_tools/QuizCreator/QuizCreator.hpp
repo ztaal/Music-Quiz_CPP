@@ -11,6 +11,8 @@
 #include <QTabWidget>
 #include <QTableWidget>
 
+#include "audio/AudioPlayer.hpp"
+
 
 namespace MusicQuiz {
 	class CategoryCreator;
@@ -87,5 +89,8 @@ namespace MusicQuiz {
 		QTableWidget* _rowCategoriesTable = nullptr;
 
 		std::vector< MusicQuiz::CategoryCreator* > _categories;
+
+		/** Audio Player */
+		audio::AudioPlayer _audioPlayer;
 	};
 }

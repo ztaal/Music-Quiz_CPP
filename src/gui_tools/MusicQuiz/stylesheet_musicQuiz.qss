@@ -131,6 +131,46 @@ QPushButton#quizCreatorRemoveBtn
 	min-width			: 15px;
 }
 
+QPushButton#quizCreatorBrowseBtn
+{
+	font-size			: 10px;
+
+	min-height			: 40px;
+	min-width			: 40px;
+
+	image				: url(:/imgs/browse_file_icon.png);
+}
+
+QPushButton#quizCreatorPlayBtn
+{
+	font-size			: 10px;
+
+	min-height			: 40px;
+	min-width			: 40px;
+
+	image				: url(:/imgs/play_icon.png);
+}
+
+QPushButton#quizCreatorPauseBtn
+{
+	font-size			: 10px;
+
+	min-height			: 40px;
+	min-width			: 40px;
+
+	image				: url(:/imgs/pause_icon.png);
+}
+
+QPushButton#quizCreatorStopBtn
+{
+	font-size			: 10px;
+
+	min-height			: 40px;
+	min-width			: 40px;
+
+	image				: url(:/imgs/stop_icon.png);
+}
+
 
 
 /****************************************/
@@ -325,4 +365,28 @@ QTableWidget#teamTable
 QMessageBox
 {
 	font-size			: 25px;
+}
+
+
+
+/****************************************/
+/*****		    QSpinBox			*****/
+/****************************************/
+
+QSpinBox#quizCreatorSpinbox
+{
+	font-size						: 20px;
+	min-height						: 40px;
+}
+
+
+
+/****************************************/
+/*****		    QTimeEdit			*****/
+/****************************************/
+
+QTimeEdit#quizCreatorTimeEdit
+{
+	font-size						: 20px;
+	min-height						: 40px;
 }
