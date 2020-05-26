@@ -78,8 +78,11 @@ void MusicQuiz::EntryCreator::createLayout()
 	QButtonGroup* buttonGroup = new QButtonGroup;
 	QRadioButton* songBtn = new QRadioButton("Song");
 	QRadioButton* videoBtn = new QRadioButton("Video");
-	buttonGroup->addButton(songBtn);
-	buttonGroup->addButton(videoBtn);
+	songBtn->setObjectName("quizCreatorRadioButton");
+	videoBtn->setObjectName("quizCreatorRadioButton");
+	buttonGroup->addButton(songBtn, 0);
+	buttonGroup->addButton(videoBtn, 1);
+	connect(buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(setEntryType(int)));
 	songBtn->setChecked(true);
 
 	typeLayout->addWidget(songBtn);
@@ -90,22 +93,10 @@ void MusicQuiz::EntryCreator::createLayout()
 	mainlayout->addItem(createSongFileLayout(), ++row, 0, 1, 2);
 
 	/** Video - File */
-	label = new QLabel("Video File:");
-	label->setObjectName("quizCreatorLabel");
-	mainlayout->addWidget(label, ++row, 0);
+	mainlayout->addItem(createVideoFileLayout(), ++row, 0, 1, 2);
 
-	QHBoxLayout* videoFileLayout = new QHBoxLayout;
-	_videoFileLineEdit = new QLineEdit;
-	_videoFileLineEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-	_videoFileLineEdit->setObjectName("quizCreatorLineEdit");
-	connect(_videoFileLineEdit, SIGNAL(textChanged(const QString&)), this, SLOT(checkVideoFileName(const QString&)));
-	videoFileLayout->addWidget(_videoFileLineEdit);
-
-	QPushButton* browseBtn = new QPushButton();
-	browseBtn->setObjectName("quizCreatorBrowseBtn");
-	connect(browseBtn, SIGNAL(released()), this, SLOT(browseVideo()));
-	videoFileLayout->addWidget(browseBtn);
-	mainlayout->addItem(videoFileLayout, ++row, 0, 1, 2);
+	/** Set Type to song */
+	setEntryType(0);
 
 	/** Set Layout */
 	mainlayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Ignored, QSizePolicy::Expanding), ++row, 0, 1, 2);
@@ -119,9 +110,9 @@ QGridLayout* MusicQuiz::EntryCreator::createSongFileLayout()
 	/** Layout */
 	QGridLayout* mainlayout = new QGridLayout;
 	QHBoxLayout* songFileLayout = new QHBoxLayout;
-	_songSettingsLayout = new QGridLayout;
-	_songSettingsLayout->setHorizontalSpacing(5);
-	_songSettingsLayout->setVerticalSpacing(10);
+	QGridLayout* songSettingsLayout = new QGridLayout;
+	songSettingsLayout->setHorizontalSpacing(5);
+	songSettingsLayout->setVerticalSpacing(10);
 	mainlayout->setVerticalSpacing(10);
 	size_t row = 0;
 
@@ -137,7 +128,7 @@ QGridLayout* MusicQuiz::EntryCreator::createSongFileLayout()
 	connect(_songFileLineEdit, SIGNAL(textChanged(const QString&)), this, SLOT(checkSongFileName(const QString&)));
 	songFileLayout->addWidget(_songFileLineEdit);
 
-	QPushButton* browseBtn = new QPushButton();
+	QPushButton* browseBtn = new QPushButton;
 	browseBtn->setObjectName("quizCreatorBrowseBtn");
 	connect(browseBtn, SIGNAL(released()), this, SLOT(browseSong()));
 	songFileLayout->addWidget(browseBtn);
@@ -147,110 +138,268 @@ QGridLayout* MusicQuiz::EntryCreator::createSongFileLayout()
 	/** Song - Set Song Start and End Times */
 	label = new QLabel("Song:");
 	label->setObjectName("quizCreatorLabel");
-	_songSettingsLayout->addWidget(label, 0, 0, 1, 1);
+	songSettingsLayout->addWidget(label, 0, 0, 1, 1);
 
 	/** Song Start Time */
 	_songStartTimeEdit = new QTimeEdit;
-	_songStartTimeEdit->setDisplayFormat("mm:ss");
 	_songStartTimeEdit->setAlignment(Qt::AlignCenter);
 	_songStartTimeEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 	_songStartTimeEdit->setObjectName("quizCreatorTimeEdit");
-	_songSettingsLayout->addWidget(_songStartTimeEdit, 0, 1, 1, 1);
+	songSettingsLayout->addWidget(_songStartTimeEdit, 0, 1, 1, 1);
 
 	/** Song End Time */
 	_songEndTimeEdit = new QTimeEdit;
-	_songEndTimeEdit->setDisplayFormat("mm:ss");
+	_songEndTimeEdit->setTime(QTime(5, 0, 0));
 	_songEndTimeEdit->setAlignment(Qt::AlignCenter);
 	_songEndTimeEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 	_songEndTimeEdit->setObjectName("quizCreatorTimeEdit");
-	_songSettingsLayout->addWidget(_songEndTimeEdit, 0, 2, 1, 1);
+	songSettingsLayout->addWidget(_songEndTimeEdit, 0, 2, 1, 1);
 
 	/** Song Audio Buttons - Play */
-	QPushButton* btn = new QPushButton();
+	QPushButton* btn = new QPushButton;
+	btn->setProperty("type", "song");
 	btn->setObjectName("quizCreatorPlayBtn");
 	connect(btn, SIGNAL(released()), this, SLOT(playSong()));
-	_songSettingsLayout->addWidget(btn, 0, 3, 1, 1);
+	songSettingsLayout->addWidget(btn, 0, 3, 1, 1);
 
 	/** Song Audio Buttons - Pause */
-	btn = new QPushButton();
+	btn = new QPushButton;
 	btn->setObjectName("quizCreatorPauseBtn");
 	connect(btn, SIGNAL(released()), this, SLOT(pauseSong()));
-	_songSettingsLayout->addWidget(btn, 0, 4, 1, 1);
+	songSettingsLayout->addWidget(btn, 0, 4, 1, 1);
 
 	/** Song Audio Buttons - Stop */
-	btn = new QPushButton();
+	btn = new QPushButton;
 	btn->setObjectName("quizCreatorStopBtn");
 	connect(btn, SIGNAL(released()), this, SLOT(stopSong()));
-	_songSettingsLayout->addWidget(btn, 0, 5, 1, 1);
+	songSettingsLayout->addWidget(btn, 0, 5, 1, 1);
 
 	/** Song - Set Answer Start and End Times */
 	label = new QLabel("Answer:");
 	label->setObjectName("quizCreatorLabel");
-	_songSettingsLayout->addWidget(label, 1, 0, 1, 1);
+	songSettingsLayout->addWidget(label, 1, 0, 1, 1);
 
 
 	/** Answer Start Time */
 	_answerStartTimeEdit = new QTimeEdit;
-	_answerStartTimeEdit->setDisplayFormat("mm:ss");
 	_answerStartTimeEdit->setAlignment(Qt::AlignCenter);
 	_answerStartTimeEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 	_answerStartTimeEdit->setObjectName("quizCreatorTimeEdit");
-	_songSettingsLayout->addWidget(_answerStartTimeEdit, 1, 1, 1, 1);
+	songSettingsLayout->addWidget(_answerStartTimeEdit, 1, 1, 1, 1);
 
 	/** Answer End Time */
 	_answerEndTimeEdit = new QTimeEdit;
-	_answerEndTimeEdit->setDisplayFormat("mm:ss");
+	_answerEndTimeEdit->setTime(QTime(5, 0, 0));
 	_answerEndTimeEdit->setAlignment(Qt::AlignCenter);
 	_answerEndTimeEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 	_answerEndTimeEdit->setObjectName("quizCreatorTimeEdit");
-	_songSettingsLayout->addWidget(_answerEndTimeEdit, 1, 2, 1, 1);
+	songSettingsLayout->addWidget(_answerEndTimeEdit, 1, 2, 1, 1);
 
 	/** Answer Audio Buttons - Play */
-	btn = new QPushButton();
+	btn = new QPushButton;
+	btn->setProperty("type", "songAnswer");
 	btn->setObjectName("quizCreatorPlayBtn");
-	connect(btn, SIGNAL(released()), this, SLOT(playAnswer()));
-	_songSettingsLayout->addWidget(btn, 1, 3, 1, 1);
+	connect(btn, SIGNAL(released()), this, SLOT(playSong()));
+	songSettingsLayout->addWidget(btn, 1, 3, 1, 1);
 
 	/** Answer Audio Buttons - Pause */
-	btn = new QPushButton();
+	btn = new QPushButton;
 	btn->setObjectName("quizCreatorPauseBtn");
-	connect(btn, SIGNAL(released()), this, SLOT(pauseAnswer()));
-	_songSettingsLayout->addWidget(btn, 1, 4, 1, 1);
+	connect(btn, SIGNAL(released()), this, SLOT(pauseSong()));
+	songSettingsLayout->addWidget(btn, 1, 4, 1, 1);
 
 	/** Answer Audio Buttons - Stop */
-	btn = new QPushButton();
+	btn = new QPushButton;
 	btn->setObjectName("quizCreatorStopBtn");
-	connect(btn, SIGNAL(released()), this, SLOT(stopAnswer()));
-	_songSettingsLayout->addWidget(btn, 1, 5, 1, 1);
+	connect(btn, SIGNAL(released()), this, SLOT(stopSong()));
+	songSettingsLayout->addWidget(btn, 1, 5, 1, 1);
+
+	/** Add layout to settings widget */
+	_songSettings = new QWidget;
+	_songSettings->setEnabled(false);
+	_songSettings->setLayout(songSettingsLayout);
+	mainlayout->addWidget(_songSettings, ++row, 0, 1, 2);
 
 	/** Set Layout */
-	mainlayout->addItem(_songSettingsLayout, ++row, 0, 1, 2);
+	return mainlayout;
+}
+
+QGridLayout* MusicQuiz::EntryCreator::createVideoFileLayout()
+{
+	/** Layout */
+	QGridLayout* mainlayout = new QGridLayout;
+	QHBoxLayout* videoFileLayout = new QHBoxLayout;
+	QGridLayout* videoSettingsLayout = new QGridLayout;
+	videoSettingsLayout->setHorizontalSpacing(5);
+	videoSettingsLayout->setVerticalSpacing(10);
+	mainlayout->setVerticalSpacing(10);
+	size_t row = 0;
+
+	/** Video - File */
+	QLabel* label = new QLabel("Video File:");
+	label->setObjectName("quizCreatorLabel");
+	mainlayout->addWidget(label, ++row, 0);
+
+	videoFileLayout->setSpacing(10);
+	_videoFileLineEdit = new QLineEdit;
+	_videoFileLineEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+	_videoFileLineEdit->setObjectName("quizCreatorLineEdit");
+	connect(_videoFileLineEdit, SIGNAL(textChanged(const QString&)), this, SLOT(checkVideoFileName(const QString&)));
+	videoFileLayout->addWidget(_videoFileLineEdit);
+
+	_browseVideoBtn = new QPushButton;
+	_browseVideoBtn->setObjectName("quizCreatorBrowseBtn");
+	connect(_browseVideoBtn, SIGNAL(released()), this, SLOT(browseVideo()));
+	videoFileLayout->addWidget(_browseVideoBtn);
+	mainlayout->addItem(videoFileLayout, ++row, 0, 1, 2);
+
+
+	/** Video - Set Video Start and End Times */
+	label = new QLabel("Video:");
+	label->setObjectName("quizCreatorLabel");
+	videoSettingsLayout->addWidget(label, 0, 0, 1, 1);
+
+	/** Video Start Time */
+	_videoStartTimeEdit = new QTimeEdit;
+	_videoStartTimeEdit->setAlignment(Qt::AlignCenter);
+	_videoStartTimeEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+	_videoStartTimeEdit->setObjectName("quizCreatorTimeEdit");
+	videoSettingsLayout->addWidget(_videoStartTimeEdit, 0, 1, 1, 1);
+
+	/** Video End Time */
+	_videoEndTimeEdit = new QTimeEdit;
+	_videoEndTimeEdit->setTime(QTime(5, 0, 0));
+	_videoEndTimeEdit->setAlignment(Qt::AlignCenter);
+	_videoEndTimeEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+	_videoEndTimeEdit->setObjectName("quizCreatorTimeEdit");
+	videoSettingsLayout->addWidget(_videoEndTimeEdit, 0, 2, 1, 1);
+
+	/** Video Buttons - Play */
+	QPushButton* btn = new QPushButton;
+	//btn->setProperty("type", "videoSong");
+	btn->setObjectName("quizCreatorPlayBtn");
+	//connect(btn, SIGNAL(released()), this, SLOT(playSong()));
+	videoSettingsLayout->addWidget(btn, 0, 3, 1, 1);
+
+	/** Video Buttons - Pause */
+	btn = new QPushButton;
+	btn->setObjectName("quizCreatorPauseBtn");
+	//connect(btn, SIGNAL(released()), this, SLOT(pauseSong()));
+	videoSettingsLayout->addWidget(btn, 0, 4, 1, 1);
+
+	/** Video Buttons - Stop */
+	btn = new QPushButton;
+	btn->setObjectName("quizCreatorStopBtn");
+	//connect(btn, SIGNAL(released()), this, SLOT(stopSong()));
+	videoSettingsLayout->addWidget(btn, 0, 5, 1, 1);
+
+
+	/** Video - Set Answer Start and End Times */
+	label = new QLabel("Answer:");
+	label->setObjectName("quizCreatorLabel");
+	videoSettingsLayout->addWidget(label, 1, 0, 1, 1);
+
+	/** Answer Start Time */
+	_videoAnswerStartTimeEdit = new QTimeEdit;
+	_videoAnswerStartTimeEdit->setAlignment(Qt::AlignCenter);
+	_videoAnswerStartTimeEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+	_videoAnswerStartTimeEdit->setObjectName("quizCreatorTimeEdit");
+	videoSettingsLayout->addWidget(_videoAnswerStartTimeEdit, 1, 1, 1, 1);
+
+	/** Answer End Time */
+	_videoAnswerEndTimeEdit = new QTimeEdit;
+	_videoAnswerEndTimeEdit->setTime(QTime(5, 0, 0));
+	_videoAnswerEndTimeEdit->setAlignment(Qt::AlignCenter);
+	_videoAnswerEndTimeEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+	_videoAnswerEndTimeEdit->setObjectName("quizCreatorTimeEdit");
+	videoSettingsLayout->addWidget(_videoAnswerEndTimeEdit, 1, 2, 1, 1);
+
+	/** Answer Audio Buttons - Play */
+	btn = new QPushButton;
+	//btn->setProperty("type", "videoSongAnswer");
+	btn->setObjectName("quizCreatorPlayBtn");
+	//connect(btn, SIGNAL(released()), this, SLOT(playSong()));
+	videoSettingsLayout->addWidget(btn, 1, 3, 1, 1);
+
+	/** Answer Audio Buttons - Pause */
+	btn = new QPushButton;
+	btn->setObjectName("quizCreatorPauseBtn");
+	//connect(btn, SIGNAL(released()), this, SLOT(pauseSong()));
+	videoSettingsLayout->addWidget(btn, 1, 4, 1, 1);
+
+	/** Answer Audio Buttons - Stop */
+	btn = new QPushButton;
+	btn->setObjectName("quizCreatorStopBtn");
+	//connect(btn, SIGNAL(released()), this, SLOT(stopSong()));
+	videoSettingsLayout->addWidget(btn, 1, 5, 1, 1);
+
+	/** Add layout to settings widget */
+	_videoSettings = new QWidget;
+	_videoSettings->setEnabled(false);
+	_videoSettings->setLayout(videoSettingsLayout);
+	mainlayout->addWidget(_videoSettings, ++row, 0, 1, 2);
+
+	/** Set Layout */
 	return mainlayout;
 }
 
 void MusicQuiz::EntryCreator::playSong()
 {
 	/** Sanity Check */
-	if ( _audioPlayer == nullptr || _songFileLineEdit == nullptr ||
-		_songStartTimeEdit == nullptr || _songEndTimeEdit == nullptr ) {
+	QPushButton* button = qobject_cast<QPushButton*>(sender());
+	if ( button == nullptr || _audioPlayer == nullptr ) {
 		return;
 	}
 
+	/** Get Type */
+	QString fileName = "";
+	size_t startTime = 0, endTime = 0;
+	const QString type = button->property("type").toString();
+	if ( type == "song" ) {
+		/** Sanity Check */
+		if ( _songFileLineEdit == nullptr || _songStartTimeEdit == nullptr || _songEndTimeEdit == nullptr ) {
+			return;
+		}
+
+		/** Get File Name */
+		fileName = _songFileLineEdit->text();
+
+		/** Get Start and End Time */
+		startTime = getMSec(_songStartTimeEdit->time());
+		endTime = getMSec(_songEndTimeEdit->time());
+	} else if ( type == "songAnswer" ) {
+		/** Sanity Check */
+		if ( _songFileLineEdit == nullptr || _answerStartTimeEdit == nullptr || _answerEndTimeEdit == nullptr ) {
+			return;
+		}
+
+		/** Get File Name */
+		fileName = _songFileLineEdit->text();
+
+		/** Get Start and End Time */
+		startTime = getMSec(_answerStartTimeEdit->time());
+		endTime = getMSec(_answerEndTimeEdit->time());
+	} else if ( type == "videoSong" ) {
+
+	} else if ( type == "videoSongAnswer" ) {
+
+	}
+
 	/** Check if file is valid */
-	const QString fileName = _songFileLineEdit->text();
 	if ( fileName.isEmpty() || !isSongFileValid(fileName) ) {
 		return;
 	}
 
-	/** Get Start and End Time */
-	const QTime startTime = _songStartTimeEdit->time();
-	const QTime endTime = _songEndTimeEdit->time();
-
-	/** Play Song */
-	LOG_DEBUG("startTime " << startTime.msec());
-	LOG_DEBUG("endTime " << endTime.msec());
 	try {
-		_audioPlayer->play(fileName.toStdString(), startTime.msec(), endTime.msec());
+		/** Stop Song */
+		stopSong();
+		
+		/** Play Song */
+		if ( endTime > 240000 ) { // \hack if end time is larger than 4 min play without an end time
+			_audioPlayer->play(fileName.toStdString(), startTime);
+		} else {
+			_audioPlayer->play(fileName.toStdString(), startTime, endTime);
+		}
 	} catch ( ... ) {
 	}
 }
@@ -279,33 +428,6 @@ void MusicQuiz::EntryCreator::stopSong()
 	/** Play Song */
 	try {
 		_audioPlayer->stop();
-	} catch ( ... ) {
-	}
-}
-
-void MusicQuiz::EntryCreator::playAnswer()
-{
-	/** Sanity Check */
-	if ( _audioPlayer == nullptr || _songFileLineEdit == nullptr ||
-		_answerStartTimeEdit == nullptr || _answerEndTimeEdit == nullptr ) {
-		return;
-	}
-
-	/** Check if file is valid */
-	const QString fileName = _songFileLineEdit->text();
-	if ( fileName.isEmpty() || !isSongFileValid(fileName) ) {
-		return;
-	}
-
-	/** Get Start and End Time */
-	const QTime startTime = _answerStartTimeEdit->time();
-	const QTime endTime = _answerEndTimeEdit->time();
-
-	/** Play Song */
-	LOG_DEBUG("startTime " << startTime.hour() * 1000);
-	LOG_DEBUG("endTime " << endTime.hour() * 1000);
-	try {
-		_audioPlayer->play(fileName.toStdString(), startTime.hour() * 1000, endTime.hour() * 1000);
 	} catch ( ... ) {
 	}
 }
@@ -359,29 +481,17 @@ void MusicQuiz::EntryCreator::checkSongFileName(const QString& fileName)
 		/** Set Line Edit Color */
 		lineEdit->setStyleSheet("color: black;");
 
-		try {
-			/** Update End Time */
-			_songEndTimeEdit->setMaximumTime(QTime(0, 5, 0));
-			_answerEndTimeEdit->setMaximumTime(QTime(0, 5, 0));
-			_songEndTimeEdit->setTime(QTime(0, 5, 0));
-			_answerEndTimeEdit->setTime(QTime(0, 5, 0));
-
-			/** Enable Song Controls */
-			if ( !_songSettingsLayout->isEnabled() ) {
-				_songSettingsLayout->setEnabled(true);
-			}
-		} catch ( const std::exception& err ) {
-			LOG_ERROR("Failed to get song duration. " << err.what());
-		} catch ( ... ) {
-			LOG_ERROR("Failed to get song duration.");
+		/** Enable Song Controls */
+		if ( !_songSettings->isEnabled() ) {
+			_songSettings->setEnabled(true);
 		}
 	} else {
 		/** Set Line Edit Color */
 		lineEdit->setStyleSheet("color: red;");
 
 		/** Disable Song Controls */
-		if ( _songSettingsLayout->isEnabled() ) {
-			_songSettingsLayout->setEnabled(false);
+		if ( _songSettings->isEnabled() ) {
+			_songSettings->setEnabled(false);
 		}
 	}
 }
@@ -397,11 +507,22 @@ void MusicQuiz::EntryCreator::checkVideoFileName(const QString& fileName)
 	/** Check if name is valid */
 	bool isValid = isVideoFileValid(fileName);
 
-	/** Set Line Edit Color */
 	if ( isValid ) {
+		/** Set Line Edit Color */
 		lineEdit->setStyleSheet("color: black;");
+
+		/** Enable Video Controls */
+		if ( !_videoSettings->isEnabled() ) {
+			_videoSettings->setEnabled(true);
+		}
 	} else {
+		/** Set Line Edit Color */
 		lineEdit->setStyleSheet("color: red;");
+
+		/** Disable Video Controls */
+		if ( _videoSettings->isEnabled() ) {
+			_videoSettings->setEnabled(false);
+		}
 	}
 }
 
@@ -435,6 +556,11 @@ bool MusicQuiz::EntryCreator::isVideoFileValid(const QString& fileName)
 	return true;
 }
 
+size_t MusicQuiz::EntryCreator::getMSec(const QTime& time)
+{
+	return time.hour() * 60000 + time.minute() * 1000;
+}
+
 void MusicQuiz::EntryCreator::setName(const QString& name)
 {
 	/** Sanity Check */
@@ -447,4 +573,25 @@ void MusicQuiz::EntryCreator::setName(const QString& name)
 
 	/** Update Label */
 	_entryNameLabel->setText(_entryName);
+}
+
+void MusicQuiz::EntryCreator::setEntryType(int index)
+{
+	/** Sanity Check */
+	if ( _videoSettings == nullptr || _browseVideoBtn == nullptr || _videoFileLineEdit == nullptr ) {
+		return;
+	}
+
+	/** Get Type */
+	if ( index == 0 ) { // song
+		/** Disable Video Widgets */
+		_videoSettings->setEnabled(false);
+		_browseVideoBtn->setEnabled(false);
+		_videoFileLineEdit->setEnabled(false);
+	} else if ( index == 1 ) { // video
+		/** Enable Video Widgets */
+		_videoSettings->setEnabled(true);
+		_browseVideoBtn->setEnabled(true);
+		_videoFileLineEdit->setEnabled(true);
+	}
 }

@@ -11,6 +11,7 @@
 #include <QLineEdit>
 #include <QCheckBox>
 #include <QGridLayout>
+#include <QPushButton>
 #include <QTableWidget>
 
 #include "audio/AudioPlayer.hpp"
@@ -77,11 +78,6 @@ namespace MusicQuiz {
 		void playSong();
 
 		/**
-		 * @brief Plays the answer file from the start position defined in the start QTimeEdit.
-		 */
-		void playAnswer();
-
-		/**
 		 * @brief Pauses the song playing.
 		 */
 		void pauseSong();
@@ -90,6 +86,13 @@ namespace MusicQuiz {
 		 * @brief Stops the song playing.
 		 */
 		void stopSong();
+
+		/**
+		 * @brief Sets the entry type [0 = song, 1 = video].
+		 *
+		 * @param[in] index The type index.
+		 */
+		void setEntryType(int index);
 
 	private:
 		/**
@@ -102,6 +105,11 @@ namespace MusicQuiz {
 		 */
 		QGridLayout* createSongFileLayout();
 
+		/**
+		 * @brief Creates the video file category layout.
+		 */
+		QGridLayout* createVideoFileLayout();
+		
 		/**
 		 * @brief Checks if the song file name is valid.
 		 *
@@ -120,6 +128,16 @@ namespace MusicQuiz {
 		 */
 		bool isVideoFileValid(const QString& fileName);
 
+		/**
+		 * @brief Gets the time in msec from a QTime.
+		 * @note The Qtime is used so the hh::mm corresponds to mm::ss.
+		 *
+		 * @param[in] time The time.
+		 *
+		 * @return The time in miliseconds.
+		 */
+		size_t getMSec(const QTime& time);
+
 		/** Variables */
 		size_t _points = 0;
 
@@ -137,8 +155,14 @@ namespace MusicQuiz {
 		QTimeEdit* _answerEndTimeEdit = nullptr;
 		QTimeEdit* _answerStartTimeEdit = nullptr;
 
-		QGridLayout* _songSettingsLayout = nullptr;
-		QGridLayout* _videoSettingsLayout = nullptr;
+		QTimeEdit* _videoEndTimeEdit = nullptr;
+		QTimeEdit* _videoStartTimeEdit = nullptr;
+		QTimeEdit* _videoAnswerEndTimeEdit = nullptr;
+		QTimeEdit* _videoAnswerStartTimeEdit = nullptr;
+
+		QWidget* _songSettings = nullptr;
+		QWidget* _videoSettings = nullptr;
+		QPushButton* _browseVideoBtn = nullptr;
 
 		std::shared_ptr< audio::AudioPlayer > _audioPlayer = nullptr;
 	};

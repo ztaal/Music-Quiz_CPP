@@ -390,3 +390,17 @@ QTimeEdit#quizCreatorTimeEdit
 	font-size						: 20px;
 	min-height						: 40px;
 }
+
+
+
+/****************************************/
+/*****		    QRadioButton		*****/
+/****************************************/
+
+QRadioButton#quizCreatorRadioButton
+{
+	font-size						: 20px;
+	min-height						: 40px;
+}
+
+
