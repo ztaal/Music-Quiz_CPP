@@ -11,6 +11,7 @@
 
 
 namespace MusicQuiz {
+	class EntryCreator;
 
 	class CategoryCreator : public QWidget
 	{
@@ -38,6 +39,20 @@ namespace MusicQuiz {
 		 * @param[in] name The name.
 		 */
 		void setName(const QString& name);
+
+		/**
+		 * @brief Gets the category name
+		 *
+		 * @return The name.
+		 */
+		const QString getName() const;
+
+		/**
+		 * @brief Gets the entries
+		 *
+		 * @return The category entries.
+		 */
+		const std::vector< MusicQuiz::EntryCreator* > getEntries() const;
 
 	private slots:
 		/**
@@ -70,6 +85,7 @@ namespace MusicQuiz {
 		QExtensions::QTabWidgetExtender* _tabWidget = nullptr;
 
 		QTableWidget* _entriesTable = nullptr;
+		std::vector< MusicQuiz::EntryCreator* > _entries;
 
 		std::shared_ptr< audio::AudioPlayer > _audioPlayer = nullptr;
 	};

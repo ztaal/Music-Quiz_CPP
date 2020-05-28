@@ -65,7 +65,9 @@ MusicQuiz::util::QuizLoader::QuizPreview MusicQuiz::util::QuizLoader::getQuizPre
 	quizPreview.quizName = sub_tree.get<std::string>("QuizName");
 
 	/** Author */
-	quizPreview.quizAuthor = sub_tree.get<std::string>("QuizAuthor");
+	try {
+		quizPreview.quizAuthor = sub_tree.get<std::string>("QuizAuthor");
+	} catch ( ... ) {}
 
 	/** Description */
 	quizPreview.quizDescription = sub_tree.get<std::string>("QuizDescription");
@@ -78,7 +80,7 @@ MusicQuiz::util::QuizLoader::QuizPreview MusicQuiz::util::QuizLoader::getQuizPre
 	/** Categories & Row Categories */
 	boost::property_tree::ptree::const_iterator ctrl = sub_tree.begin();
 	for ( ; ctrl != sub_tree.end(); ++ctrl ) {
-		if ( ctrl->first == "Categories" ) { // Load Categories
+		if ( ctrl->first == "QuizCategories" ) { // Load Categories
 			boost::property_tree::ptree categoriesTree = ctrl->second;
 			boost::property_tree::ptree::const_iterator sub_ctrl = categoriesTree.begin();
 			for ( ; sub_ctrl != categoriesTree.end(); ++sub_ctrl ) {
@@ -100,7 +102,7 @@ MusicQuiz::util::QuizLoader::QuizPreview MusicQuiz::util::QuizLoader::getQuizPre
 					}
 				}
 			}
-		} else if ( ctrl->first == "RowCategories" ) { // Load Row Categories
+		} else if ( ctrl->first == "QuizRowCategories" ) { // Load Row Categories
 			boost::property_tree::ptree rowCategoriesTree = ctrl->second;
 			boost::property_tree::ptree::const_iterator sub_ctrl = rowCategoriesTree.begin();
 			for ( ; sub_ctrl != rowCategoriesTree.end(); ++sub_ctrl ) {
@@ -142,44 +144,51 @@ std::vector<MusicQuiz::QuizCategory*> MusicQuiz::util::QuizLoader::loadQuizCateg
 	std::vector<MusicQuiz::QuizCategory*> categories;
 	boost::property_tree::ptree::const_iterator ctrl = sub_tree.begin();
 	for ( ; ctrl != sub_tree.end(); ++ctrl ) {
-		if ( ctrl->first == "Categories" ) { // Load Categories
+		if ( ctrl->first == "QuizCategories" ) { // Load Categories
 			boost::property_tree::ptree categoriesTree = ctrl->second;
 			boost::property_tree::ptree::const_iterator sub_ctrl = categoriesTree.begin();
-			for ( ; sub_ctrl != categoriesTree.end(); ++sub_ctrl ) {
-				if ( sub_ctrl->first == "Category" ) {
+			try {
+				for ( ; sub_ctrl != categoriesTree.end(); ++sub_ctrl ) {
+					if ( sub_ctrl->first == "Category" ) {
 
-					/** Category Name */
-					const QString categoryName = QString::fromStdString(sub_ctrl->second.get<std::string>("<xmlattr>.name"));
+						/** Category Name */
+						const QString categoryName = QString::fromStdString(sub_ctrl->second.get<std::string>("<xmlattr>.name"));
 
-					/** Category Entries */
-					std::vector<MusicQuiz::QuizEntry*> categorieEntries;
-					boost::property_tree::ptree entryTree = sub_ctrl->second;
-					boost::property_tree::ptree::const_iterator it = entryTree.begin();
-					for ( ; it != entryTree.end(); ++it ) {
-						if ( it->first == "QuizEntry" ) {
-							const boost::filesystem::path full_path(boost::filesystem::current_path());
-							QString songFile = QString::fromStdString(full_path.string() + "/" + it->second.get<std::string>("Media.SongFile"));
-							std::replace(songFile.begin(), songFile.end(), '\\', '/');
-							const QString answer = QString::fromStdString(it->second.get<std::string>("Answer"));
-							const size_t points = it->second.get<size_t>("Points");
-							const size_t startTime = it->second.get<size_t>("StartTime");
-							const size_t endTime = it->second.get<size_t>("EndTime");
-							const size_t answerStartTime = it->second.get<size_t>("AnswerStartTime");
-							const size_t answerEndTime = it->second.get<size_t>("AnswerEndTime");
+						/** Category Entries */
+						std::vector<MusicQuiz::QuizEntry*> categorieEntries;
+						boost::property_tree::ptree entryTree = sub_ctrl->second;
+						boost::property_tree::ptree::const_iterator it = entryTree.begin();
+						for ( ; it != entryTree.end(); ++it ) {
+							if ( it->first == "QuizEntry" ) {
+								const boost::filesystem::path full_path(boost::filesystem::current_path());
+								QString songFile = QString::fromStdString(full_path.string() + "/" + it->second.get<std::string>("Media.SongFile"));
+								std::replace(songFile.begin(), songFile.end(), '\\', '/');
+								const QString answer = QString::fromStdString(it->second.get<std::string>("Answer"));
+								const size_t points = it->second.get<size_t>("Points");
+								const size_t startTime = it->second.get<size_t>("StartTime");
+								const size_t endTime = it->second.get<size_t>("EndTime");
+								const size_t answerStartTime = it->second.get<size_t>("AnswerStartTime");
+								const size_t answerEndTime = it->second.get<size_t>("AnswerEndTime");
 
-							/** Check if file exsists */
-							if ( !boost::filesystem::exists(songFile.toStdString()) ) {
-								err += "Missing song file '" + songFile.toStdString() + "'\n";
+								/** Check if file exsists */
+								if ( !boost::filesystem::exists(songFile.toStdString()) ) {
+									err += "Missing song file '" + songFile.toStdString() + "'\n";
+								}
+
+								/** Push Back Entry */
+								categorieEntries.push_back(new MusicQuiz::QuizEntry(songFile, answer, points, startTime, answerStartTime, endTime, answerEndTime, audioPlayer));
 							}
-
-							/** Push Back Entry */
-							categorieEntries.push_back(new MusicQuiz::QuizEntry(songFile, answer, points, startTime, answerStartTime, endTime, answerEndTime, audioPlayer));
 						}
-					}
 
-					categories.push_back(new MusicQuiz::QuizCategory(categoryName, categorieEntries));
+						categories.push_back(new MusicQuiz::QuizCategory(categoryName, categorieEntries));
+					}
 				}
+			} catch ( const std::exception& err ) {
+				LOG_ERROR("Failed to load category. " << err.what());
+			} catch ( ... ) {
+				LOG_ERROR("Failed to load category.");
 			}
+			
 		}
 	}
 
@@ -212,7 +221,7 @@ std::vector<QString> MusicQuiz::util::QuizLoader::loadQuizRowCategories(const si
 	std::vector<QString> rowCategories;
 	boost::property_tree::ptree::const_iterator ctrl = sub_tree.begin();
 	for ( ; ctrl != sub_tree.end(); ++ctrl ) {
-		if ( ctrl->first == "RowCategories" ) { // Load Categories
+		if ( ctrl->first == "QuizRowCategories" ) { // Load Categories
 			boost::property_tree::ptree rowCategoriesTree = ctrl->second;
 			boost::property_tree::ptree::const_iterator sub_ctrl = rowCategoriesTree.begin();
 			for ( ; sub_ctrl != rowCategoriesTree.end(); ++sub_ctrl ) {

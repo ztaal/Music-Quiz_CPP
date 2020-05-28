@@ -41,11 +41,32 @@ namespace MusicQuiz {
 
 	public slots:
 		/**
-		 * @brief Updates the category name
+		 * @brief Updates the entry name.
 		 *
 		 * @param[in] name The name.
 		 */
 		void setName(const QString& name);
+
+		/**
+		 * @brief Gets the entry name.
+		 *
+		 * @return The name.
+		 */
+		const QString getName() const;
+
+		/**
+		 * @brief Gets the entry answer.
+		 *
+		 * @return The answer.
+		 */
+		const QString getAnswer() const;
+
+		/**
+		 * @brief Gets the points.
+		 *
+		 * @return The points.
+		 */
+		const size_t getPoints() const;
 
 	private slots:
 		/**
@@ -93,6 +114,8 @@ namespace MusicQuiz {
 		 * @param[in] index The type index.
 		 */
 		void setEntryType(int index);
+
+		void pointsChanged(int points);
 
 	private:
 		/**

@@ -64,10 +64,14 @@ namespace MusicQuiz {
 		void updateCategoryTabName(const QString& str);
 
 		/**
+		 * @brief Saves the quiz.
+		 */
+		void saveQuiz();
+
+		/**
 		 * @brief Quits the quiz creator.
 		 */
 		void quitCreator();
-
 
 	signals:
 
@@ -78,6 +82,8 @@ namespace MusicQuiz {
 		void createLayout();
 
 		/** Variables */
+		std::string quizSavedName = "";
+
 		QTabWidget* _tabWidget = nullptr;
 
 		QLineEdit* _quizNameLineEdit = nullptr;

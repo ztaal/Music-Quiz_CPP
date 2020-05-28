@@ -12,7 +12,13 @@
 #include <QApplication>
 #include <QTableWidgetItem>
 
+#include <boost/filesystem.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/xml_parser.hpp>
+
 #include "common/Log.hpp"
+#include "common/TimeUtil.hpp"
+#include "gui_tools/QuizCreator/EntryCreator.hpp"
 #include "gui_tools/QuizCreator/CategoryCreator.hpp"
 
 
@@ -125,6 +131,7 @@ void MusicQuiz::QuizCreator::createLayout()
 
 	/** Bottom Buttons */
 	QPushButton* saveQuizBtn = new QPushButton("Save Quiz");
+	connect(saveQuizBtn, SIGNAL(released()), this, SLOT(saveQuiz()));
 	mainlayout->addWidget(saveQuizBtn, 1, 0, 1, 1);
 
 	QPushButton* previewQuizBtn = new QPushButton("Preview");
@@ -154,7 +161,7 @@ void MusicQuiz::QuizCreator::addCategory()
 	/** Add Line Edit */
 	const QString categoryNameStr = "Category " + QString::number(categoryCount + 1);
 	QLineEdit* categoryName = new QLineEdit(categoryNameStr);
-	categoryName->setObjectName("quizCreatorCategoryLineEdit"); 
+	categoryName->setObjectName("quizCreatorCategoryLineEdit");
 	categoryName->setProperty("index", categoryCount);
 	connect(categoryName, SIGNAL(textChanged(const QString&)), this, SLOT(updateCategoryTabName(const QString&)));
 	_categoriesTable->setCellWidget(categoryCount, 0, categoryName);
@@ -174,6 +181,7 @@ void MusicQuiz::QuizCreator::addCategory()
 
 	/** Add Tab */
 	MusicQuiz::CategoryCreator* category = new MusicQuiz::CategoryCreator(categoryNameStr, std::make_shared<audio::AudioPlayer>(_audioPlayer));
+	_categories.push_back(category);
 	_tabWidget->addTab(category, categoryNameStr);
 }
 
@@ -245,6 +253,7 @@ void MusicQuiz::QuizCreator::removeCategory()
 
 	/** Delete Category in table */
 	_categoriesTable->removeRow(index);
+	_categories.erase(_categories.begin() + index);
 
 	/** Delete Tab */
 	_tabWidget->removeTab(index + 1);
@@ -341,6 +350,149 @@ void MusicQuiz::QuizCreator::updateCategoryTabName(const QString& str)
 	MusicQuiz::CategoryCreator* categoryWidget = qobject_cast<MusicQuiz::CategoryCreator*>(_tabWidget->widget(index));
 	if ( categoryWidget != nullptr ) {
 		categoryWidget->setName(str);
+	}
+}
+
+void MusicQuiz::QuizCreator::saveQuiz()
+{
+	/** Sanity Check */
+
+	try {
+		/** Get Quiz Name */
+		const std::string quizName = _quizNameLineEdit->text().toStdString();
+		if ( quizName.empty() ) {
+			QMessageBox::information(nullptr, "Info", "Enter a Quiz Name.");
+			return;
+		}
+
+		/** Get Quiz Description */
+		const std::string quizDescription = _quizDescriptionTextEdit->toPlainText().toStdString();
+		if ( quizName.empty() ) {
+			QMessageBox::information(nullptr, "Info", "Enter a Quiz Description.");
+			return;
+		}
+
+		/** Check if quiz already exists */
+		boost::system::error_code boost_err;
+		const std::string quizPath = "./data/" + quizName;
+		if ( boost::filesystem::is_directory(quizPath) && quizSavedName != quizName ) {
+			QMessageBox::StandardButton resBtn = QMessageBox::question(this, "Overwrite Quiz?", "Quiz already exists, do you want to overwrite existing quiz?",
+				QMessageBox::No | QMessageBox::Yes, QMessageBox::Yes);
+
+			if ( resBtn != QMessageBox::Yes ) {
+				return;
+			}
+		} else if ( !boost::filesystem::is_directory(quizPath) ) {
+			/** Create Folder */
+			boost::filesystem::create_directory(quizPath, boost_err);
+			if ( boost_err ) {
+				QMessageBox::warning(nullptr, "Failed to Save Quiz", "Failed to create directory to save the quiz in.");
+				return;
+			}
+		}
+		quizSavedName = quizName;
+
+		/** Create Media Folder */
+		const std::string mediaDirectoryPath = quizPath + "/mediaTmp";
+		boost::filesystem::create_directory(mediaDirectoryPath, boost_err);
+		if ( boost_err ) {
+			QMessageBox::warning(nullptr, "Failed to Save Quiz", "Failed to create directory to save the media files in.");
+			return;
+		}
+
+		/** Wirte Quiz to XML Parser */
+		boost::property_tree::ptree tree;
+		boost::property_tree::ptree& main_tree = tree.put("MusicQuiz", "");
+		main_tree.put("<xmlcomment>", std::string("File content written on the ") + common::TimeUtil::getTimeNow());
+
+		/** Quiz Name */
+		main_tree.put("QuizName", quizName);
+
+		/** Quiz Description */
+		main_tree.put("QuizDescription", quizDescription);
+
+		/** Categories */
+		const size_t numberOfCategories = _categoriesTable->rowCount();
+		for ( size_t i = 0; i < numberOfCategories; ++i ) {			
+			/** Get Category */
+			MusicQuiz::CategoryCreator* category = _categories[i];
+
+			/** Create Category tree */
+			boost::property_tree::ptree& category_tree = main_tree.add("QuizCategories.Category", "");
+
+			/** Category Name */
+			const std::string categoryName = category->getName().toStdString();
+			if ( categoryName.empty() ) {
+				QMessageBox::warning(nullptr, "Failed to Save Quiz", "Failed to save quiz. All categories must have a name.");
+				return;
+			}
+			category_tree.put("<xmlattr>.name", categoryName);
+
+			/** Create Category Folder */
+			boost::filesystem::create_directory(mediaDirectoryPath + "/" + categoryName, boost_err);
+			if ( boost_err ) {
+				QMessageBox::warning(nullptr, "Failed to Save Quiz", "Failed to create directory to save the catrgory files in.");
+				return;
+			}
+
+			/** Category Entries */
+			const std::vector< MusicQuiz::EntryCreator* > entries = category->getEntries();
+			const size_t numberOfEntries = entries.size();
+			for ( size_t j = 0; j < numberOfEntries; ++j ) {
+				/** Get Entry */
+				MusicQuiz::EntryCreator* entry = entries[j];
+
+				/** Create Entry tree */
+				boost::property_tree::ptree& entry_tree = category_tree.add("QuizEntry", "");
+
+				/** Entry Name */
+				const std::string entryName = entry->getName().toStdString();
+				if ( entryName.empty() ) {
+					QMessageBox::warning(nullptr, "Failed to Save Quiz", "Failed to save quiz. All entries needs to have a name.");
+					return;
+				}
+				entry_tree.put("<xmlattr>.name", entryName);
+
+				/** Entry Answer */
+				const std::string entryAnswer = entry->getAnswer().toStdString();
+				if ( entryAnswer.empty() ) {
+					QMessageBox::warning(nullptr, "Failed to Save Quiz", "Failed to save quiz. Answers have to be set for all entries.");
+					return;
+				}
+				entry_tree.put("Answer", entryAnswer);
+
+				/** Entry Points */
+				entry_tree.put("Points", entry->getPoints());
+			}
+		}
+
+		/** Delete Previous Folder */
+		boost::filesystem::path target(quizPath + "/media");
+		if ( boost::filesystem::exists(target) || boost::filesystem::is_directory(target) ) {
+			boost::filesystem::directory_iterator file(target), end;
+			for ( ; file != end; ++file ) {
+				boost::filesystem::remove_all(file->path());
+			}
+			boost::filesystem::remove_all(target);
+		}
+
+		/** Rename tmp folder */
+		boost::filesystem::rename(mediaDirectoryPath, target);
+
+		/** Save Quiz */
+#if ( BOOST_VERSION >= 105600 )
+	boost::property_tree::xml_writer_settings<std::string> settings('\t', 1);
+#elif
+	boost::property_tree::xml_writer_settings<char> settings('\t', 1);
+#endif
+		boost::property_tree::write_xml(quizPath + "/" + quizName + ".quiz.xml", tree, std::locale(), settings);
+
+		/** Popup to tell user that the quiz was saved */
+		QMessageBox::information(nullptr, "Info", "Quiz saves successfully.");
+	} catch ( const std::exception& err ) {
+		QMessageBox::warning(nullptr, "Failed to Save Quiz", "Failed to save the quiz. " + QString::fromStdString(err.what()));
+	} catch ( ... ) {
+		QMessageBox::warning(nullptr, "Failed to Save Quiz", "Failed to save the quiz. Unkown Error.");
 	}
 }
 

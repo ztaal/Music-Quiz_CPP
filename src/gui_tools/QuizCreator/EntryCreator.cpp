@@ -64,6 +64,7 @@ void MusicQuiz::EntryCreator::createLayout()
 	_pointsSpinbox->setRange(0, 10000);
 	_pointsSpinbox->setSingleStep(100);
 	_pointsSpinbox->setValue(_points);
+	connect(_pointsSpinbox, SIGNAL(valueChanged(int)), this, SLOT(pointsChanged(int)));
 	mainlayout->addWidget(_pointsSpinbox, row, 1);
 
 	/** Type */
@@ -561,20 +562,6 @@ size_t MusicQuiz::EntryCreator::getMSec(const QTime& time)
 	return time.hour() * 60000 + time.minute() * 1000;
 }
 
-void MusicQuiz::EntryCreator::setName(const QString& name)
-{
-	/** Sanity Check */
-	if ( _entryNameLabel == nullptr ) {
-		return;
-	}
-
-	/** Set Name */
-	_entryName = name;
-
-	/** Update Label */
-	_entryNameLabel->setText(_entryName);
-}
-
 void MusicQuiz::EntryCreator::setEntryType(int index)
 {
 	/** Sanity Check */
@@ -594,4 +581,43 @@ void MusicQuiz::EntryCreator::setEntryType(int index)
 		_browseVideoBtn->setEnabled(true);
 		_videoFileLineEdit->setEnabled(true);
 	}
+}
+
+void MusicQuiz::EntryCreator::setName(const QString& name)
+{
+	/** Sanity Check */
+	if ( _entryNameLabel == nullptr ) {
+		return;
+	}
+
+	/** Set Name */
+	_entryName = name;
+
+	/** Update Label */
+	_entryNameLabel->setText(_entryName);
+}
+
+const QString MusicQuiz::EntryCreator::getName() const
+{
+	return _entryName;
+}
+
+const QString MusicQuiz::EntryCreator::getAnswer() const
+{
+	/** Sanity Check */
+	if ( _answerLineEdit == nullptr ) {
+		return "";
+	}
+
+	return _answerLineEdit->text();
+}
+
+void MusicQuiz::EntryCreator::pointsChanged(int points)
+{
+	_points = points;
+}
+
+const size_t MusicQuiz::EntryCreator::getPoints() const
+{
+	return _points;
 }

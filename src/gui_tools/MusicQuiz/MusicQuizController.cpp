@@ -121,7 +121,17 @@ void MusicQuiz::MusicQuizController::executeQuiz()
 		_quizIntro = new MusicQuiz::QuizIntroScreen;
 
 		/** Connect Signals */
-		connect(_quizIntro, SIGNAL(introCompleteSignal()), this, SLOT(introComplete()));
+		try {
+			connect(_quizIntro, SIGNAL(introCompleteSignal()), this, SLOT(introComplete()));
+		} catch ( const std::exception& err ) {
+			QMessageBox::warning(nullptr, "Failed to Display Quiz Intro", "Failed to display quiz intro. " + QString(err.what()));
+			_quizState = SELECT_QUIZ;
+			break;
+		} catch ( ... ) {
+			QMessageBox::warning(nullptr, "Failed to Quiz Intro", "Failed to display quiz intro.");
+			_quizState = SELECT_QUIZ;
+			break;
+		}
 
 		/** Show Widget */
 		_quizIntro->exec();
@@ -137,21 +147,31 @@ void MusicQuiz::MusicQuizController::executeQuiz()
 			break;
 		}
 
-		/** Create Quiz Board */
-		_quizBoard = MusicQuiz::QuizFactory::createQuiz(_selectedQuizIdx, _settings, std::make_shared<audio::AudioPlayer>(_audioPlayer), _teams);
+		try {
+			/** Create Quiz Board */
+			_quizBoard = MusicQuiz::QuizFactory::createQuiz(_selectedQuizIdx, _settings, std::make_shared<audio::AudioPlayer>(_audioPlayer), _teams);
 
-		/** Connect Signals */
-		connect(_quizBoard, SIGNAL(quitSignal()), this, SLOT(quitQuiz()));
-		connect(_quizBoard, SIGNAL(gameComplete(std::vector<MusicQuiz::QuizTeam*>)), this, SLOT(quizCompleted(std::vector<MusicQuiz::QuizTeam*>)));
+			/** Connect Signals */
+			connect(_quizBoard, SIGNAL(quitSignal()), this, SLOT(quitQuiz()));
+			connect(_quizBoard, SIGNAL(gameComplete(std::vector<MusicQuiz::QuizTeam*>)), this, SLOT(quizCompleted(std::vector<MusicQuiz::QuizTeam*>)));
 
-		/** Stop Quiz Theme Song */
-		_audioPlayer.stop();
+			/** Stop Quiz Theme Song */
+			_audioPlayer.stop();
 
-		/** Show Widget */
-		_quizBoard->exec();
+			/** Show Widget */
+			_quizBoard->exec();
 
-		/** Go to quiz running state */
-		_quizState = VICTORY_SCREEN;
+			/** Go to quiz running state */
+			_quizState = VICTORY_SCREEN;
+		} catch ( const std::exception& err ) {
+			QMessageBox::warning(nullptr, "Failed to Load Quiz", "Failed to load the quiz. " + QString(err.what()));
+			_quizState = SELECT_QUIZ;
+			break;
+		} catch ( ... ) {
+			QMessageBox::warning(nullptr, "Failed to Load Quiz", "Failed to load the quiz.");
+			_quizState = SELECT_QUIZ;
+			break;
+		}
 	}
 	break;
 	case MusicQuiz::MusicQuizController::VICTORY_SCREEN:

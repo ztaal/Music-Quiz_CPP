@@ -98,6 +98,7 @@ void MusicQuiz::CategoryCreator::addEntry()
 	/** Add Tab */
 	const size_t points = (entryCount + 1) * 100;
 	MusicQuiz::EntryCreator* entry = new MusicQuiz::EntryCreator(entryNameStr, points, _audioPlayer);
+	_entries.push_back(entry);
 	_tabWidget->addTab(entry, entryNameStr);
 }
 
@@ -137,6 +138,7 @@ void MusicQuiz::CategoryCreator::removeEntry()
 
 	/** Delete Entry in table */
 	_entriesTable->removeRow(index);
+	_entries.erase(_entries.begin() + index);
 
 	/** Delete Tab */
 	_tabWidget->removeTab(index + 1);
@@ -199,4 +201,14 @@ void MusicQuiz::CategoryCreator::setName(const QString& name)
 
 	/** Update Label */
 	_categoryNameLabel->setText(_categoryName);
+}
+
+const QString MusicQuiz::CategoryCreator::getName() const
+{
+	return _categoryName;
+}
+
+const std::vector< MusicQuiz::EntryCreator* > MusicQuiz::CategoryCreator::getEntries() const
+{
+	return _entries;
 }
