@@ -97,3 +97,29 @@ int main(int argc, char* argv[])
 
 	return 0;
 }
+
+
+/** TODO LIST
+ * Add video Functionallity
+	- Add song file to video in quiz creator
+	- Add video song controls in quiz creator
+	- Display video and play music
+
+ * Add edit category and entry button to go to tab in quiz creator
+
+ * Add indicator to see if a category / entry is complete or incomplete (text in tab is red)
+
+ * Add guess the category in quiz creator
+ * Add guess the category in music quiz
+
+ * Make settings menu pretty
+
+ * Add daily double and daily triple
+	- Add check box in settings
+	- Add percentage slider
+	- Add hidden / shown checkbox
+
+ * Update popup boxes cosmetics
+
+
+*/

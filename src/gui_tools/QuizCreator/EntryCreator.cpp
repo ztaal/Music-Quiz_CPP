@@ -569,13 +569,18 @@ void MusicQuiz::EntryCreator::setEntryType(int index)
 		return;
 	}
 
-	/** Get Type */
-	if ( index == 0 ) { // song
+	if ( index == EntryType::Song ) { // song
+		/** Set Type */
+		_entryType = EntryType::Song;
+
 		/** Disable Video Widgets */
 		_videoSettings->setEnabled(false);
 		_browseVideoBtn->setEnabled(false);
 		_videoFileLineEdit->setEnabled(false);
-	} else if ( index == 1 ) { // video
+	} else if ( index == EntryType::Video ) { // video
+		/** Set Type */
+		_entryType = EntryType::Video;
+
 		/** Enable Video Widgets */
 		_videoSettings->setEnabled(true);
 		_browseVideoBtn->setEnabled(true);
@@ -620,4 +625,53 @@ void MusicQuiz::EntryCreator::pointsChanged(int points)
 const size_t MusicQuiz::EntryCreator::getPoints() const
 {
 	return _points;
+}
+
+const MusicQuiz::EntryCreator::EntryType MusicQuiz::EntryCreator::getType() const
+{
+	return _entryType;
+}
+
+const QString MusicQuiz::EntryCreator::getSongFile() const
+{
+	/** Sanity Check */
+	if ( _songFileLineEdit == nullptr ) {
+		return "";
+	}
+
+	return _songFileLineEdit->text();
+}
+
+const QString MusicQuiz::EntryCreator::getVideoFile() const
+{
+	/** Sanity Check */
+	if ( _videoFileLineEdit == nullptr ) {
+		return "";
+	}
+
+	return _videoFileLineEdit->text();
+}
+
+const std::pair<size_t, size_t> MusicQuiz::EntryCreator::getSongTimings()
+{
+	/** Sanity Check */
+	if ( _songStartTimeEdit == nullptr || _songEndTimeEdit == nullptr ) {
+		return std::pair<size_t, size_t>(0, 0);
+	}
+
+	const size_t startTime = getMSec(_songStartTimeEdit->time());
+	const size_t endTime = getMSec(_songEndTimeEdit->time());
+	return std::pair<size_t, size_t>(startTime, endTime);
+}
+
+const std::pair<size_t, size_t> MusicQuiz::EntryCreator::getAnswerTimings()
+{
+	/** Sanity Check */
+	if ( _answerStartTimeEdit == nullptr || _answerEndTimeEdit == nullptr ) {
+		return std::pair<size_t, size_t>(0, 0);
+	}
+
+	const size_t startTime = getMSec(_answerStartTimeEdit->time());
+	const size_t endTime = getMSec(_answerEndTimeEdit->time());
+	return std::pair<size_t, size_t>(startTime, endTime);
 }

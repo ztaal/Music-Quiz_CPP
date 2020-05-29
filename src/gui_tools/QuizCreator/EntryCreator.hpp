@@ -24,6 +24,10 @@ namespace MusicQuiz {
 		Q_OBJECT
 
 	public:
+		enum EntryType {
+			Song = 0, Video = 1
+		};
+
 		/**
 		 * @brief Constructor
 		 *
@@ -67,6 +71,41 @@ namespace MusicQuiz {
 		 * @return The points.
 		 */
 		const size_t getPoints() const;
+
+		/**
+		 * @brief Gets the entry type [Song, Video].
+		 *
+		 * @return The entry type.
+		 */
+		const EntryType getType() const;
+
+		/**
+		 * @brief Gets the song file.
+		 *
+		 * @return The song file.
+		 */
+		const QString getSongFile() const;
+
+		/**
+		 * @brief Gets the video file.
+		 *
+		 * @return The video file.
+		 */
+		const QString getVideoFile() const;
+
+		/**
+		 * @brief Gets the song start and end time.
+		 *
+		 * @return The song start and end time.
+		 */
+		const std::pair<size_t, size_t> getSongTimings();
+
+		/**
+		 * @brief Gets the answer start and end time.
+		 *
+		 * @return The answer start and end time.
+		 */
+		const std::pair<size_t, size_t> getAnswerTimings();
 
 	private slots:
 		/**
@@ -166,6 +205,8 @@ namespace MusicQuiz {
 
 		QString _entryName;
 		QLabel* _entryNameLabel = nullptr;
+
+		EntryType _entryType = EntryType::Song;
 
 		QSpinBox* _pointsSpinbox = nullptr;
 		QLineEdit* _answerLineEdit = nullptr;
