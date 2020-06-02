@@ -3,6 +3,8 @@
 #include <string>
 #include <memory>
 
+#include <QWidget>
+
 #include "util/QuizSettings.hpp"
 #include "audio/AudioPlayer.hpp"
 #include "gui_tools/widgets/QuizTeam.hpp"
@@ -27,11 +29,28 @@ namespace MusicQuiz {
 		/**
 		 * @brief Creates the music quiz.
 		 *
+		 * @param[in] quizName The quiz name to load.
+		 * @param[in] settings The quiz settings.
+		 * @param[in] audioPlayer The audio player.
+		 * @param[in] teams The teams list.
+		 * @param[in] preview If the quiz should be displayed in preview mode.
+		 * @param[in] parent The quiz board parent.
+		 */
+		static MusicQuiz::QuizBoard* createQuiz(const std::string& quizName, const MusicQuiz::QuizSettings& settings, const std::shared_ptr< audio::AudioPlayer >& audioPlayer, 
+			const std::vector<MusicQuiz::QuizTeam*>& teams = {}, bool preview = false, QWidget * parent = nullptr);
+
+		/**
+		 * @brief Creates the music quiz.
+		 *
 		 * @param[in] idx The quiz index to load.
 		 * @param[in] settings The quiz settings.
+		 * @param[in] audioPlayer The audio player.
 		 * @param[in] teams The teams list.
+		 * @param[in] preview If the quiz should be displayed in preview mode.
+		 * @param[in] parent The quiz board parent.
 		 */
-		static MusicQuiz::QuizBoard* createQuiz(const size_t idx, const MusicQuiz::QuizSettings& settings, const std::shared_ptr< audio::AudioPlayer >& audioPlayer, const std::vector<MusicQuiz::QuizTeam*>& teams = {});
+		static MusicQuiz::QuizBoard* createQuiz(const size_t idx, const MusicQuiz::QuizSettings& settings, const std::shared_ptr< audio::AudioPlayer >& audioPlayer,
+			const std::vector<MusicQuiz::QuizTeam*>& teams = {}, bool preview = false, QWidget* parent = nullptr);
 
 	protected:
 	};
