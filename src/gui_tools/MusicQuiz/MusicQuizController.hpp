@@ -22,7 +22,6 @@
 
 
 namespace MusicQuiz {
-	class QuizBoard;
 	class QuizFactory;
 	class QuizSelector;
 	class TeamSelector;
