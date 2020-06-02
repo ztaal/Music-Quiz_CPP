@@ -26,10 +26,12 @@ namespace MusicQuiz {
 		 * @param[in] categories The categories.
 		 * @param[in] rowCategories The row categories.
 		 * @param[in] teams The list of teams.
+		 * @param[in] settings The quiz settings.
+		 * @param[in] preview If the quiz board should be shown in preview mode.
 		 * @param[in] parent The parent widget.
 		 */
 		explicit QuizBoard(const std::vector<MusicQuiz::QuizCategory*> &categories, const std::vector<QString> &rowCategories,
-			const std::vector<MusicQuiz::QuizTeam*> &teams, const MusicQuiz::QuizSettings& settings, QWidget* parent = nullptr);
+			const std::vector<MusicQuiz::QuizTeam*> &teams, const MusicQuiz::QuizSettings& settings, bool preview = false, QWidget* parent = nullptr);
 
 		/**
 		 * @brief Default Destructor

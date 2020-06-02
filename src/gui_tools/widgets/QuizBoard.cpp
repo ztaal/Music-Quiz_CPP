@@ -20,17 +20,19 @@
 
 
 MusicQuiz::QuizBoard::QuizBoard(const std::vector<MusicQuiz::QuizCategory*>& categories, const std::vector<QString>& rowCategories, 
-	const std::vector<MusicQuiz::QuizTeam*>& teams, const MusicQuiz::QuizSettings& settings, QWidget* parent) :
+	const std::vector<MusicQuiz::QuizTeam*>& teams, const MusicQuiz::QuizSettings& settings, bool preview, QWidget* parent) :
 	QDialog(parent), _categories(categories), _teams(teams), _settings(settings)
 {
-	/** Set Window Flags */
-	setWindowFlags(windowFlags() | Qt::Window | Qt::FramelessWindowHint | Qt::WindowMaximizeButtonHint | Qt::WindowMinimizeButtonHint);
-
 	/** Set Object Name */
 	setObjectName("QuizBoard");
 
-	/** Set Fullscreen */
-	showFullScreen();
+	/** Set Window Flags */
+	if ( !preview ) {
+		setWindowFlags(windowFlags() | Qt::Window | Qt::FramelessWindowHint | Qt::WindowMaximizeButtonHint | Qt::WindowMinimizeButtonHint);
+
+		/** Set Fullscreen */
+		showFullScreen();
+	}
 
 	/** Sanity Check */
 	if ( _categories.empty() ) {
