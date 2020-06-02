@@ -18,6 +18,10 @@
 
 #include "common/Log.hpp"
 #include "common/TimeUtil.hpp"
+#include "util/QuizSettings.hpp"
+#include "gui_tools/widgets/QuizTeam.hpp"
+#include "gui_tools/widgets/QuizBoard.hpp"
+#include "gui_tools/widgets/QuizFactory.hpp"
 #include "gui_tools/QuizCreator/EntryCreator.hpp"
 #include "gui_tools/QuizCreator/CategoryCreator.hpp"
 
@@ -135,6 +139,7 @@ void MusicQuiz::QuizCreator::createLayout()
 	mainlayout->addWidget(saveQuizBtn, 1, 0, 1, 1);
 
 	QPushButton* previewQuizBtn = new QPushButton("Preview");
+	connect(previewQuizBtn, SIGNAL(released()), this, SLOT(previewQuiz()));
 	mainlayout->addWidget(previewQuizBtn, 1, 1, 1, 1);
 
 	QPushButton* quitCreatorBtn = new QPushButton("Quit");
@@ -355,9 +360,10 @@ void MusicQuiz::QuizCreator::updateCategoryTabName(const QString& str)
 
 void MusicQuiz::QuizCreator::saveQuiz()
 {
-	/** Sanity Check */
-
 	try {
+		/** Stop Song */
+		_audioPlayer.stop();
+
 		/** Get Quiz Name */
 		const std::string quizName = _quizNameLineEdit->text().toStdString();
 		if ( quizName.empty() ) {
@@ -408,8 +414,15 @@ void MusicQuiz::QuizCreator::saveQuiz()
 		/** Quiz Name */
 		main_tree.put("QuizName", quizName);
 
+		/** Quiz Author */
+		main_tree.put("QuizAuthor", ""); // \todo add this
+
 		/** Quiz Description */
 		main_tree.put("QuizDescription", quizDescription);
+
+		/** Guess the Category Setting */
+		boost::property_tree::ptree& guessTheCategory_tree = main_tree.add("QuizGuessTheCateotry", 500);
+		guessTheCategory_tree.put("<xmlattr>.enabled", _hiddenCategoriesCheckbox->isChecked());
 
 		/** Categories */
 		std::vector<std::string> songFiles;
@@ -518,6 +531,64 @@ void MusicQuiz::QuizCreator::saveQuiz()
 	} catch ( ... ) {
 		QMessageBox::warning(nullptr, "Failed to Save Quiz", "Failed to save the quiz. Unkown Error.");
 	}
+}
+
+void MusicQuiz::QuizCreator::previewQuiz()
+{
+	/** Stop Song */
+	_audioPlayer.stop();
+
+	/** Check that quiz have been saved */
+	const std::string quizName = _quizNameLineEdit->text().toStdString();
+	const std::string quizPath = "./data/" + quizName + "/" + quizName + ".quiz.xml", tree;
+	if ( !boost::filesystem::exists(quizPath) ) {
+		QMessageBox::information(nullptr, "Info", "Quiz must be saved before the preview can be shown.");
+		return;
+	}
+
+	/** Save Quiz */
+	try {
+		//saveQuiz();
+	} catch ( ... ) {}
+
+	/** Create Dummy Teams */
+	MusicQuiz::QuizTeam* dummyTeamOne = new QuizTeam("Dummy Team 1", QColor(255, 0, 0));
+	MusicQuiz::QuizTeam* dummyTeamTwo = new QuizTeam("Dummy Team 2", QColor(0, 255, 0));
+	const std::vector< MusicQuiz::QuizTeam* > dummyTeams = { dummyTeamOne, dummyTeamTwo };
+
+	/** Dummy Settings */
+	MusicQuiz::QuizSettings settings;
+	settings.guessTheCategory = _hiddenCategoriesCheckbox->isChecked();
+
+	/** Create Quiz Preview */
+	try {
+		//_previewQuizBoard = MusicQuiz::QuizFactory::createQuiz(quizPath, settings, std::make_shared<audio::AudioPlayer>(_audioPlayer), dummyTeams, true, this);
+		_previewQuizBoard = MusicQuiz::QuizFactory::createQuiz(quizPath, settings, std::make_shared<audio::AudioPlayer>(_audioPlayer), dummyTeams);
+
+		/** Connect Signals */
+		//connect(_previewQuizBoard, SIGNAL(quitSignal()), this, SLOT(stopQuizPreview()));
+
+	} catch ( const std::exception& err ) {
+		QMessageBox::warning(nullptr, "Info", "Failed to preview quiz. " + QString::fromStdString(err.what()));
+		return;
+	} catch ( ... ) {
+		QMessageBox::warning(nullptr, "Info", "Failed to preview quiz.");
+		return;
+	}
+}
+
+void MusicQuiz::QuizCreator::stopQuizPreview()
+{
+	/** Sanity Check */
+	if ( _previewQuizBoard == nullptr ) {
+		return;
+	}
+
+	/** Stop Quiz */
+	_previewQuizBoard->hide();
+	_previewQuizBoard->close();
+	delete _previewQuizBoard;
+	_previewQuizBoard = nullptr;
 }
 
 void MusicQuiz::QuizCreator::quitCreator()

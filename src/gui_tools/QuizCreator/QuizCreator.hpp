@@ -15,6 +15,7 @@
 
 
 namespace MusicQuiz {
+	class QuizBoard;
 	class CategoryCreator;
 
 	class QuizCreator : public QDialog
@@ -69,6 +70,16 @@ namespace MusicQuiz {
 		void saveQuiz();
 
 		/**
+		 * @brief Previews the quiz.
+		 */
+		void previewQuiz();
+
+		/**
+		 * @brief Stops the quiz preview.
+		 */
+		void stopQuizPreview();
+
+		/**
 		 * @brief Quits the quiz creator.
 		 */
 		void quitCreator();
@@ -98,5 +109,8 @@ namespace MusicQuiz {
 
 		/** Audio Player */
 		audio::AudioPlayer _audioPlayer;
+
+		/** Preview Quiz Board */
+		MusicQuiz::QuizBoard* _previewQuizBoard = nullptr;
 	};
 }
