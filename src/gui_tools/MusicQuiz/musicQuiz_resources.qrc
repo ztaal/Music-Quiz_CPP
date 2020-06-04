@@ -10,5 +10,7 @@
         <file>imgs/play_icon.png</file>
         <file>imgs/stop_icon.png</file>
         <file>imgs/pause_icon.png</file>
+        <file>imgs/checkbox_checked_black.png</file>
+        <file>imgs/checkbox_unchecked_black.png</file>
     </qresource>
 </RCC>

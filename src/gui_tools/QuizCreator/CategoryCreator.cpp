@@ -55,6 +55,7 @@ void MusicQuiz::CategoryCreator::createLayout()
 	_entriesTable->horizontalHeader()->setVisible(false);
 	_entriesTable->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
 	_entriesTable->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+	_entriesTable->verticalHeader()->setDefaultSectionSize(40);
 	setupTabLayout->addWidget(_entriesTable, ++row, 0, 1, 2);
 
 	/** Set Layout */

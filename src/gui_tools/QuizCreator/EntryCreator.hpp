@@ -94,6 +94,13 @@ namespace MusicQuiz {
 		const QString getVideoFile() const;
 
 		/**
+		 * @brief Gets the video song file.
+		 *
+		 * @return The video song file.
+		 */
+		const QString getVideoSongFile() const;
+
+		/**
 		 * @brief Gets the song start and end time.
 		 *
 		 * @return The song start and end time.
@@ -119,6 +126,11 @@ namespace MusicQuiz {
 		void browseVideo();
 
 		/**
+		 * @brief Opens a dialog to browse for a song file.
+		 */
+		void browseVideoSong();
+
+		/**
 		 * @brief Check if the song file name is valid and enables / disables widgets.
 		 *
 		 * @param[in] fileName The file name.
@@ -126,11 +138,9 @@ namespace MusicQuiz {
 		void checkSongFileName(const QString& fileName);
 
 		/**
-		 * @brief Check if the video file name is valid and enables / disables widgets.
-		 *
-		 * @param[in] fileName The file name.
+		 * @brief Check if the video file names is valid and enables / disables widgets.
 		 */
-		void checkVideoFileName(const QString& fileName);
+		void checkVideoFiles();
 
 		/**
 		 * @brief Plays the song file from the start position defined in the start QTimeEdit.
@@ -154,6 +164,11 @@ namespace MusicQuiz {
 		 */
 		void setEntryType(int index);
 
+		/**
+		 * @brief Updates the points.
+		 *
+		 * @param[in] points The points.
+		 */
 		void pointsChanged(int points);
 
 	private:
@@ -213,6 +228,7 @@ namespace MusicQuiz {
 
 		QLineEdit* _songFileLineEdit = nullptr;
 		QLineEdit* _videoFileLineEdit = nullptr;
+		QLineEdit* _videoSongFileLineEdit = nullptr;
 
 		QTimeEdit* _songEndTimeEdit = nullptr;
 		QTimeEdit* _songStartTimeEdit = nullptr;
@@ -227,6 +243,7 @@ namespace MusicQuiz {
 		QWidget* _songSettings = nullptr;
 		QWidget* _videoSettings = nullptr;
 		QPushButton* _browseVideoBtn = nullptr;
+		QPushButton* _browseVideoSongBtn = nullptr;
 
 		std::shared_ptr< audio::AudioPlayer > _audioPlayer = nullptr;
 	};

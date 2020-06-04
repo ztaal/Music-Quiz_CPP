@@ -8,8 +8,8 @@ QSize MusicQuiz::QExtensions::QTabBarExtender::tabSizeHint(int index) const
 {
 	QSize s = QTabBar::tabSizeHint(index);
 	s.transpose();
-	s.setHeight(100);
-	s.setWidth(200);
+	s.setHeight(60);
+	s.setWidth(150);
 	return s;
 }
 
@@ -17,8 +17,8 @@ void MusicQuiz::QExtensions::QTabBarExtender::paintEvent(QPaintEvent * /*event*/
 {
 	QStylePainter painter(this);
 	QStyleOptionTab opt;
-	opt.rect.setHeight(100);
-	opt.rect.setWidth(200);
+	opt.rect.setHeight(60);
+	opt.rect.setWidth(150);
 
 	for ( int i = 0; i < count(); ++i ) {
 		initStyleOption(&opt, i);
@@ -35,7 +35,7 @@ void MusicQuiz::QExtensions::QTabBarExtender::paintEvent(QPaintEvent * /*event*/
 		QPoint c = opt.rect.center();
 		painter.translate(c);
 		painter.rotate(90);
-		painter.translate(-c - QPoint(25, 0));
+		painter.translate(-c - QPoint(0, 0));
 		painter.drawControl(QStyle::CE_TabBarTabLabel, opt);
 		painter.restore();
 	}

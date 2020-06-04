@@ -76,7 +76,6 @@ void MusicQuiz::QuizCreator::createLayout()
 	setupTabLayout->addWidget(label, ++row, 0, 1, 2, Qt::AlignLeft);
 
 	_quizNameLineEdit = new QLineEdit;
-	_quizNameLineEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 	_quizNameLineEdit->setObjectName("quizCreatorLineEdit");
 	setupTabLayout->addWidget(_quizNameLineEdit, ++row, 0, 1, 2);
 
@@ -86,7 +85,6 @@ void MusicQuiz::QuizCreator::createLayout()
 	setupTabLayout->addWidget(label, ++row, 0, 1, 2, Qt::AlignLeft);
 
 	_quizDescriptionTextEdit = new QTextEdit;
-	_quizDescriptionTextEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 	_quizDescriptionTextEdit->setObjectName("quizCreatorTextEdit");
 	setupTabLayout->addWidget(_quizDescriptionTextEdit, ++row, 0, 1, 2);
 
@@ -96,7 +94,7 @@ void MusicQuiz::QuizCreator::createLayout()
 	setupTabLayout->addWidget(label, ++row, 0, 1, 2, Qt::AlignLeft);
 
 	_hiddenCategoriesCheckbox = new QCheckBox("Hidden Categories");
-	_hiddenCategoriesCheckbox->setObjectName("quizCreatorLineEdit");
+	_hiddenCategoriesCheckbox->setObjectName("quizCreatorCheckbox");
 	setupTabLayout->addWidget(_hiddenCategoriesCheckbox, ++row, 0, 1, 2);
 
 	/** Setup Tab - Categories */
@@ -114,6 +112,7 @@ void MusicQuiz::QuizCreator::createLayout()
 	_categoriesTable->horizontalHeader()->setVisible(false);
 	_categoriesTable->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
 	_categoriesTable->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+	_categoriesTable->verticalHeader()->setDefaultSectionSize(40);
 	setupTabLayout->addWidget(_categoriesTable, ++row, 0, 1, 2);
 
 	/** Setup Tab - Row Categories */
@@ -131,21 +130,22 @@ void MusicQuiz::QuizCreator::createLayout()
 	_rowCategoriesTable->horizontalHeader()->setVisible(false);
 	_rowCategoriesTable->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
 	_rowCategoriesTable->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+	_rowCategoriesTable->verticalHeader()->setDefaultSectionSize(40);
 	setupTabLayout->addWidget(_rowCategoriesTable, ++row, 0, 1, 2);
-
-	/** Setup Tab - Spacer */
-	setupTabLayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Ignored, QSizePolicy::Expanding), ++row, 0, 1, 2);
 
 	/** Bottom Buttons */
 	QPushButton* saveQuizBtn = new QPushButton("Save Quiz");
+	saveQuizBtn->setObjectName("quizCreatorBtn");
 	connect(saveQuizBtn, SIGNAL(released()), this, SLOT(saveQuiz()));
 	mainlayout->addWidget(saveQuizBtn, 1, 0, 1, 1);
 
 	QPushButton* previewQuizBtn = new QPushButton("Preview");
+	previewQuizBtn->setObjectName("quizCreatorBtn");
 	connect(previewQuizBtn, SIGNAL(released()), this, SLOT(previewQuiz()));
 	mainlayout->addWidget(previewQuizBtn, 1, 1, 1, 1);
 
 	QPushButton* quitCreatorBtn = new QPushButton("Quit");
+	quitCreatorBtn->setObjectName("quizCreatorBtn");
 	connect(quitCreatorBtn, SIGNAL(released()), this, SLOT(quitCreator()));
 	mainlayout->addWidget(quitCreatorBtn, 1, 2, 1, 1);
 

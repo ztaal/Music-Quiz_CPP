@@ -230,6 +230,7 @@ QGridLayout* MusicQuiz::EntryCreator::createVideoFileLayout()
 	/** Layout */
 	QGridLayout* mainlayout = new QGridLayout;
 	QHBoxLayout* videoFileLayout = new QHBoxLayout;
+	QHBoxLayout* videoSongFileLayout = new QHBoxLayout;
 	QGridLayout* videoSettingsLayout = new QGridLayout;
 	videoSettingsLayout->setHorizontalSpacing(5);
 	videoSettingsLayout->setVerticalSpacing(10);
@@ -245,7 +246,7 @@ QGridLayout* MusicQuiz::EntryCreator::createVideoFileLayout()
 	_videoFileLineEdit = new QLineEdit;
 	_videoFileLineEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 	_videoFileLineEdit->setObjectName("quizCreatorLineEdit");
-	connect(_videoFileLineEdit, SIGNAL(textChanged(const QString&)), this, SLOT(checkVideoFileName(const QString&)));
+	connect(_videoFileLineEdit, SIGNAL(textChanged(const QString&)), this, SLOT(checkVideoFiles()));
 	videoFileLayout->addWidget(_videoFileLineEdit);
 
 	_browseVideoBtn = new QPushButton;
@@ -254,6 +255,22 @@ QGridLayout* MusicQuiz::EntryCreator::createVideoFileLayout()
 	videoFileLayout->addWidget(_browseVideoBtn);
 	mainlayout->addItem(videoFileLayout, ++row, 0, 1, 2);
 
+	/** Video - Song File */
+	label = new QLabel("Video Song File:");
+	label->setObjectName("quizCreatorLabel");
+	mainlayout->addWidget(label, ++row, 0);
+
+	_videoSongFileLineEdit = new QLineEdit;
+	_videoSongFileLineEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+	_videoSongFileLineEdit->setObjectName("quizCreatorLineEdit");
+	connect(_videoSongFileLineEdit, SIGNAL(textChanged(const QString&)), this, SLOT(checkVideoFiles()));
+	videoSongFileLayout->addWidget(_videoSongFileLineEdit);
+
+	_browseVideoSongBtn = new QPushButton;
+	_browseVideoSongBtn->setObjectName("quizCreatorBrowseBtn");
+	connect(_browseVideoSongBtn, SIGNAL(released()), this, SLOT(browseVideoSong()));
+	videoSongFileLayout->addWidget(_browseVideoSongBtn);
+	mainlayout->addItem(videoSongFileLayout, ++row, 0, 1, 2);
 
 	/** Video - Set Video Start and End Times */
 	label = new QLabel("Video:");
@@ -441,7 +458,7 @@ void MusicQuiz::EntryCreator::browseSong()
 	}
 
 	/** Open File Dialog */
-	const QString filePath = QFileDialog::getOpenFileName(this, "Select Song File", "./data/", "Song File (*.mp3; *.wav);");
+	const QString filePath = QFileDialog::getOpenFileName(this, "Select Audio File", "./data/", "Audio File (*.mp3; *.wav);");
 	if ( filePath.isEmpty() ) {
 		return;
 	}
@@ -465,6 +482,23 @@ void MusicQuiz::EntryCreator::browseVideo()
 
 	/** Update Line Edit */
 	_videoFileLineEdit->setText(filePath);
+}
+
+void MusicQuiz::EntryCreator::browseVideoSong()
+{
+	/** Sanity Check */
+	if ( _videoSongFileLineEdit == nullptr ) {
+		return;
+	}
+
+	/** Open File Dialog */
+	const QString filePath = QFileDialog::getOpenFileName(this, "Select Audio File", "./data/", "Audio File (*.mp3; *.wav);");
+	if ( filePath.isEmpty() ) {
+		return;
+	}
+
+	/** Update Line Edit */
+	_videoSongFileLineEdit->setText(filePath);
 }
 
 void MusicQuiz::EntryCreator::checkSongFileName(const QString& fileName)
@@ -497,29 +531,42 @@ void MusicQuiz::EntryCreator::checkSongFileName(const QString& fileName)
 	}
 }
 
-void MusicQuiz::EntryCreator::checkVideoFileName(const QString& fileName)
+void MusicQuiz::EntryCreator::checkVideoFiles()
 {
 	/** Sanity Check */
-	QLineEdit* lineEdit = qobject_cast<QLineEdit*>(sender());
-	if ( lineEdit == nullptr ) {
+	if ( _videoSettings == nullptr || _videoFileLineEdit == nullptr || _videoSongFileLineEdit == nullptr ) {
 		return;
 	}
-
+	
 	/** Check if name is valid */
-	bool isValid = isVideoFileValid(fileName);
+	const bool isVideoValid = isVideoFileValid(_videoFileLineEdit->text());
+	const bool isSongValid = isSongFileValid(_videoSongFileLineEdit->text());
 
-	if ( isValid ) {
+	/** Video File Line Edit */
+	if ( isVideoValid ) {
 		/** Set Line Edit Color */
-		lineEdit->setStyleSheet("color: black;");
+		_videoFileLineEdit->setStyleSheet("color: black;");
+	} else {
+		/** Set Line Edit Color */
+		_videoFileLineEdit->setStyleSheet("color: red;");
+	}
 
+	/** Video Song File Line Edit */
+	if ( isSongValid ) {
+		/** Set Line Edit Color */
+		_videoSongFileLineEdit->setStyleSheet("color: black;");
+	} else {
+		/** Set Line Edit Color */
+		_videoSongFileLineEdit->setStyleSheet("color: red;");
+	}
+
+	/** Video Controls */
+	if ( isVideoValid && isSongValid ) {
 		/** Enable Video Controls */
 		if ( !_videoSettings->isEnabled() ) {
 			_videoSettings->setEnabled(true);
 		}
 	} else {
-		/** Set Line Edit Color */
-		lineEdit->setStyleSheet("color: red;");
-
 		/** Disable Video Controls */
 		if ( _videoSettings->isEnabled() ) {
 			_videoSettings->setEnabled(false);
@@ -577,6 +624,7 @@ void MusicQuiz::EntryCreator::setEntryType(int index)
 		_videoSettings->setEnabled(false);
 		_browseVideoBtn->setEnabled(false);
 		_videoFileLineEdit->setEnabled(false);
+		_videoSongFileLineEdit->setEnabled(false);
 	} else if ( index == EntryType::Video ) { // video
 		/** Set Type */
 		_entryType = EntryType::Video;
@@ -585,6 +633,8 @@ void MusicQuiz::EntryCreator::setEntryType(int index)
 		_videoSettings->setEnabled(true);
 		_browseVideoBtn->setEnabled(true);
 		_videoFileLineEdit->setEnabled(true);
+		_videoSongFileLineEdit->setEnabled(true);
+		checkVideoFiles();
 	}
 }
 
@@ -650,6 +700,16 @@ const QString MusicQuiz::EntryCreator::getVideoFile() const
 	}
 
 	return _videoFileLineEdit->text();
+}
+
+const QString MusicQuiz::EntryCreator::getVideoSongFile() const
+{
+	/** Sanity Check */
+	if ( _videoSongFileLineEdit == nullptr ) {
+		return "";
+	}
+
+	return _videoSongFileLineEdit->text();
 }
 
 const std::pair<size_t, size_t> MusicQuiz::EntryCreator::getSongTimings()
