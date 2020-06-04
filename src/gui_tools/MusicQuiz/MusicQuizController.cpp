@@ -17,7 +17,10 @@
 
 MusicQuiz::MusicQuizController::MusicQuizController(QWidget* parent) :
 	QWidget(parent)
-{	
+{
+	/** Create Audio Player */
+	_audioPlayer = std::make_shared<audio::AudioPlayer>();
+
 	/** Connect Update Timer */
 	connect(&_updateTimer, SIGNAL(timeout()), this, SLOT(executeQuiz()));
 
@@ -28,7 +31,7 @@ MusicQuiz::MusicQuizController::MusicQuizController(QWidget* parent) :
 MusicQuiz::MusicQuizController::~MusicQuizController()
 {
 	/** Stop Audio */
-	_audioPlayer.stop();
+	_audioPlayer->stop();
 
 	/** Stop Update Timer */
 	if ( _updateTimer.isActive() ) {
@@ -73,7 +76,7 @@ void MusicQuiz::MusicQuizController::executeQuiz()
 	case MusicQuiz::MusicQuizController::SELECT_QUIZ:
 	{
 		/** Start Quiz Theme Song */
-		_audioPlayer.play(_themeSongFile, true);
+		_audioPlayer->play(_themeSongFile, true);
 
 		/** Create Quiz Selector */
 		_quizSelector = new MusicQuiz::QuizSelector;
@@ -149,14 +152,14 @@ void MusicQuiz::MusicQuizController::executeQuiz()
 
 		try {
 			/** Create Quiz Board */
-			_quizBoard = MusicQuiz::QuizFactory::createQuiz(_selectedQuizIdx, _settings, std::make_shared<audio::AudioPlayer>(_audioPlayer), _teams);
+			_quizBoard = MusicQuiz::QuizFactory::createQuiz(_selectedQuizIdx, _settings, _audioPlayer, _teams);
 
 			/** Connect Signals */
 			connect(_quizBoard, SIGNAL(quitSignal()), this, SLOT(quitQuiz()));
 			connect(_quizBoard, SIGNAL(gameComplete(std::vector<MusicQuiz::QuizTeam*>)), this, SLOT(quizCompleted(std::vector<MusicQuiz::QuizTeam*>)));
 
 			/** Stop Quiz Theme Song */
-			_audioPlayer.stop();
+			_audioPlayer->stop();
 
 			/** Show Widget */
 			_quizBoard->exec();
@@ -190,7 +193,7 @@ void MusicQuiz::MusicQuizController::executeQuiz()
 			connect(_quizWinningScreen, SIGNAL(winningScreenCompleteSignal()), this, SLOT(quitQuiz()));
 				
 			/** Start Winning Song */
-			_audioPlayer.play(_vicatorySongFile, true);
+			_audioPlayer->play(_vicatorySongFile, true);
 
 			/** Show Widget */
 			_quizWinningScreen->exec();

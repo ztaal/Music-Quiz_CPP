@@ -123,6 +123,6 @@ namespace MusicQuiz {
 		MusicQuiz::QuizSettings _settings;
 
 		/** Audio Player */
-		audio::AudioPlayer _audioPlayer;
+		std::shared_ptr<audio::AudioPlayer> _audioPlayer = nullptr;
 	};
 }

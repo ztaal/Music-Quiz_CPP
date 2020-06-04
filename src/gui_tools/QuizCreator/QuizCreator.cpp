@@ -47,6 +47,9 @@ MusicQuiz::QuizCreator::QuizCreator(QWidget* parent) :
 		setGeometry(parent->x() + parent->width() / 2 - width / 2, parent->y() + parent->height() / 2 - height / 2, width, height);
 	}
 
+	/** Create Audio Player */
+	_audioPlayer = std::make_shared<audio::AudioPlayer>();
+
 	/** Create Layout */
 	createLayout();
 }
@@ -185,7 +188,7 @@ void MusicQuiz::QuizCreator::addCategory()
 	_categoriesTable->setCellWidget(categoryCount, 1, layoutWidget);
 
 	/** Add Tab */
-	MusicQuiz::CategoryCreator* category = new MusicQuiz::CategoryCreator(categoryNameStr, std::make_shared<audio::AudioPlayer>(_audioPlayer));
+	MusicQuiz::CategoryCreator* category = new MusicQuiz::CategoryCreator(categoryNameStr, _audioPlayer);
 	_categories.push_back(category);
 	_tabWidget->addTab(category, categoryNameStr);
 }
@@ -362,19 +365,19 @@ void MusicQuiz::QuizCreator::saveQuiz()
 {
 	try {
 		/** Stop Song */
-		_audioPlayer.stop();
+		_audioPlayer->stop();
 
 		/** Get Quiz Name */
 		const std::string quizName = _quizNameLineEdit->text().toStdString();
 		if ( quizName.empty() ) {
-			QMessageBox::information(nullptr, "Info", "Enter a Quiz Name.");
+			QMessageBox::information(this, "Info", "Enter a Quiz Name.");
 			return;
 		}
 
 		/** Get Quiz Description */
 		const std::string quizDescription = _quizDescriptionTextEdit->toPlainText().toStdString();
 		if ( quizName.empty() ) {
-			QMessageBox::information(nullptr, "Info", "Enter a Quiz Description.");
+			QMessageBox::information(this, "Info", "Enter a Quiz Description.");
 			return;
 		}
 
@@ -392,7 +395,7 @@ void MusicQuiz::QuizCreator::saveQuiz()
 			/** Create Folder */
 			boost::filesystem::create_directory(quizPath, boost_err);
 			if ( boost_err ) {
-				QMessageBox::warning(nullptr, "Failed to Save Quiz", "Failed to create directory to save the quiz in.");
+				QMessageBox::warning(this, "Failed to Save Quiz", "Failed to create directory to save the quiz in.");
 				return;
 			}
 		}
@@ -402,7 +405,7 @@ void MusicQuiz::QuizCreator::saveQuiz()
 		const std::string mediaDirectoryPath = quizPath + "/mediaTmp";
 		boost::filesystem::create_directory(mediaDirectoryPath, boost_err);
 		if ( boost_err ) {
-			QMessageBox::warning(nullptr, "Failed to Save Quiz", "Failed to create directory to save the media files in.");
+			QMessageBox::warning(this, "Failed to Save Quiz", "Failed to create directory to save the media files in.");
 			return;
 		}
 
@@ -437,7 +440,7 @@ void MusicQuiz::QuizCreator::saveQuiz()
 			/** Category Name */
 			const std::string categoryName = category->getName().toStdString();
 			if ( categoryName.empty() ) {
-				QMessageBox::warning(nullptr, "Failed to Save Quiz", "Failed to save quiz. All categories must have a name.");
+				QMessageBox::warning(this, "Failed to Save Quiz", "Failed to save quiz. All categories must have a name.");
 				return;
 			}
 			category_tree.put("<xmlattr>.name", categoryName);
@@ -445,7 +448,7 @@ void MusicQuiz::QuizCreator::saveQuiz()
 			/** Create Category Folder */
 			boost::filesystem::create_directory(mediaDirectoryPath + "/" + categoryName, boost_err);
 			if ( boost_err ) {
-				QMessageBox::warning(nullptr, "Failed to Save Quiz", "Failed to create directory to save the catrgory files in.");
+				QMessageBox::warning(this, "Failed to Save Quiz", "Failed to create directory to save the catrgory files in.");
 				return;
 			}
 
@@ -462,7 +465,7 @@ void MusicQuiz::QuizCreator::saveQuiz()
 				/** Entry Name */
 				const std::string entryName = entry->getName().toStdString();
 				if ( entryName.empty() ) {
-					QMessageBox::warning(nullptr, "Failed to Save Quiz", "Failed to save quiz. All entries needs to have a name.");
+					QMessageBox::warning(this, "Failed to Save Quiz", "Failed to save quiz. All entries needs to have a name.");
 					return;
 				}
 				entry_tree.put("<xmlattr>.name", entryName);
@@ -470,7 +473,7 @@ void MusicQuiz::QuizCreator::saveQuiz()
 				/** Entry Answer */
 				const std::string entryAnswer = entry->getAnswer().toStdString();
 				if ( entryAnswer.empty() ) {
-					QMessageBox::warning(nullptr, "Failed to Save Quiz", "Failed to save quiz. Answers have to be set for all entries.");
+					QMessageBox::warning(this, "Failed to Save Quiz", "Failed to save quiz. Answers have to be set for all entries.");
 					return;
 				}
 				entry_tree.put("Answer", entryAnswer);
@@ -525,18 +528,18 @@ void MusicQuiz::QuizCreator::saveQuiz()
 		boost::property_tree::write_xml(quizPath + "/" + quizName + ".quiz.xml", tree, std::locale(), settings);
 
 		/** Popup to tell user that the quiz was saved */
-		QMessageBox::information(nullptr, "Info", "Quiz saves successfully.");
+		QMessageBox::information(this, "Info", "Quiz saves successfully.");
 	} catch ( const std::exception& err ) {
-		QMessageBox::warning(nullptr, "Failed to Save Quiz", "Failed to save the quiz. " + QString::fromStdString(err.what()));
+		QMessageBox::warning(this, "Failed to Save Quiz", "Failed to save the quiz. " + QString::fromStdString(err.what()));
 	} catch ( ... ) {
-		QMessageBox::warning(nullptr, "Failed to Save Quiz", "Failed to save the quiz. Unkown Error.");
+		QMessageBox::warning(this, "Failed to Save Quiz", "Failed to save the quiz. Unkown Error.");
 	}
 }
 
 void MusicQuiz::QuizCreator::previewQuiz()
 {
 	/** Stop Song */
-	_audioPlayer.stop();
+	_audioPlayer->stop();
 
 	/** Check that quiz have been saved */
 	const std::string quizName = _quizNameLineEdit->text().toStdString();
@@ -562,17 +565,21 @@ void MusicQuiz::QuizCreator::previewQuiz()
 
 	/** Create Quiz Preview */
 	try {
-		//_previewQuizBoard = MusicQuiz::QuizFactory::createQuiz(quizPath, settings, std::make_shared<audio::AudioPlayer>(_audioPlayer), dummyTeams, true, this);
-		_previewQuizBoard = MusicQuiz::QuizFactory::createQuiz(quizPath, settings, std::make_shared<audio::AudioPlayer>(_audioPlayer), dummyTeams);
+		//_previewQuizBoard = MusicQuiz::QuizFactory::createQuiz(quizPath, settings, _audioPlayer, dummyTeams, true, this);
+		_previewQuizBoard = MusicQuiz::QuizFactory::createQuiz(quizPath, settings, _audioPlayer, dummyTeams);
+		if ( _previewQuizBoard == nullptr ) {
+			QMessageBox::warning(this, "Info", "Failed to preview quiz.");
+			return;
+		}
 
 		/** Connect Signals */
-		//connect(_previewQuizBoard, SIGNAL(quitSignal()), this, SLOT(stopQuizPreview()));
+		connect(_previewQuizBoard, SIGNAL(quitSignal()), this, SLOT(stopQuizPreview()));
 
 	} catch ( const std::exception& err ) {
-		QMessageBox::warning(nullptr, "Info", "Failed to preview quiz. " + QString::fromStdString(err.what()));
+		QMessageBox::warning(this, "Info", "Failed to preview quiz. " + QString::fromStdString(err.what()));
 		return;
 	} catch ( ... ) {
-		QMessageBox::warning(nullptr, "Info", "Failed to preview quiz.");
+		QMessageBox::warning(this, "Info", "Failed to preview quiz.");
 		return;
 	}
 }

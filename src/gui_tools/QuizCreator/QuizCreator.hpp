@@ -108,7 +108,7 @@ namespace MusicQuiz {
 		std::vector< MusicQuiz::CategoryCreator* > _categories;
 
 		/** Audio Player */
-		audio::AudioPlayer _audioPlayer;
+		std::shared_ptr<audio::AudioPlayer> _audioPlayer = nullptr;
 
 		/** Preview Quiz Board */
 		MusicQuiz::QuizBoard* _previewQuizBoard = nullptr;
