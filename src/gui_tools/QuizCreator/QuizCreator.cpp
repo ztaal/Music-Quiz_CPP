@@ -565,8 +565,7 @@ void MusicQuiz::QuizCreator::previewQuiz()
 
 	/** Create Quiz Preview */
 	try {
-		//_previewQuizBoard = MusicQuiz::QuizFactory::createQuiz(quizPath, settings, _audioPlayer, dummyTeams, true, this);
-		_previewQuizBoard = MusicQuiz::QuizFactory::createQuiz(quizPath, settings, _audioPlayer, dummyTeams);
+		_previewQuizBoard = MusicQuiz::QuizFactory::createQuiz(quizPath, settings, _audioPlayer, dummyTeams, true, this);
 		if ( _previewQuizBoard == nullptr ) {
 			QMessageBox::warning(this, "Info", "Failed to preview quiz.");
 			return;
@@ -575,6 +574,8 @@ void MusicQuiz::QuizCreator::previewQuiz()
 		/** Connect Signals */
 		connect(_previewQuizBoard, SIGNAL(quitSignal()), this, SLOT(stopQuizPreview()));
 
+		/** Start Preview */
+		_previewQuizBoard->exec();
 	} catch ( const std::exception& err ) {
 		QMessageBox::warning(this, "Info", "Failed to preview quiz. " + QString::fromStdString(err.what()));
 		return;

@@ -27,6 +27,7 @@ MusicQuiz::QuizBoard::QuizBoard(const std::vector<MusicQuiz::QuizCategory*>& cat
 	setObjectName("QuizBoard");
 
 	/** Set Window Flags */
+	setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 	if ( !preview ) {
 		setWindowFlags(windowFlags() | Qt::Window | Qt::FramelessWindowHint | Qt::WindowMaximizeButtonHint | Qt::WindowMinimizeButtonHint);
 

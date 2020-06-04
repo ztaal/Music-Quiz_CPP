@@ -45,7 +45,7 @@ MusicQuiz::QuizBoard* MusicQuiz::QuizFactory::createQuiz(const std::string& quiz
 	LOG_DEBUG("QuizListName = " << quizList[idx]);
 
 	/** Create Quiz */
-	createQuiz(idx, settings, audioPlayer, teams, preview, parent);
+	return createQuiz(idx, settings, audioPlayer, teams, preview, parent);
 }
 
 MusicQuiz::QuizBoard* MusicQuiz::QuizFactory::createQuiz(const size_t idx, const QuizSettings& settings, const audio::AudioPlayer::Ptr& audioPlayer,
