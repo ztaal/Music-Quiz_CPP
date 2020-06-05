@@ -454,6 +454,22 @@ QRadioButton#quizCreatorRadioButton
 	min-height						: 40px;
 }
 
+QRadioButton#quizCreatorRadioButton::indicator
+{
+	min-height						: 30px;
+	min-width						: 30px;
+}
+
+QRadioButton#quizCreatorRadioButton::indicator::checked
+{
+	image		: url(:/imgs/checkbox_checked_black.png);
+}
+
+QRadioButton#quizCreatorRadioButton::indicator::unchecked
+{
+	image		: url(:/imgs/checkbox_unchecked_black.png);
+}
+
 
 
 /****************************************/
