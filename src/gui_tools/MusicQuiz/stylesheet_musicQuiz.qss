@@ -125,10 +125,12 @@ QPushButton#removeBtn
 
 QPushButton#quizCreatorRemoveBtn
 {
-	font-size			: 10px;
+	background-color	: rgba(0, 0, 0, 0);
 
-	min-height			: 15px;
-	min-width			: 15px;
+	min-height			: 22px;
+	min-width			: 22px;
+
+	image				: url(:/imgs/remove_icon_black.png);
 }
 
 QPushButton#quizCreatorBrowseBtn
@@ -280,6 +282,7 @@ QTextEdit#quizCreatorTextEdit
 {
 	font-size						: 20px;
 	max-height						: 80px;
+	padding-left					: 10px;
 }
 
 
@@ -312,11 +315,13 @@ QLineEdit#quizCreatorLineEdit
 {
 	font-size						: 20px;
 	min-height						: 40px;
+	padding-left					: 10px;
 }
 
 QLineEdit#quizCreatorCategoryLineEdit
 {
 	font-size						: 18px;
+	border							: none;
 }
 
 

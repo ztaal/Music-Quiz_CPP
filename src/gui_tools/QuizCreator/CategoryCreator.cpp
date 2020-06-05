@@ -84,7 +84,7 @@ void MusicQuiz::CategoryCreator::addEntry()
 	_entriesTable->setCellWidget(entryCount, 0, entryName);
 
 	/** Add Remove Entry Button */
-	QPushButton* removeBtn = new QPushButton("X");
+	QPushButton* removeBtn = new QPushButton;
 	removeBtn->setObjectName("quizCreatorRemoveBtn");
 	removeBtn->setProperty("index", entryCount);
 	connect(removeBtn, SIGNAL(released()), this, SLOT(removeEntry()));

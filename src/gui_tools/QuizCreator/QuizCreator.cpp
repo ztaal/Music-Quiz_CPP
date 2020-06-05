@@ -175,7 +175,7 @@ void MusicQuiz::QuizCreator::addCategory()
 	_categoriesTable->setCellWidget(categoryCount, 0, categoryName);
 
 	/** Add Remove Category Button */
-	QPushButton* removeBtn = new QPushButton("X");
+	QPushButton* removeBtn = new QPushButton;
 	removeBtn->setObjectName("quizCreatorRemoveBtn");
 	removeBtn->setProperty("index", categoryCount);
 	connect(removeBtn, SIGNAL(released()), this, SLOT(removeCategory()));
