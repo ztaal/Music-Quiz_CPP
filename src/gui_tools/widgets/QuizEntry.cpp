@@ -8,9 +8,8 @@
 #include "common/Log.hpp"
 
 
-MusicQuiz::QuizEntry::QuizEntry(const QString &audioFile, const QString &answer, const size_t points, const size_t startTime, const size_t answerStartTime, const size_t endTime, const size_t answerEndTime, 
-	const audio::AudioPlayer::Ptr& audioPlayer, QWidget* parent) :
-	QPushButton(parent), _audioFile(audioFile), _answer(answer), _points(points), _startTime(startTime), _answerStartTime(answerStartTime), _endTime(endTime), _answerEndTime(answerEndTime), _audioPlayer(audioPlayer)
+MusicQuiz::QuizEntry::QuizEntry(const QString &audioFile, const QString &answer, const size_t points, const size_t startTime, const size_t answerStartTime, const audio::AudioPlayer::Ptr& audioPlayer, QWidget* parent) :
+	QPushButton(parent), _audioFile(audioFile), _answer(answer), _points(points), _startTime(startTime), _answerStartTime(answerStartTime), _audioPlayer(audioPlayer)
 {
 	/** Sanity Check */
 	if ( _audioPlayer == nullptr ) {
@@ -73,11 +72,7 @@ void MusicQuiz::QuizEntry::leftClickEvent()
 	{
 	case EntryState::IDLE: // Start Song
 		_state = EntryState::PLAYING;
-		if ( _endTime == -1 ) {
-			_audioPlayer->play(_audioFile.toStdString(), _startTime);
-		} else {
-			_audioPlayer->play(_audioFile.toStdString(), _startTime, _endTime);
-		}
+		_audioPlayer->play(_audioFile.toStdString(), _startTime);
 		break;
 	case EntryState::PLAYING: // Pause Song
 		_state = EntryState::PAUSED;
@@ -85,11 +80,7 @@ void MusicQuiz::QuizEntry::leftClickEvent()
 		break;
 	case EntryState::PAUSED: // Play Answer
 		_state = EntryState::PLAYING_ANSWER;
-		if ( _answerEndTime == -1 ) {
-			_audioPlayer->play(_audioFile.toStdString(), _answerStartTime);
-		} else {
-			_audioPlayer->play(_audioFile.toStdString(), _answerStartTime, _answerEndTime);
-		}
+		_audioPlayer->play(_audioFile.toStdString(), _answerStartTime);
 
 		if ( !_hiddenAnswer ) {
 			setText(QString::fromLocal8Bit(_answer.toStdString().c_str()));
@@ -100,11 +91,7 @@ void MusicQuiz::QuizEntry::leftClickEvent()
 		_audioPlayer->stop();
 		break;
 	case QuizEntry::EntryState::PLAYED: // Play Answer Again
-		if ( _answerEndTime == -1 ) {
-			_audioPlayer->play(_audioFile.toStdString(), _answerStartTime);
-		} else {
-			_audioPlayer->play(_audioFile.toStdString(), _answerStartTime, _answerEndTime);
-		}
+		_audioPlayer->play(_audioFile.toStdString(), _answerStartTime);
 		_state = EntryState::PLAYING_ANSWER;
 		break;
 	default:

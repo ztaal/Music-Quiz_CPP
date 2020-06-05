@@ -15,6 +15,7 @@
 #include <QTableWidget>
 
 #include "audio/AudioPlayer.hpp"
+#include "media/VideoPlayer.hpp"
 
 
 namespace MusicQuiz {
@@ -101,18 +102,39 @@ namespace MusicQuiz {
 		const QString getVideoSongFile() const;
 
 		/**
-		 * @brief Gets the song start and end time.
+		 * @brief Gets the song start time.
 		 *
-		 * @return The song start and end time.
+		 * @return The song start time.
 		 */
-		const std::pair<size_t, size_t> getSongTimings();
+		const size_t getSongStartTime();
 
 		/**
-		 * @brief Gets the answer start and end time.
+		 * @brief Gets the answer start time.
 		 *
-		 * @return The answer start and end time.
+		 * @return The answer start time.
 		 */
-		const std::pair<size_t, size_t> getAnswerTimings();
+		const size_t getAnswerStartTime();
+
+		/**
+		 * @brief Gets the video start time.
+		 *
+		 * @return The video start time.
+		 */
+		const size_t getVideoStartTime();
+
+		/**
+		 * @brief Gets the video song start time.
+		 *
+		 * @return The video song start time.
+		 */
+		const size_t getVideoSongStartTime();
+
+		/**
+		 * @brief Gets the video answer start time.
+		 *
+		 * @return The video answer start time.
+		 */
+		const size_t getVideoAnswerStartTime();
 
 	private slots:
 		/**
@@ -132,10 +154,8 @@ namespace MusicQuiz {
 
 		/**
 		 * @brief Check if the song file name is valid and enables / disables widgets.
-		 *
-		 * @param[in] fileName The file name.
 		 */
-		void checkSongFileName(const QString& fileName);
+		void checkSongFileName();
 
 		/**
 		 * @brief Check if the video file names is valid and enables / disables widgets.
@@ -148,14 +168,19 @@ namespace MusicQuiz {
 		void playSong();
 
 		/**
-		 * @brief Pauses the song playing.
+		 * @brief Pauses the audio and video playing.
 		 */
-		void pauseSong();
+		void pause();
 
 		/**
-		 * @brief Stops the song playing.
+		 * @brief Stops the audio and video playing.
 		 */
-		void stopSong();
+		void stop();
+
+		/**
+		 * @brief Plays the video file from the start position defined in the start QTimeEdit.
+		 */
+		void playVideo();
 
 		/**
 		 * @brief Sets the entry type [0 = song, 1 = video].
@@ -230,21 +255,20 @@ namespace MusicQuiz {
 		QLineEdit* _videoFileLineEdit = nullptr;
 		QLineEdit* _videoSongFileLineEdit = nullptr;
 
-		QTimeEdit* _songEndTimeEdit = nullptr;
 		QTimeEdit* _songStartTimeEdit = nullptr;
-		QTimeEdit* _answerEndTimeEdit = nullptr;
 		QTimeEdit* _answerStartTimeEdit = nullptr;
 
-		QTimeEdit* _videoEndTimeEdit = nullptr;
 		QTimeEdit* _videoStartTimeEdit = nullptr;
-		QTimeEdit* _videoAnswerEndTimeEdit = nullptr;
+		QTimeEdit* _videoSongStartTimeEdit = nullptr;
 		QTimeEdit* _videoAnswerStartTimeEdit = nullptr;
 
 		QWidget* _songSettings = nullptr;
 		QWidget* _videoSettings = nullptr;
+		QPushButton* _browseSongBtn = nullptr;
 		QPushButton* _browseVideoBtn = nullptr;
 		QPushButton* _browseVideoSongBtn = nullptr;
 
 		std::shared_ptr< audio::AudioPlayer > _audioPlayer = nullptr;
+		media::VideoPlayer* _videoPlayer = nullptr;
 	};
 }

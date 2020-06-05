@@ -25,11 +25,9 @@ namespace MusicQuiz {
 		 * @param[in] points The number of points obtained by guessing the entry.
 		 * @param[in] startTime The start time of the media in [ms].
 		 * @param[in] answerStartTime The answer media start time in [ms].
-		 * @param[in] endTime The media end time in [ms]. Set to -1 for no end time.
-		 * @param[in] answerEndTime The answer media end time in [ms]. Set to -1 for no end time.
 		 * @param[in] parent The parent widget.
 		 */
-		explicit QuizEntry(const QString &audioFile, const QString &answer, size_t points, size_t startTime, size_t answerStartTime, size_t endTime, size_t answerEndTime,
+		explicit QuizEntry(const QString &audioFile, const QString &answer, size_t points, size_t startTime, size_t answerStartTime,
 			const std::shared_ptr< audio::AudioPlayer >& audioPlayer, QWidget* parent = nullptr);
 
 		/**
@@ -101,10 +99,7 @@ namespace MusicQuiz {
 		size_t _points = 0;
 
 		size_t _startTime = 0;
-		size_t _endTime = 0;
-
 		size_t _answerStartTime = 0;
-		size_t _answerEndTime = 0;
 
 		QString _answer = "";
 		bool _entryAnswered = false;

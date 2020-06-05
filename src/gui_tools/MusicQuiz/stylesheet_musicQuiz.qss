@@ -311,7 +311,7 @@ QTextEdit#quizCreatorTextEdit
 
 QLineEdit:disabled
 {
-	background-color				: rgb(100, 100, 100);
+	background-color				: rgb(120, 120, 120);
 }
 
 QLineEdit#authorText
@@ -476,3 +476,12 @@ QTabBar#_verticalTabBar::tab
 
 
 
+/****************************************/
+/*****		    QVideoWidget		*****/
+/****************************************/
+
+QVideoWidget
+{
+	background-color		: black;
+	border					: 1px solid black;
+}

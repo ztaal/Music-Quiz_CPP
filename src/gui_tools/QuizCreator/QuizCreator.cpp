@@ -516,6 +516,10 @@ void MusicQuiz::QuizCreator::saveQuiz()
 				}
 				entry_tree.put("<xmlattr>.name", entryName);
 
+				/** Entry Type */
+				MusicQuiz::EntryCreator::EntryType type = entry->getType();
+				entry_tree.put("<xmlattr>.video", (type == MusicQuiz::EntryCreator::EntryType::Video ? true : false));
+
 				/** Entry Answer */
 				const std::string entryAnswer = entry->getAnswer().toStdString();
 				if ( entryAnswer.empty() ) {
@@ -527,28 +531,45 @@ void MusicQuiz::QuizCreator::saveQuiz()
 				/** Entry Points */
 				entry_tree.put("Points", entry->getPoints());
 
-				/** Entry Song Timings */
-				const std::pair<size_t, size_t> songTimings = entry->getSongTimings();
-				entry_tree.put("StartTime", songTimings.first);
-				entry_tree.put("EndTime", songTimings.second);
+				/** Media */
+				if ( type == MusicQuiz::EntryCreator::EntryType::Song ) { // Song
+					/** Entry Song Start Time */
+					entry_tree.put("StartTime", entry->getSongStartTime());
 
-				/** Entry Song Answer Timings */
-				const std::pair<size_t, size_t> answerTimings = entry->getAnswerTimings();
-				entry_tree.put("AnswerStartTime", answerTimings.first);
-				entry_tree.put("AnswerEndTime", answerTimings.second);
+					/** Entry Song Answer Start Time */
+					entry_tree.put("AnswerStartTime", entry->getAnswerStartTime());
 
-				/** Entry Type */
-				MusicQuiz::EntryCreator::EntryType type = entry->getType();
+					/** Media File */
+					const std::string songFile = entry->getSongFile().toStdString();
+					const std::string songPath = quizPath + "/media/" + categoryName + "/" + entryName + ".mp3";
+					boost::property_tree::ptree& media_tree = entry_tree.add("Media", "");
+					media_tree.put("SongFile", songPath);
 
-				/** Media File */
-				const std::string songFile = entry->getSongFile().toStdString();
-				const std::string songPath = mediaDirectoryPath + "/" + categoryName + "/" + entryName + ".mp3";
-				boost::property_tree::ptree& media_tree = entry_tree.add("Media", "");
-				media_tree.put("<xmlattr>.video", (type == MusicQuiz::EntryCreator::EntryType::Video ? true : false));
-				media_tree.put("SongFile", quizPath + "/media/" + categoryName + "/" + entryName + ".mp3");
+					/** Copy Media File */
+					boost::filesystem::copy_file(songFile, mediaDirectoryPath + "/" + categoryName + "/" + entryName + ".mp3", boost::filesystem::copy_option::overwrite_if_exists);
+				} else if ( type == MusicQuiz::EntryCreator::EntryType::Video ) { // Video
+					/** Entry Video Start Time */
+					entry_tree.put("StartTime", entry->getVideoStartTime());
 
-				/** Copy Media File */
-				boost::filesystem::copy_file(songFile, mediaDirectoryPath + "/" + categoryName + "/" + entryName + ".mp3", boost::filesystem::copy_option::overwrite_if_exists);
+					/** Entry Video Song Start Time */
+					entry_tree.put("VideoSongStartTime", entry->getVideoSongStartTime());
+
+					/** Entry Video Answer Start Time */
+					entry_tree.put("AnswerStartTime", entry->getVideoAnswerStartTime());
+
+					/** Media File */
+					const std::string videoFile = entry->getVideoFile().toStdString();
+					const std::string songFile = entry->getVideoSongFile().toStdString();
+					const std::string videoPath = quizPath + "/media/" + categoryName + "/" + entryName + ".mp4";
+					const std::string songPath = quizPath + "/media/" + categoryName + "/" + entryName + ".mp3";
+					boost::property_tree::ptree& media_tree = entry_tree.add("Media", "");
+					media_tree.put("VideoFile", videoPath);
+					media_tree.put("SongFile", songPath);
+
+					/** Copy Media File */
+					boost::filesystem::copy_file(videoFile, mediaDirectoryPath + "/" + categoryName + "/" + entryName + ".mp4", boost::filesystem::copy_option::overwrite_if_exists);
+					boost::filesystem::copy_file(songFile, mediaDirectoryPath + "/" + categoryName + "/" + entryName + ".mp3", boost::filesystem::copy_option::overwrite_if_exists);
+				}
 			}
 		}
 
