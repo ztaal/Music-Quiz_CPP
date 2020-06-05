@@ -100,7 +100,11 @@ void MusicQuiz::TeamSelector::createLayout()
 	selectionLayout->addWidget(_hueSlider, 1, 1);
 
 	/** Add Button */
-	QPushButton* addBtn = new QPushButton("+");
+	QPushButton* addBtn = new QPushButton; 
+	QPixmap pixmap(":/imgs/add_icon_yellow.png");
+	QIcon icon(pixmap);
+	addBtn->setIcon(icon);
+	addBtn->setIconSize(QSize(50, 50));
 	addBtn->setObjectName("addButton");
 	connect(addBtn, SIGNAL(released()), this, SLOT(addTeam()));
 	selectionLayout->addWidget(addBtn, 1, 2);
@@ -277,6 +281,10 @@ void MusicQuiz::TeamSelector::removeTeam()
 
 	/** Remove Team */
 	_teamTable->removeRow(selectedRow);
+
+	/** Delete button */
+	button = nullptr;
+	delete button;
 
 	/** Enable Line Edit and slider if count is below the maximum number of teams */
 	if ( !_teamNameLineEdit->isEnabled() ) {

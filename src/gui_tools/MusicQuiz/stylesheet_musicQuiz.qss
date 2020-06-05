@@ -105,12 +105,10 @@ QPushButton#menuButton
 
 QPushButton#addButton
 {
-	color				: Yellow;
 	background-color	: rgb(96, 96, 96);
-	font-size			: 50px;
 
-	min-height			: 100px;
-	min-width			: 100px;
+	min-height			: 95px;
+	min-width			: 95px;
 }
 
 QPushButton#removeBtn
