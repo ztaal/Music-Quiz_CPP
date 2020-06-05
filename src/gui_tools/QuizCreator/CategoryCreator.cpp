@@ -51,11 +51,12 @@ void MusicQuiz::CategoryCreator::createLayout()
 	connect(addEntryBtn, SIGNAL(released()), this, SLOT(addEntry()));
 	setupTabLayout->addWidget(addEntryBtn, row, 1, 1, 1, Qt::AlignRight);
 
-	_entriesTable = new QTableWidget(0, 2);
+	_entriesTable = new QTableWidget(0, 3);
 	_entriesTable->setObjectName("quizCreatorTable");
 	_entriesTable->horizontalHeader()->setVisible(false);
 	_entriesTable->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
 	_entriesTable->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+	_entriesTable->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
 	_entriesTable->verticalHeader()->setDefaultSectionSize(40);
 	setupTabLayout->addWidget(_entriesTable, ++row, 0, 1, 2);
 
@@ -84,24 +85,62 @@ void MusicQuiz::CategoryCreator::addEntry()
 	connect(entryName, SIGNAL(textChanged(const QString&)), this, SLOT(updateEntryTabName(const QString&)));
 	_entriesTable->setCellWidget(entryCount, 0, entryName);
 
+	/** Add Edit Category Button */
+	QPushButton* editBtn = new QPushButton;
+	editBtn->setObjectName("quizCreatorEditBtn");
+	editBtn->setProperty("index", entryCount);
+	connect(editBtn, SIGNAL(released()), this, SLOT(editEntry()));
+
+	QHBoxLayout* btnLayout = new QHBoxLayout;
+	btnLayout->addWidget(editBtn, Qt::AlignCenter);
+
+	QWidget* layoutWidget = new QWidget;
+	layoutWidget->setLayout(btnLayout);
+	_entriesTable->setCellWidget(entryCount, 1, layoutWidget);
+
 	/** Add Remove Entry Button */
 	QPushButton* removeBtn = new QPushButton;
 	removeBtn->setObjectName("quizCreatorRemoveBtn");
 	removeBtn->setProperty("index", entryCount);
 	connect(removeBtn, SIGNAL(released()), this, SLOT(removeEntry()));
 
-	QHBoxLayout* removeBtnLayout = new QHBoxLayout;
-	removeBtnLayout->addWidget(removeBtn, Qt::AlignCenter);
+	btnLayout = new QHBoxLayout;
+	btnLayout->addWidget(removeBtn, Qt::AlignCenter);
 
-	QWidget* layoutWidget = new QWidget;
-	layoutWidget->setLayout(removeBtnLayout);
-	_entriesTable->setCellWidget(entryCount, 1, layoutWidget);
+	layoutWidget = new QWidget;
+	layoutWidget->setLayout(btnLayout);
+	_entriesTable->setCellWidget(entryCount, 2, layoutWidget);
 
 	/** Add Tab */
 	const size_t points = (entryCount + 1) * 100;
 	MusicQuiz::EntryCreator* entry = new MusicQuiz::EntryCreator(entryNameStr, points, _audioPlayer);
 	_entries.push_back(entry);
 	_tabWidget->addTab(entry, entryNameStr);
+}
+
+void MusicQuiz::CategoryCreator::editEntry()
+{
+	/** Sanity Check */
+	if ( _entriesTable == nullptr ) {
+		return;
+	}
+
+	QPushButton* button = qobject_cast<QPushButton*>(sender());
+	if ( button == nullptr ) {
+		return;
+	}
+
+	/** Get Number of Categories */
+	const size_t entryCount = _entriesTable->rowCount();
+
+	/** Get Index */
+	const size_t index = button->property("index").toInt();
+	if ( index >= _tabWidget->count() || index >= entryCount ) {
+		return;
+	}
+
+	/** Go to the Tab */
+	_tabWidget->setCurrentIndex(index + 1);
 }
 
 void MusicQuiz::CategoryCreator::removeEntry()

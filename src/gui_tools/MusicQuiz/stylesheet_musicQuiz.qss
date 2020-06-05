@@ -131,6 +131,16 @@ QPushButton#quizCreatorRemoveBtn
 	image				: url(:/imgs/remove_icon_black.png);
 }
 
+QPushButton#quizCreatorEditBtn
+{
+	background-color	: rgba(0, 0, 0, 0);
+
+	min-height			: 25px;
+	min-width			: 25px;
+
+	image				: url(:/imgs/edit_icon_black.png);
+}
+
 QPushButton#quizCreatorAddBtn
 {
 	background-color	: rgba(0, 0, 0, 0);

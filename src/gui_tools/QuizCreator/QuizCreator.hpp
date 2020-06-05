@@ -43,6 +43,11 @@ namespace MusicQuiz {
 		void addCategory();
 
 		/**
+		 * @brief Goes to the category tab.
+		 */
+		void editCategory();
+
+		/**
 		 * @brief Adds a row category to the quiz.
 		 */
 		void addRowCategory();

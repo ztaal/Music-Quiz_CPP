@@ -61,6 +61,11 @@ namespace MusicQuiz {
 		void addEntry();
 
 		/**
+		 * @brief Goes to the entry tab.
+		 */
+		void editEntry();
+
+		/**
 		 * @brief Removes a entry.
 		 */
 		void removeEntry();
