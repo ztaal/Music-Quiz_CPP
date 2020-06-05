@@ -340,6 +340,7 @@ QLineEdit#quizCreatorCategoryLineEdit
 {
 	font-size						: 18px;
 	border							: none;
+	padding-left					: 10px;
 }
 
 
