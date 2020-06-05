@@ -13,5 +13,6 @@
         <file>imgs/checkbox_checked_black.png</file>
         <file>imgs/checkbox_unchecked_black.png</file>
         <file>imgs/remove_icon_black.png</file>
+        <file>imgs/add_icon_black.png</file>
     </qresource>
 </RCC>

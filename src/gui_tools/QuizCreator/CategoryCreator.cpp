@@ -45,7 +45,8 @@ void MusicQuiz::CategoryCreator::createLayout()
 	label->setObjectName("quizCreatorLabel");
 	setupTabLayout->addWidget(label, ++row, 0, 1, 1, Qt::AlignLeft);
 
-	QPushButton* addEntryBtn = new QPushButton("+");
+	QPushButton* addEntryBtn = new QPushButton;
+	addEntryBtn->setObjectName("quizCreatorAddBtn");
 	addEntryBtn->setFocusPolicy(Qt::FocusPolicy::NoFocus);
 	connect(addEntryBtn, SIGNAL(released()), this, SLOT(addEntry()));
 	setupTabLayout->addWidget(addEntryBtn, row, 1, 1, 1, Qt::AlignRight);

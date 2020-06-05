@@ -102,7 +102,8 @@ void MusicQuiz::QuizCreator::createLayout()
 	label->setObjectName("quizCreatorLabel");
 	setupTabLayout->addWidget(label, ++row, 0, 1, 1, Qt::AlignLeft);
 
-	QPushButton* addCategoryBtn = new QPushButton("+");
+	QPushButton* addCategoryBtn = new QPushButton;
+	addCategoryBtn->setObjectName("quizCreatorAddBtn");
 	addCategoryBtn->setFocusPolicy(Qt::FocusPolicy::NoFocus);
 	connect(addCategoryBtn, SIGNAL(released()), this, SLOT(addCategory()));
 	setupTabLayout->addWidget(addCategoryBtn, row, 1, 1, 1, Qt::AlignRight);
@@ -120,7 +121,8 @@ void MusicQuiz::QuizCreator::createLayout()
 	label->setObjectName("quizCreatorLabel");
 	setupTabLayout->addWidget(label, ++row, 0, 1, 2, Qt::AlignLeft);
 
-	QPushButton* addRowCategoryBtn = new QPushButton("+");
+	QPushButton* addRowCategoryBtn = new QPushButton;
+	addRowCategoryBtn->setObjectName("quizCreatorAddBtn");
 	addRowCategoryBtn->setFocusPolicy(Qt::FocusPolicy::NoFocus);
 	connect(addRowCategoryBtn, SIGNAL(released()), this, SLOT(addRowCategory()));
 	setupTabLayout->addWidget(addRowCategoryBtn, row, 1, 1, 1, Qt::AlignRight);
