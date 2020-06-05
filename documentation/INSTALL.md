@@ -37,3 +37,7 @@ Windows 10:
 - Add 'BOOST_LIBRARYDIR' with the msvc folder as value.
   - Example 'D:\boost_1_69_0\lib32-msvc-14.1"
 - Add 'boost_1_69_0\lib32-msvc-14.1' to the path variable.
+
+### K-Lite Codec Pack
+
+To use play audio and video on windows the [K-Lite Codec Pack](http://www.codecguide.com/configuration_tips.htm) needs to be installed.
