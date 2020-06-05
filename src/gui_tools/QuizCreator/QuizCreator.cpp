@@ -278,7 +278,12 @@ void MusicQuiz::QuizCreator::removeCategory()
 		QList<QPushButton*> buttons = _categoriesTable->cellWidget(i, 1)->findChildren<QPushButton*>();
 		for ( QPushButton* tmpButton : buttons ) {
 			if ( tmpButton != nullptr ) {
-				tmpButton->setProperty("index", i);
+				if ( tmpButton->property("index").toInt() == index ) {
+					tmpButton = nullptr;
+					delete tmpButton;
+				} else {
+					tmpButton->setProperty("index", i);
+				}
 			}
 		}
 	}
