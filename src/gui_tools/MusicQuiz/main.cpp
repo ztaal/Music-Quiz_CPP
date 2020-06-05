@@ -105,8 +105,6 @@ int main(int argc, char* argv[])
 	- Add video song controls in quiz creator
 	- Display video and play music
 
- * Add edit category and entry button to go to tab in quiz creator
-
  * Add indicator to see if a category / entry is complete or incomplete (text in tab is red)
 
  * Add guess the category in quiz creator
