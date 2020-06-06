@@ -83,8 +83,15 @@ namespace MusicQuiz {
 
 		/**
 		 * @brief Loads a quiz.
+		 *
+		 * param[in] quizName The quiz name to load.
 		 */
-		void loadQuiz();
+		void loadQuiz(const std::string& quizName); 
+
+		/**
+		 * @brief Opens a dialog to select which quiz to load.
+		 */
+		void openLoadQuizDialog();
 		
 		/**
 		 * @brief Previews the quiz.

@@ -25,6 +25,7 @@
 #include "gui_tools/widgets/QuizFactory.hpp"
 #include "gui_tools/QuizCreator/EntryCreator.hpp"
 #include "gui_tools/QuizCreator/CategoryCreator.hpp"
+#include "gui_tools/QuizCreator/LoadQuizDialog.hpp"
 
 
 MusicQuiz::QuizCreator::QuizCreator(QWidget* parent) :
@@ -159,7 +160,7 @@ void MusicQuiz::QuizCreator::createLayout()
 
 	QPushButton* loadQuizBtn = new QPushButton("Load Quiz");
 	loadQuizBtn->setObjectName("quizCreatorBtn");
-	connect(loadQuizBtn, SIGNAL(released()), this, SLOT(loadQuiz()));
+	connect(loadQuizBtn, SIGNAL(released()), this, SLOT(openLoadQuizDialog()));
 	mainlayout->addWidget(loadQuizBtn, 1, 2, 1, 1);
 
 	QPushButton* quitCreatorBtn = new QPushButton("Quit");
@@ -622,11 +623,27 @@ void MusicQuiz::QuizCreator::saveQuiz()
 	}
 }
 
-void MusicQuiz::QuizCreator::loadQuiz()
+void MusicQuiz::QuizCreator::openLoadQuizDialog()
 {
+	/** Create Dialog */
+	MusicQuiz::LoadQuizDialog* loadQuizDialog = new MusicQuiz::LoadQuizDialog(this);
 
+	/** Connect Signal */
+	connect(loadQuizDialog, SIGNAL(loadSignal(const std::string&)), this, SLOT(loadQuiz(const std::string&)));
+
+	/** Open Dialog */
+	loadQuizDialog->exec();
 }
 
+void MusicQuiz::QuizCreator::loadQuiz(const std::string& quizName)
+{
+	/** Sanity Check */
+	if ( quizName.empty() ) {
+		return;
+	}
+
+	LOG_INFO("Loading quiz '" << quizName << "'");
+}
 
 void MusicQuiz::QuizCreator::previewQuiz()
 {
