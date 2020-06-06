@@ -132,7 +132,6 @@ void media::VideoPlayer::resize(const QSize& size)
 
 void media::VideoPlayer::mousePressEvent(QMouseEvent* event)
 {
-	LOG_DEBUG("Video Player This");
 	if ( _mouseEventCallback ) {
 		_mouseEventCallback(event);
 	}
