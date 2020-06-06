@@ -478,7 +478,7 @@ void MusicQuiz::QuizCreator::saveQuiz()
 		const size_t numberOfCategories = _categoriesTable->rowCount();
 		for ( size_t i = 0; i < numberOfCategories; ++i ) {			
 			/** Get Category */
-			MusicQuiz::CategoryCreator* category = _categories[i];
+			const MusicQuiz::CategoryCreator* category = _categories[i];
 
 			/** Create Category tree */
 			boost::property_tree::ptree& category_tree = main_tree.add("QuizCategories.Category", "");
@@ -517,7 +517,7 @@ void MusicQuiz::QuizCreator::saveQuiz()
 				entry_tree.put("<xmlattr>.name", entryName);
 
 				/** Entry Type */
-				MusicQuiz::EntryCreator::EntryType type = entry->getType();
+				const MusicQuiz::EntryCreator::EntryType type = entry->getType();
 				if ( type == MusicQuiz::EntryCreator::EntryType::Song ) {
 					entry_tree.put("<xmlattr>.type", "song");
 				} else if ( type == MusicQuiz::EntryCreator::EntryType::Video ) {
@@ -578,7 +578,7 @@ void MusicQuiz::QuizCreator::saveQuiz()
 		}
 
 		/** Delete Previous Folder */
-		boost::filesystem::path target(quizPath + "/media");
+		const boost::filesystem::path target(quizPath + "/media");
 		if ( boost::filesystem::exists(target) || boost::filesystem::is_directory(target) ) {
 			boost::filesystem::directory_iterator file(target), end;
 			for ( ; file != end; ++file ) {

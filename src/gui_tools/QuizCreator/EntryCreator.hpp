@@ -25,8 +25,8 @@ namespace MusicQuiz {
 		Q_OBJECT
 
 	public:
-		enum EntryType {
-			Song = 0, Video = 1
+		enum class EntryType {
+			Song, Video
 		};
 
 		/**

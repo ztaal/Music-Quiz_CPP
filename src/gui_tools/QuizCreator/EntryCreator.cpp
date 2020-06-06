@@ -93,7 +93,7 @@ void MusicQuiz::EntryCreator::createLayout()
 	mainlayout->addItem(createVideoFileLayout(), ++row, 0, 1, 2);
 
 	/** Set Type to song */
-	setEntryType(EntryType::Song);
+	setEntryType(0);
 
 	/** Set Layout */
 	mainlayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Ignored, QSizePolicy::Expanding), ++row, 0, 1, 2);
@@ -688,7 +688,7 @@ void MusicQuiz::EntryCreator::setEntryType(int index)
 		return;
 	}
 
-	if ( index == EntryType::Song ) { // song
+	if ( index == 0 ) { // song
 		/** Set Type */
 		_entryType = EntryType::Song;
 
@@ -707,7 +707,7 @@ void MusicQuiz::EntryCreator::setEntryType(int index)
 		_browseVideoSongBtn->setEnabled(false);
 		_videoFileLineEdit->setEnabled(false);
 		_videoSongFileLineEdit->setEnabled(false);
-	} else if ( index == EntryType::Video ) { // video
+	} else if ( index == 1 ) { // video
 		/** Set Type */
 		_entryType = EntryType::Video;
 
