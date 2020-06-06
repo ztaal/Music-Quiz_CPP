@@ -62,7 +62,7 @@ void media::VideoPlayer::play(const QString& videoFile, const size_t startTime, 
 		throw std::runtime_error("Video File Name is empty.");
 	}
 
-	/** Stop audio if any is playing and close file */
+	/** Stop video if any is playing and close file */
 	stop();
 
 	/** Set Video File */
@@ -106,7 +106,7 @@ void media::VideoPlayer::resume()
 		return;
 	}
 
-	/** Resume audio */
+	/** Resume Video */
 	_player->play();
 
 	/** Set State */

@@ -15,7 +15,7 @@
 
 
 
-MusicQuiz::QuizBoard* MusicQuiz::QuizFactory::createQuiz(const std::string& quizName, const QuizSettings& settings, const audio::AudioPlayer::Ptr& audioPlayer,
+MusicQuiz::QuizBoard* MusicQuiz::QuizFactory::createQuiz(const std::string& quizName, const QuizSettings& settings, const media::AudioPlayer::Ptr& audioPlayer,
 	const media::VideoPlayer::Ptr& videoPlayer, const std::vector<MusicQuiz::QuizTeam*>& teams, bool preview, QWidget* parent)
 {
 	/** Get List of Quizzes */
@@ -48,7 +48,7 @@ MusicQuiz::QuizBoard* MusicQuiz::QuizFactory::createQuiz(const std::string& quiz
 	return createQuiz(idx, settings, audioPlayer, videoPlayer, teams, preview, parent);
 }
 
-MusicQuiz::QuizBoard* MusicQuiz::QuizFactory::createQuiz(const size_t idx, const QuizSettings& settings, const audio::AudioPlayer::Ptr& audioPlayer,
+MusicQuiz::QuizBoard* MusicQuiz::QuizFactory::createQuiz(const size_t idx, const QuizSettings& settings, const media::AudioPlayer::Ptr& audioPlayer,
 	const media::VideoPlayer::Ptr& videoPlayer, const std::vector<MusicQuiz::QuizTeam*>& teams, bool preview, QWidget* parent)
 {
 	/** Create Quiz Board */

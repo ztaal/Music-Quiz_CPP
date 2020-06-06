@@ -8,7 +8,7 @@
 #include <QWidget>
 #include <QPushButton>
 
-#include "audio/AudioPlayer.hpp"
+#include "media/AudioPlayer.hpp"
 #include "media/VideoPlayer.hpp"
 
 class QMouseEvent;
@@ -31,7 +31,7 @@ namespace MusicQuiz {
 		 * @param[in] parent The parent widget.
 		 */
 		explicit QuizEntry(const QString &audioFile, const QString &answer, size_t points, size_t startTime, size_t answerStartTime,
-			const std::shared_ptr< audio::AudioPlayer >& audioPlayer, QWidget* parent = nullptr);
+			const std::shared_ptr< media::AudioPlayer >& audioPlayer, QWidget* parent = nullptr);
 
 		/**
 		 * @brief Entry Type Video Constructor
@@ -48,7 +48,7 @@ namespace MusicQuiz {
 		 * @param[in] parent The parent widget.
 		 */
 		explicit QuizEntry(const QString& audioFile, const QString& videoFile, const QString& answer, size_t points, size_t startTime, size_t videoStartTime, size_t answerStartTime,
-			const std::shared_ptr< audio::AudioPlayer >& audioPlayer, const std::shared_ptr< media::VideoPlayer >& videoPlayer, QWidget* parent = nullptr);
+			const std::shared_ptr< media::AudioPlayer >& audioPlayer, const std::shared_ptr< media::VideoPlayer >& videoPlayer, QWidget* parent = nullptr);
 
 		/**
 		 * @brief Default Destructor
@@ -144,7 +144,7 @@ namespace MusicQuiz {
 		EntryType _type = EntryType::Song;
 		EntryState _state = EntryState::IDLE;
 
-		std::shared_ptr< audio::AudioPlayer > _audioPlayer = nullptr;
+		std::shared_ptr< media::AudioPlayer > _audioPlayer = nullptr;
 		std::shared_ptr < media::VideoPlayer > _videoPlayer = nullptr;
 
 		bool _hiddenAnswer = false; // setting

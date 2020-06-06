@@ -11,7 +11,7 @@
 #include "gui_tools/QuizCreator/EntryCreator.hpp"
 
 
-MusicQuiz::CategoryCreator::CategoryCreator(const QString& name, const audio::AudioPlayer::Ptr& audioPlayer, QWidget* parent) :
+MusicQuiz::CategoryCreator::CategoryCreator(const QString& name, const media::AudioPlayer::Ptr& audioPlayer, QWidget* parent) :
 	QWidget(parent), _categoryName(name), _audioPlayer(audioPlayer)
 {
 	/** Create Layout */

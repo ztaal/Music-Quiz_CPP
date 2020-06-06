@@ -6,7 +6,7 @@
 #include <QLineEdit>
 #include <QTableWidget>
 
-#include "audio/AudioPlayer.hpp"
+#include "media/AudioPlayer.hpp"
 #include "gui_tools/GuiUtil/QExtensions/QTabWidgetExtender.hpp"
 
 
@@ -25,7 +25,7 @@ namespace MusicQuiz {
 		 * @param[in] audioPlayer The audio player.
 		 * @param[in] parent The parent widget.
 		 */
-		explicit CategoryCreator(const QString& name, const std::shared_ptr< audio::AudioPlayer >& audioPlayer, QWidget* parent = nullptr);
+		explicit CategoryCreator(const QString& name, const std::shared_ptr< media::AudioPlayer >& audioPlayer, QWidget* parent = nullptr);
 
 		/**
 		 * @brief Default destructor
@@ -92,6 +92,6 @@ namespace MusicQuiz {
 		QTableWidget* _entriesTable = nullptr;
 		std::vector< MusicQuiz::EntryCreator* > _entries;
 
-		std::shared_ptr< audio::AudioPlayer > _audioPlayer = nullptr;
+		std::shared_ptr< media::AudioPlayer > _audioPlayer = nullptr;
 	};
 }

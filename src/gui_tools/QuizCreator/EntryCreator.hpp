@@ -14,7 +14,7 @@
 #include <QPushButton>
 #include <QTableWidget>
 
-#include "audio/AudioPlayer.hpp"
+#include "media/AudioPlayer.hpp"
 #include "media/VideoPlayer.hpp"
 
 
@@ -37,7 +37,7 @@ namespace MusicQuiz {
 		 * @param[in] audioPlayer The audio player.
 		 * @param[in] parent The parent widget.
 		 */
-		explicit EntryCreator(const QString& name, size_t points, const std::shared_ptr< audio::AudioPlayer >& audioPlayer, QWidget* parent = nullptr);
+		explicit EntryCreator(const QString& name, size_t points, const std::shared_ptr< media::AudioPlayer >& audioPlayer, QWidget* parent = nullptr);
 
 		/**
 		 * @brief Default destructor
@@ -268,7 +268,7 @@ namespace MusicQuiz {
 		QPushButton* _browseVideoBtn = nullptr;
 		QPushButton* _browseVideoSongBtn = nullptr;
 
-		std::shared_ptr< audio::AudioPlayer > _audioPlayer = nullptr;
+		std::shared_ptr< media::AudioPlayer > _audioPlayer = nullptr;
 		media::VideoPlayer* _videoPlayer = nullptr;
 	};
 }

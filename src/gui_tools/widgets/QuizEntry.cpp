@@ -9,7 +9,7 @@
 #include "common/Log.hpp"
 
 
-MusicQuiz::QuizEntry::QuizEntry(const QString& audioFile, const QString& answer, const size_t points, const size_t startTime, const size_t answerStartTime, const audio::AudioPlayer::Ptr& audioPlayer, QWidget* parent) :
+MusicQuiz::QuizEntry::QuizEntry(const QString& audioFile, const QString& answer, const size_t points, const size_t startTime, const size_t answerStartTime, const media::AudioPlayer::Ptr& audioPlayer, QWidget* parent) :
 	QPushButton(parent), _audioFile(audioFile), _answer(answer), _points(points), _startTime(startTime), _answerStartTime(answerStartTime), _audioPlayer(audioPlayer)
 {
 	/** Sanity Check */
@@ -34,7 +34,7 @@ MusicQuiz::QuizEntry::QuizEntry(const QString& audioFile, const QString& answer,
 }
 
 MusicQuiz::QuizEntry::QuizEntry(const QString& audioFile, const QString& videoFile, const QString& answer, size_t points, size_t startTime, size_t videoStartTime, size_t answerStartTime,
-	const audio::AudioPlayer::Ptr& audioPlayer, const media::VideoPlayer::Ptr& videoPlayer, QWidget* parent) :
+	const media::AudioPlayer::Ptr& audioPlayer, const media::VideoPlayer::Ptr& videoPlayer, QWidget* parent) :
 	QPushButton(parent), _audioFile(audioFile), _videoFile(videoFile), _answer(answer), _points(points), _startTime(startTime), _videoStartTime(videoStartTime),
 	_answerStartTime(answerStartTime), _audioPlayer(audioPlayer), _videoPlayer(videoPlayer)
 {
@@ -120,12 +120,12 @@ void MusicQuiz::QuizEntry::leftClickEvent()
 	case EntryState::IDLE: // Start Media
 		_state = EntryState::PLAYING;
 		if ( _type == EntryType::Song ) {
-			_audioPlayer->play(_audioFile.toStdString(), _startTime);
+			_audioPlayer->play(_audioFile, _startTime);
 		} else if ( _type == EntryType::Video ) {
 			_audioPlayer->stop();
 			_videoPlayer->play(_videoFile, _videoStartTime, true);
 			_videoPlayer->show();
-			_audioPlayer->play(_audioFile.toStdString(), _startTime);
+			_audioPlayer->play(_audioFile, _startTime);
 		}
 		break;
 	case EntryState::PLAYING: // Pause Media
@@ -138,7 +138,7 @@ void MusicQuiz::QuizEntry::leftClickEvent()
 	case EntryState::PAUSED: // Play Answer
 		_state = EntryState::PLAYING_ANSWER;
 		if ( _type == EntryType::Song ) {
-			_audioPlayer->play(_audioFile.toStdString(), _answerStartTime);
+			_audioPlayer->play(_audioFile, _answerStartTime);
 		} else if ( _type == EntryType::Video ) {
 			_videoPlayer->play(_videoFile, _answerStartTime);
 			_videoPlayer->show();
@@ -158,7 +158,7 @@ void MusicQuiz::QuizEntry::leftClickEvent()
 		break;
 	case QuizEntry::EntryState::PLAYED: // Play Answer Again
 		if ( _type == EntryType::Song ) {
-			_audioPlayer->play(_audioFile.toStdString(), _answerStartTime);
+			_audioPlayer->play(_audioFile, _answerStartTime);
 		} else if ( _type == EntryType::Video ) {
 			_videoPlayer->play(_videoFile, _answerStartTime);
 			_videoPlayer->show();

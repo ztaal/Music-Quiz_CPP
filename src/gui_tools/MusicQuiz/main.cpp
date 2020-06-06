@@ -104,9 +104,6 @@ int main(int argc, char* argv[])
 	- Add author to quiz creator.
 	- Add author and quiz name to quiz intro screen.
 
- * Add video Functionallity
-	- Display video and play music
-
  * Add indicator to see if a category / entry is complete or incomplete (text in tab is red)
 
  * Add guess the category in music quiz

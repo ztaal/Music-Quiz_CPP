@@ -49,7 +49,7 @@ MusicQuiz::QuizCreator::QuizCreator(QWidget* parent) :
 	}
 
 	/** Create Audio Player */
-	_audioPlayer = std::make_shared<audio::AudioPlayer>();
+	_audioPlayer = std::make_shared<media::AudioPlayer>();
 
 	/** Create Video Player */
 	_videoPlayer = std::make_shared<media::VideoPlayer>();	

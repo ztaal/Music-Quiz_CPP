@@ -116,7 +116,7 @@ MusicQuiz::util::QuizLoader::QuizPreview MusicQuiz::util::QuizLoader::getQuizPre
 	return quizPreview;
 }
 
-std::vector<MusicQuiz::QuizCategory*> MusicQuiz::util::QuizLoader::loadQuizCategories(const size_t idx, const audio::AudioPlayer::Ptr& audioPlayer,
+std::vector<MusicQuiz::QuizCategory*> MusicQuiz::util::QuizLoader::loadQuizCategories(const size_t idx, const media::AudioPlayer::Ptr& audioPlayer,
 	const media::VideoPlayer::Ptr& videoPlayer, std::string& err)
 {
 	/** Get List of Quizzes */

@@ -14,7 +14,7 @@
 #include "ui_MusicQuizGUI.h"
 
 #include "util/QuizSettings.hpp"
-#include "audio/AudioPlayer.hpp"
+#include "media/AudioPlayer.hpp"
 #include "media/VideoPlayer.hpp"
 
 #include "gui_tools/widgets/QuizTeam.hpp"
@@ -96,8 +96,8 @@ namespace MusicQuiz {
 	private:
 
 		/** Variables */
-		std::string _themeSongFile = "./data/default/theme_song.mp3";
-		std::string _vicatorySongFile = "./data/default/victory_song.mp3";
+		const QString _themeSongFile = "./data/default/theme_song.mp3";
+		const QString _vicatorySongFile = "./data/default/victory_song.mp3";
 
 		MusicQuiz::QuizBoard* _quizBoard = nullptr;
 		std::vector< MusicQuiz::QuizTeam* > _teams;
@@ -124,7 +124,7 @@ namespace MusicQuiz {
 		MusicQuiz::QuizSettings _settings;
 
 		/** Audio Player */
-		std::shared_ptr<audio::AudioPlayer> _audioPlayer = nullptr;
+		std::shared_ptr<media::AudioPlayer> _audioPlayer = nullptr;
 
 		/** Video Player */
 		std::shared_ptr<media::VideoPlayer> _videoPlayer = nullptr;

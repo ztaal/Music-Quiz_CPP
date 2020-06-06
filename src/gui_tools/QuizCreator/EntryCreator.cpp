@@ -15,7 +15,7 @@
 #include "common/Log.hpp"
 
 
-MusicQuiz::EntryCreator::EntryCreator(const QString& name, const size_t points, const audio::AudioPlayer::Ptr& audioPlayer, QWidget* parent) :
+MusicQuiz::EntryCreator::EntryCreator(const QString& name, const size_t points, const media::AudioPlayer::Ptr& audioPlayer, QWidget* parent) :
 	QWidget(parent), _entryName(name), _points(points), _audioPlayer(audioPlayer)
 {
 	/** Create Layout */
@@ -417,7 +417,7 @@ void MusicQuiz::EntryCreator::playSong()
 	}
 
 	/** Play Song */
-	_audioPlayer->play(fileName.toStdString(), startTime);
+	_audioPlayer->play(fileName, startTime);
 }
 
 void MusicQuiz::EntryCreator::pause()
@@ -485,7 +485,7 @@ void MusicQuiz::EntryCreator::playVideo()
 		/** Play Video and Song */
 		_videoPlayer->play(videoFileName, videoStartTime, true);
 		_videoPlayer->show();
-		_audioPlayer->play(songFileName.toStdString(), songStartTime);
+		_audioPlayer->play(songFileName, songStartTime);
 	} else if ( type == "videoAnswer" ) {
 		/** Sanity Check */
 		if ( _songFileLineEdit == nullptr || _videoAnswerStartTimeEdit == nullptr ) {
