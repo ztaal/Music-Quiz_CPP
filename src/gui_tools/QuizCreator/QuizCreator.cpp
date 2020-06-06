@@ -10,6 +10,7 @@
 #include <QHeaderView>
 #include <QMessageBox>
 #include <QApplication>
+#include <QDesktopWidget>
 #include <QTableWidgetItem>
 
 #include <boost/filesystem.hpp>
@@ -49,6 +50,15 @@ MusicQuiz::QuizCreator::QuizCreator(QWidget* parent) :
 
 	/** Create Audio Player */
 	_audioPlayer = std::make_shared<audio::AudioPlayer>();
+
+	/** Create Video Player */
+	_videoPlayer = std::make_shared<media::VideoPlayer>();	
+	_videoPlayer->setWindowFlags(windowFlags() | Qt::Window | Qt::WindowMaximizeButtonHint | Qt::WindowMinimizeButtonHint | Qt::WindowStaysOnTopHint);
+
+	/** Set Video Player Size */
+	const QRect screenRec = QApplication::desktop()->screenGeometry();
+	_videoPlayer->setMinimumSize(QSize(screenRec.width() / 4, screenRec.height() / 4));
+	_videoPlayer->resize(QSize(screenRec.width() / 4, screenRec.height() / 4));
 
 	/** Create Layout */
 	createLayout();
@@ -611,6 +621,7 @@ void MusicQuiz::QuizCreator::previewQuiz()
 {
 	/** Stop Song */
 	_audioPlayer->stop();
+	_videoPlayer->stop();
 
 	/** Check that quiz have been saved */
 	const std::string quizName = _quizNameLineEdit->text().toStdString();
@@ -626,8 +637,8 @@ void MusicQuiz::QuizCreator::previewQuiz()
 	} catch ( ... ) {}
 
 	/** Create Dummy Teams */
-	MusicQuiz::QuizTeam* dummyTeamOne = new QuizTeam("Dummy Team 1", QColor(255, 0, 0));
-	MusicQuiz::QuizTeam* dummyTeamTwo = new QuizTeam("Dummy Team 2", QColor(0, 255, 0));
+	MusicQuiz::QuizTeam* dummyTeamOne = new QuizTeam("Team 1", QColor(255, 0, 0));
+	MusicQuiz::QuizTeam* dummyTeamTwo = new QuizTeam("Team 2", QColor(0, 255, 0));
 	const std::vector< MusicQuiz::QuizTeam* > dummyTeams = { dummyTeamOne, dummyTeamTwo };
 
 	/** Dummy Settings */
@@ -636,7 +647,7 @@ void MusicQuiz::QuizCreator::previewQuiz()
 
 	/** Create Quiz Preview */
 	try {
-		_previewQuizBoard = MusicQuiz::QuizFactory::createQuiz(quizPath, settings, _audioPlayer, dummyTeams, true, this);
+		_previewQuizBoard = MusicQuiz::QuizFactory::createQuiz(quizPath, settings, _audioPlayer, _videoPlayer, dummyTeams, true, this);
 		if ( _previewQuizBoard == nullptr ) {
 			QMessageBox::warning(this, "Info", "Failed to preview quiz.");
 			return;
@@ -646,7 +657,7 @@ void MusicQuiz::QuizCreator::previewQuiz()
 		connect(_previewQuizBoard, SIGNAL(quitSignal()), this, SLOT(stopQuizPreview()));
 
 		/** Start Preview */
-		_previewQuizBoard->exec();
+		_previewQuizBoard->show();
 	} catch ( const std::exception& err ) {
 		QMessageBox::warning(this, "Info", "Failed to preview quiz. " + QString::fromStdString(err.what()));
 		return;

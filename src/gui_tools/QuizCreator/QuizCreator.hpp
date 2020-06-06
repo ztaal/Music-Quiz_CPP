@@ -12,6 +12,7 @@
 #include <QTableWidget>
 
 #include "audio/AudioPlayer.hpp"
+#include "media/VideoPlayer.hpp"
 
 
 namespace MusicQuiz {
@@ -114,6 +115,7 @@ namespace MusicQuiz {
 
 		/** Audio Player */
 		std::shared_ptr<audio::AudioPlayer> _audioPlayer = nullptr;
+		std::shared_ptr<media::VideoPlayer> _videoPlayer = nullptr;
 
 		/** Preview Quiz Board */
 		MusicQuiz::QuizBoard* _previewQuizBoard = nullptr;

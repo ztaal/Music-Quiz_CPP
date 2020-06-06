@@ -16,7 +16,7 @@
 
 
 MusicQuiz::QuizBoard* MusicQuiz::QuizFactory::createQuiz(const std::string& quizName, const QuizSettings& settings, const audio::AudioPlayer::Ptr& audioPlayer,
-	const std::vector<MusicQuiz::QuizTeam*>& teams, bool preview, QWidget* parent)
+	const media::VideoPlayer::Ptr& videoPlayer, const std::vector<MusicQuiz::QuizTeam*>& teams, bool preview, QWidget* parent)
 {
 	/** Get List of Quizzes */
 	std::vector<std::string> quizList = MusicQuiz::util::QuizLoader::getListOfQuizzes();
@@ -45,18 +45,18 @@ MusicQuiz::QuizBoard* MusicQuiz::QuizFactory::createQuiz(const std::string& quiz
 	LOG_DEBUG("QuizListName = " << quizList[idx]);
 
 	/** Create Quiz */
-	return createQuiz(idx, settings, audioPlayer, teams, preview, parent);
+	return createQuiz(idx, settings, audioPlayer, videoPlayer, teams, preview, parent);
 }
 
 MusicQuiz::QuizBoard* MusicQuiz::QuizFactory::createQuiz(const size_t idx, const QuizSettings& settings, const audio::AudioPlayer::Ptr& audioPlayer,
-	const std::vector<MusicQuiz::QuizTeam*>& teams, bool preview, QWidget* parent)
+	const media::VideoPlayer::Ptr& videoPlayer, const std::vector<MusicQuiz::QuizTeam*>& teams, bool preview, QWidget* parent)
 {
 	/** Create Quiz Board */
 	MusicQuiz::QuizBoard* quizBoard = nullptr;
 
 	/** Load Categories */
 	std::string loadError;
-	std::vector<MusicQuiz::QuizCategory*> categories = MusicQuiz::util::QuizLoader::loadQuizCategories(idx, audioPlayer, loadError);
+	std::vector<MusicQuiz::QuizCategory*> categories = MusicQuiz::util::QuizLoader::loadQuizCategories(idx, audioPlayer, videoPlayer, loadError);
 	if ( !loadError.empty() ) {
 		QMessageBox::information(nullptr, "Info", "Incomplete Quiz:\n\n" + QString::fromStdString(loadError));
 	}

@@ -3,6 +3,8 @@
 #include <QString>
 #include <QWidget>
 #include <QObject>
+#include <QKeyEvent>
+#include <QMouseEvent>
 #include <QMediaPlayer>
 #include <QVideoWidget>
 
@@ -75,10 +77,32 @@ namespace media {
 		 */
 		void resize(const QSize& size);
 
+		/**
+		 * @brief Set the mouse event call back function.
+		 *
+		 * @param[in] mouseEventCallback The callback function.
+		 */
+		void setMouseEventCallbackFunction(const std::function< void(QMouseEvent*) > mouseEventCallback);
 	protected:
+		/**
+		 * @brief Override the mouse release event.
+		 *
+		 * @param[in] event The event.
+		 */
+		void mousePressEvent(QMouseEvent* event) override;
+
+		/**
+		 * @brief Override the key press event.
+		 *
+		 * @param[in] event The event.
+		 */
+		void keyPressEvent(QKeyEvent* event) override;
+
 		/** Variables */
 		QMediaPlayer* _player = nullptr;
 		QVideoWidget* _videoWidget = nullptr;
 		VideoPlayState _state = VideoPlayState::IDLE;
+
+		std::function< void(QMouseEvent*) > _mouseEventCallback;
 	};
 }

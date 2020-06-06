@@ -166,7 +166,7 @@ void MusicQuiz::QuizBoard::handleAnswer(const size_t points)
 			teamButtons.push_back(msgBox.addButton(_teams[i]->getName(), QMessageBox::YesRole));
 		}
 		QAbstractButton* exitButton = msgBox.addButton("No One", QMessageBox::NoRole);
-		msgBox.setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint);
+		msgBox.setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint | Qt::WindowStaysOnTopHint);
 		msgBox.exec();
 
 		MusicQuiz::QuizTeam* team = nullptr;

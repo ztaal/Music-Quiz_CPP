@@ -4,6 +4,8 @@
 
 #include <QVBoxLayout>
 
+#include "common/Log.hpp"
+
 
 media::VideoPlayer::VideoPlayer(QWidget* parent) :
 		QWidget(parent)
@@ -126,4 +128,28 @@ void media::VideoPlayer::resize(const QSize& size)
 	if ( _videoWidget != nullptr ) {
 		_videoWidget->resize(size);
 	}
+}
+
+void media::VideoPlayer::mousePressEvent(QMouseEvent* event)
+{
+	LOG_DEBUG("Video Player This");
+	if ( _mouseEventCallback ) {
+		_mouseEventCallback(event);
+	}
+	event->accept();
+}
+
+void media::VideoPlayer::keyPressEvent(QKeyEvent* event)
+{
+	/** Hide Video if esc is pressed */
+	if ( event->key() == Qt::Key_Escape ) {
+		hide();
+	}
+
+	event->accept();
+}
+
+void media::VideoPlayer::setMouseEventCallbackFunction(const std::function< void(QMouseEvent*) > mouseEventCallback)
+{
+	_mouseEventCallback = mouseEventCallback;
 }

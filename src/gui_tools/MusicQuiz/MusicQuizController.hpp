@@ -15,6 +15,7 @@
 
 #include "util/QuizSettings.hpp"
 #include "audio/AudioPlayer.hpp"
+#include "media/VideoPlayer.hpp"
 
 #include "gui_tools/widgets/QuizTeam.hpp"
 #include "gui_tools/widgets/QuizEntry.hpp"
@@ -124,5 +125,8 @@ namespace MusicQuiz {
 
 		/** Audio Player */
 		std::shared_ptr<audio::AudioPlayer> _audioPlayer = nullptr;
+
+		/** Video Player */
+		std::shared_ptr<media::VideoPlayer> _videoPlayer = nullptr;
 	};
 }

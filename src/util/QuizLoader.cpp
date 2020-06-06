@@ -116,7 +116,8 @@ MusicQuiz::util::QuizLoader::QuizPreview MusicQuiz::util::QuizLoader::getQuizPre
 	return quizPreview;
 }
 
-std::vector<MusicQuiz::QuizCategory*> MusicQuiz::util::QuizLoader::loadQuizCategories(const size_t idx, const audio::AudioPlayer::Ptr& audioPlayer, std::string& err)
+std::vector<MusicQuiz::QuizCategory*> MusicQuiz::util::QuizLoader::loadQuizCategories(const size_t idx, const audio::AudioPlayer::Ptr& audioPlayer,
+	const media::VideoPlayer::Ptr& videoPlayer, std::string& err)
 {
 	/** Get List of Quizzes */
 	const std::vector<std::string> quizList = getListOfQuizzes();
@@ -161,20 +162,45 @@ std::vector<MusicQuiz::QuizCategory*> MusicQuiz::util::QuizLoader::loadQuizCateg
 						for ( ; it != entryTree.end(); ++it ) {
 							if ( it->first == "QuizEntry" ) {
 								const boost::filesystem::path full_path(boost::filesystem::current_path());
-								QString songFile = QString::fromStdString(full_path.string() + "/" + it->second.get<std::string>("Media.SongFile"));
-								std::replace(songFile.begin(), songFile.end(), '\\', '/');
+
+								/** Settings */
 								const QString answer = QString::fromStdString(it->second.get<std::string>("Answer"));
 								const size_t points = it->second.get<size_t>("Points");
 								const size_t startTime = it->second.get<size_t>("StartTime");
 								const size_t answerStartTime = it->second.get<size_t>("AnswerStartTime");
 
-								/** Check if file exsists */
-								if ( !boost::filesystem::exists(songFile.toStdString()) ) {
-									err += "Missing song file '" + songFile.toStdString() + "'\n";
-								}
+								/** Media Type */
+								const std::string type = it->second.get<std::string>("<xmlattr>.type");
+								if ( type == "song" ) { // Song
+									QString songFile = QString::fromStdString(full_path.string() + "/" + it->second.get<std::string>("Media.SongFile"));
+									std::replace(songFile.begin(), songFile.end(), '\\', '/');
 
-								/** Push Back Entry */
-								categorieEntries.push_back(new MusicQuiz::QuizEntry(songFile, answer, points, startTime, answerStartTime, audioPlayer));
+									/** Check if file exsists */
+									if ( !boost::filesystem::exists(songFile.toStdString()) ) {
+										err += "Missing song file '" + songFile.toStdString() + "'\n";
+									} 
+
+									/** Push Back Song Entry */
+									categorieEntries.push_back(new MusicQuiz::QuizEntry(songFile, answer, points, startTime, answerStartTime, audioPlayer));
+								} else if ( type == "video" ) { // Video
+									QString songFile = QString::fromStdString(full_path.string() + "/" + it->second.get<std::string>("Media.SongFile"));
+									QString videoFile = QString::fromStdString(full_path.string() + "/" + it->second.get<std::string>("Media.VideoFile"));
+									std::replace(songFile.begin(), songFile.end(), '\\', '/');
+									std::replace(videoFile.begin(), videoFile.end(), '\\', '/');
+									const size_t videoStartTime = it->second.get<size_t>("VideoSongStartTime");
+
+									/** Check if files exsists */
+									if ( !boost::filesystem::exists(songFile.toStdString()) ) {
+										err += "Missing song file '" + songFile.toStdString() + "'\n";
+									}
+
+									if ( !boost::filesystem::exists(videoFile.toStdString()) ) {
+										err += "Missing video file '" + videoFile.toStdString() + "'\n";
+									}
+
+									/** Push Back Video Entry */
+									categorieEntries.push_back(new MusicQuiz::QuizEntry(songFile, videoFile, answer, points, startTime, videoStartTime, answerStartTime, audioPlayer, videoPlayer));
+								}
 							}
 						}
 

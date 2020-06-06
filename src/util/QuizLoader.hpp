@@ -10,6 +10,7 @@
 #include <boost/filesystem.hpp>
 
 #include "audio/AudioPlayer.hpp"
+#include "media/VideoPlayer.hpp"
 #include "gui_tools/widgets/QuizCategory.hpp"
 
 
@@ -90,7 +91,8 @@ namespace MusicQuiz {
 			*
 			* @return The quiz categories.
 			*/
-			static std::vector<MusicQuiz::QuizCategory*> loadQuizCategories(size_t idx, const std::shared_ptr< audio::AudioPlayer >& audioPlayer, std::string& err);
+			static std::vector<MusicQuiz::QuizCategory*> loadQuizCategories(size_t idx, const std::shared_ptr< audio::AudioPlayer >& audioPlayer,
+				const std::shared_ptr< media::VideoPlayer >& videoPlayer, std::string& err);
 
 			/**
 			* @brief Returns a list of the row categories.

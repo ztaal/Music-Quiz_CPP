@@ -4,7 +4,10 @@
 #include <string>
 #include <chrono>
 
+#include <QRect>
 #include <QMessageBox>
+#include <QApplication>
+#include <QDesktopWidget>
 
 #include "common/Log.hpp"
 #include "gui_tools/widgets/QuizFactory.hpp"
@@ -20,6 +23,18 @@ MusicQuiz::MusicQuizController::MusicQuizController(QWidget* parent) :
 {
 	/** Create Audio Player */
 	_audioPlayer = std::make_shared<audio::AudioPlayer>();
+
+	/** Create Video Player */
+	_videoPlayer = std::make_shared<media::VideoPlayer>();
+	_videoPlayer->setWindowFlags(windowFlags() | Qt::Window | Qt::FramelessWindowHint | Qt::WindowMaximizeButtonHint | Qt::WindowMinimizeButtonHint | Qt::WindowStaysOnTopHint);
+
+	/** Set Video Player Size */
+	const QRect screenRec = QApplication::desktop()->screenGeometry();
+	_videoPlayer->setMinimumSize(QSize(screenRec.width(), screenRec.height()));
+	_videoPlayer->resize(QSize(screenRec.width(), screenRec.height()));
+
+	/** Center Video Player */
+	_videoPlayer->move(0, 0);
 
 	/** Connect Update Timer */
 	connect(&_updateTimer, SIGNAL(timeout()), this, SLOT(executeQuiz()));
@@ -152,7 +167,7 @@ void MusicQuiz::MusicQuizController::executeQuiz()
 
 		try {
 			/** Create Quiz Board */
-			_quizBoard = MusicQuiz::QuizFactory::createQuiz(_selectedQuizIdx, _settings, _audioPlayer, _teams);
+			_quizBoard = MusicQuiz::QuizFactory::createQuiz(_selectedQuizIdx, _settings, _audioPlayer, _videoPlayer, _teams);
 
 			/** Connect Signals */
 			connect(_quizBoard, SIGNAL(quitSignal()), this, SLOT(quitQuiz()));
