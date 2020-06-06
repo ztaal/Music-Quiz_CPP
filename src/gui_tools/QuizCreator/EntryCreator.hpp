@@ -26,7 +26,7 @@ namespace MusicQuiz {
 
 	public:
 		enum class EntryType {
-			Song, Video
+			Song = 0, Video = 1
 		};
 
 		/**
