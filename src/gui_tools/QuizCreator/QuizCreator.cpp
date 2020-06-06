@@ -518,7 +518,11 @@ void MusicQuiz::QuizCreator::saveQuiz()
 
 				/** Entry Type */
 				MusicQuiz::EntryCreator::EntryType type = entry->getType();
-				entry_tree.put("<xmlattr>.video", (type == MusicQuiz::EntryCreator::EntryType::Video ? true : false));
+				if ( type == MusicQuiz::EntryCreator::EntryType::Song ) {
+					entry_tree.put("<xmlattr>.type", "song");
+				} else if ( type == MusicQuiz::EntryCreator::EntryType::Video ) {
+					entry_tree.put("<xmlattr>.type", "video");
+				}
 
 				/** Entry Answer */
 				const std::string entryAnswer = entry->getAnswer().toStdString();

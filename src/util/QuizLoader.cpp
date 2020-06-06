@@ -92,10 +92,10 @@ MusicQuiz::util::QuizLoader::QuizPreview MusicQuiz::util::QuizLoader::getQuizPre
 						boost::property_tree::ptree::const_iterator it = mediaTree.begin();
 						for ( ; it != mediaTree.end(); ++it ) {
 							if ( it->first == "QuizEntry" ) {
-								if ( it->second.get<bool>("<xmlattr>.video", false) && !quizPreview.includeVideos ) {
-									quizPreview.includeVideos = true;
-								} else if ( !it->second.get<bool>("<xmlattr>.video", false) && !quizPreview.includeSongs ) {
+								if ( it->second.get<std::string>("<xmlattr>.type") == "song" && !quizPreview.includeSongs ) {
 									quizPreview.includeSongs = true;
+								} else if ( it->second.get<std::string>("<xmlattr>.type") == "video" && !quizPreview.includeVideos ) {
+									quizPreview.includeVideos = true;
 								}
 							}
 						}
