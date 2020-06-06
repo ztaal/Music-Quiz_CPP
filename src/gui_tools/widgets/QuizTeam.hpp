@@ -31,6 +31,12 @@ namespace MusicQuiz {
 		virtual ~QuizTeam();
 
 		/**
+		 * @brief Deleted the copy and assignment constructor.
+		 */
+		QuizTeam(const QuizTeam&) = delete;
+		QuizTeam& operator=(const QuizTeam&) = delete;
+
+		/**
 		 * @brief Sets if the team score is visiable during the quiz.
 		 *
 		 * @param[in] hide Set to true if the score should be hidden.

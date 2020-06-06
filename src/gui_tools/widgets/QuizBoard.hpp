@@ -39,6 +39,12 @@ namespace MusicQuiz {
 		virtual ~QuizBoard() = default;
 
 		/**
+		 * @brief Deleted the copy and assignment constructor.
+		 */
+		QuizBoard(const QuizBoard&) = delete;
+		QuizBoard& operator=(const QuizBoard&) = delete;
+
+		/**
 		 * @brief Sets the quiz name.
 		 *
 		 * @param[in] name The quiz name.

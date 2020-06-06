@@ -28,6 +28,12 @@ namespace MusicQuiz {
 		~QuizFactory() = delete;
 
 		/**
+		 * @brief Deleted the copy and assignment constructor.
+		 */
+		QuizFactory(const QuizFactory&) = delete;
+		QuizFactory& operator=(const QuizFactory&) = delete;
+
+		/**
 		 * @brief Creates the music quiz.
 		 *
 		 * @param[in] quizName The quiz name to load.

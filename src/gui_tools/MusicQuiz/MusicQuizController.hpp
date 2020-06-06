@@ -55,6 +55,12 @@ namespace MusicQuiz {
 		 */
 		virtual ~MusicQuizController();
 
+		/**
+		 * @brief Deleted the copy and assignment constructor.
+		 */
+		MusicQuizController(const MusicQuizController&) = delete;
+		MusicQuizController& operator=(const MusicQuizController&) = delete;
+
 	public slots:
 
 	private slots:

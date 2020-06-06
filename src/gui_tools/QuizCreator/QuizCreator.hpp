@@ -35,6 +35,12 @@ namespace MusicQuiz {
 		 */
 		virtual ~QuizCreator() = default;
 
+		/**
+		 * @brief Deleted the copy and assignment constructor.
+		 */
+		QuizCreator(const QuizCreator&) = delete;
+		QuizCreator& operator=(const QuizCreator&) = delete;
+
 	public slots:
 
 	private slots:
@@ -75,6 +81,11 @@ namespace MusicQuiz {
 		 */
 		void saveQuiz();
 
+		/**
+		 * @brief Loads a quiz.
+		 */
+		void loadQuiz();
+		
 		/**
 		 * @brief Previews the quiz.
 		 */

@@ -44,6 +44,12 @@ namespace MusicQuiz {
 		 */
 		virtual ~EntryCreator() = default;
 
+		/**
+		 * @brief Deleted the copy and assignment constructor.
+		 */
+		EntryCreator(const EntryCreator&) = delete;
+		EntryCreator& operator=(const EntryCreator&) = delete;
+
 	public slots:
 		/**
 		 * @brief Updates the entry name.

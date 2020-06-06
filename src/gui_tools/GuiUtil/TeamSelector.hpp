@@ -36,6 +36,12 @@ namespace MusicQuiz {
 		 */
 		virtual ~TeamSelector() = default;
 
+		/**
+		 * @brief Deleted the copy and assignment constructor.
+		 */
+		TeamSelector(const TeamSelector&) = delete;
+		TeamSelector& operator=(const TeamSelector&) = delete;
+
 	public slots:
 		/**
 		 * @brief Handles the close event.

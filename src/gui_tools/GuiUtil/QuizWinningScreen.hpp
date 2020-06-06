@@ -30,6 +30,12 @@ namespace MusicQuiz {
 		 */
 		virtual ~QuizWinningScreen();
 
+		/**
+		 * @brief Deleted the copy and assignment constructor.
+		 */
+		QuizWinningScreen(const QuizWinningScreen&) = delete;
+		QuizWinningScreen& operator=(const QuizWinningScreen&) = delete;
+
 	public slots:
 
 	private slots:

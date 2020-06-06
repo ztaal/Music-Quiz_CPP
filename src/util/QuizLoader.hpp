@@ -67,6 +67,12 @@ namespace MusicQuiz {
 			~QuizLoader() = delete;
 
 			/**
+			 * @brief Deleted the copy and assignment constructor.
+			 */
+			QuizLoader(const QuizLoader&) = delete;
+			QuizLoader& operator=(const QuizLoader&) = delete;
+
+			/**
 			* @brief Returns a list of quizzez stored in the data folder.
 			*
 			* @return The list of quizzes.

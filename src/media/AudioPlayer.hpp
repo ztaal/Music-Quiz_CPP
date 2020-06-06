@@ -39,6 +39,12 @@ namespace media {
 		typedef std::shared_ptr< AudioPlayer > Ptr;
 
 		/**
+		 * @brief Deleted the copy and assignment constructor.
+		 */
+		AudioPlayer(const AudioPlayer&) = delete;
+		AudioPlayer& operator=(const AudioPlayer&) = delete;
+
+		/**
 		 * @brief Plays a video.
 		 *
 		 * @param[in] audioFile The name of the audio file to play.

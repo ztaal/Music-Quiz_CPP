@@ -25,6 +25,12 @@ namespace MusicQuiz {
 		 */
 		virtual ~QuizIntroScreen();
 
+		/**
+		 * @brief Deleted the copy and assignment constructor.
+		 */
+		QuizIntroScreen(const QuizIntroScreen&) = delete;
+		QuizIntroScreen& operator=(const QuizIntroScreen&) = delete;
+
 	public slots:
 
 	private slots:

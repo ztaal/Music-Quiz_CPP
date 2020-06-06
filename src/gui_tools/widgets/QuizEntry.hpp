@@ -55,6 +55,12 @@ namespace MusicQuiz {
 		 */
 		virtual ~QuizEntry() = default;
 
+		/**
+		 * @brief Deleted the copy and assignment constructor.
+		 */
+		QuizEntry(const QuizEntry&) = delete;
+		QuizEntry& operator=(const QuizEntry&) = delete;
+
 		enum class EntryState
 		{
 			IDLE = 1, // Default

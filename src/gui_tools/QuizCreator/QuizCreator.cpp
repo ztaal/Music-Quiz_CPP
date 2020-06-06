@@ -71,7 +71,7 @@ void MusicQuiz::QuizCreator::createLayout()
 
 	/** Tab Widget */
 	_tabWidget = new QTabWidget;
-	mainlayout->addWidget(_tabWidget, 0, 0, 1, 3);
+	mainlayout->addWidget(_tabWidget, 0, 0, 1, 4);
 
 	/** Setup Tab */
 	QWidget* setupTab = new QWidget;
@@ -147,20 +147,25 @@ void MusicQuiz::QuizCreator::createLayout()
 	setupTabLayout->addWidget(_rowCategoriesTable, ++row, 0, 1, 2);
 
 	/** Bottom Buttons */
-	QPushButton* saveQuizBtn = new QPushButton("Save Quiz");
-	saveQuizBtn->setObjectName("quizCreatorBtn");
-	connect(saveQuizBtn, SIGNAL(released()), this, SLOT(saveQuiz()));
-	mainlayout->addWidget(saveQuizBtn, 1, 0, 1, 1);
-
 	QPushButton* previewQuizBtn = new QPushButton("Preview");
 	previewQuizBtn->setObjectName("quizCreatorBtn");
 	connect(previewQuizBtn, SIGNAL(released()), this, SLOT(previewQuiz()));
-	mainlayout->addWidget(previewQuizBtn, 1, 1, 1, 1);
+	mainlayout->addWidget(previewQuizBtn, 1, 0, 1, 1);
+
+	QPushButton* saveQuizBtn = new QPushButton("Save Quiz");
+	saveQuizBtn->setObjectName("quizCreatorBtn");
+	connect(saveQuizBtn, SIGNAL(released()), this, SLOT(saveQuiz()));
+	mainlayout->addWidget(saveQuizBtn, 1, 1, 1, 1);
+
+	QPushButton* loadQuizBtn = new QPushButton("Load Quiz");
+	loadQuizBtn->setObjectName("quizCreatorBtn");
+	connect(loadQuizBtn, SIGNAL(released()), this, SLOT(loadQuiz()));
+	mainlayout->addWidget(loadQuizBtn, 1, 2, 1, 1);
 
 	QPushButton* quitCreatorBtn = new QPushButton("Quit");
 	quitCreatorBtn->setObjectName("quizCreatorBtn");
 	connect(quitCreatorBtn, SIGNAL(released()), this, SLOT(quitCreator()));
-	mainlayout->addWidget(quitCreatorBtn, 1, 2, 1, 1);
+	mainlayout->addWidget(quitCreatorBtn, 1, 3, 1, 1);
 
 	/** Set Layout */
 	setLayout(mainlayout);
@@ -616,6 +621,12 @@ void MusicQuiz::QuizCreator::saveQuiz()
 		QMessageBox::warning(this, "Failed to Save Quiz", "Failed to save the quiz. Unkown Error.");
 	}
 }
+
+void MusicQuiz::QuizCreator::loadQuiz()
+{
+
+}
+
 
 void MusicQuiz::QuizCreator::previewQuiz()
 {

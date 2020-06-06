@@ -35,6 +35,12 @@ namespace MusicQuiz {
 		 */
 		virtual ~QuizSelector() = default;
 
+		/**
+		 * @brief Deleted the copy and assignment constructor.
+		 */
+		QuizSelector(const QuizSelector&) = delete;
+		QuizSelector& operator=(const QuizSelector&) = delete;
+
 	public slots:
 		/**
 		 * @brief Handles the close event.

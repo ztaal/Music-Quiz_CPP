@@ -29,6 +29,12 @@ namespace MusicQuiz {
 		virtual ~QuizCategory() = default;
 
 		/**
+		 * @brief Deleted the copy and assignment constructor.
+		 */
+		QuizCategory(const QuizCategory&) = delete;
+		QuizCategory& operator=(const QuizCategory&) = delete;
+
+		/**
 		 * @brief Gets the size of the category.
 		 *
 		 * @return The size of the category.

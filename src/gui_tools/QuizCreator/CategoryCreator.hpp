@@ -32,6 +32,12 @@ namespace MusicQuiz {
 		 */
 		virtual ~CategoryCreator() = default;
 
+		/**
+		 * @brief Deleted the copy and assignment constructor.
+		 */
+		CategoryCreator(const CategoryCreator&) = delete;
+		CategoryCreator& operator=(const CategoryCreator&) = delete;
+
 	public slots:
 		/**
 		 * @brief Updates the category name

@@ -30,6 +30,12 @@ namespace MusicQuiz {
 		 */
 		virtual ~QuizSettingsDialog() = default;
 
+		/**
+		 * @brief Deleted the copy and assignment constructor.
+		 */
+		QuizSettingsDialog(const QuizSettingsDialog&) = delete;
+		QuizSettingsDialog& operator=(const QuizSettingsDialog&) = delete;
+
 	public slots:
 		/**
 		 * @brief Handles the key press events.
