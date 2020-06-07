@@ -53,16 +53,10 @@ int main(int argc, char* argv[])
 		} catch ( const std::exception& err ) {
 			LOG_ERROR("Failed to start Music Quiz. " << err.what());
 			errorMessage("Quiz Creator", "Quiz Creator Error. " + std::string(err.what()));
-#if WINDOWS_INTERFACE
-			system("pause");
-#endif
 			return 1;
 		} catch ( ... ) {
 			LOG_ERROR("Failed to start Music Quiz. Unknown Error.");
 			errorMessage("Quiz Creator", "Quiz Creator Error. Unknown Error.");
-#if WINDOWS_INTERFACE
-			system("pause");
-#endif
 			return 1;
 		}
 	} else if ( msgBox.clickedButton() == quizCreatorButton ) {
@@ -76,24 +70,16 @@ int main(int argc, char* argv[])
 		} catch ( const std::exception& err ) {
 			LOG_ERROR("Failed to start Quiz Creator. " << err.what());
 			errorMessage("Quiz Creator", "Quiz Creator Error. " + std::string(err.what()));
-#if WINDOWS_INTERFACE
-			system("pause");
-#endif
 			return 1;
 		} catch ( ... ) {
 			LOG_ERROR("Failed to start Quiz Creator. Unknown Error.");
 			errorMessage("Quiz Creator", "Quiz Creator Error. Unknown Error.");
-#if WINDOWS_INTERFACE
-			system("pause");
-#endif
 			return 1;
 		}
 	} else {
 		/** Close Program */
 		LOG_INFO("Exit Program Selected.");
 	}
-
-	system("pause");
 
 	return 0;
 }
