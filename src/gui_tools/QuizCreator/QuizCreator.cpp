@@ -500,7 +500,6 @@ void MusicQuiz::QuizCreator::saveQuiz()
 		guessTheCategory_tree.put("<xmlattr>.enabled", _hiddenCategoriesCheckbox->isChecked());
 
 		/** Categories */
-		std::vector<std::string> songFiles;
 		const size_t numberOfCategories = _categoriesTable->rowCount();
 		for ( size_t i = 0; i < numberOfCategories; ++i ) {			
 			/** Get Category */
