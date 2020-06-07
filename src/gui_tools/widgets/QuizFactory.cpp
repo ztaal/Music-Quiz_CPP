@@ -284,8 +284,8 @@ void MusicQuiz::QuizFactory::saveQuiz(const MusicQuiz::QuizCreator::QuizData& da
 						media_tree.put("SongFile", songPath);
 
 						/** Copy Media File */
-						boost::filesystem::copy_file(videoFile, mediaDirectoryPath + "/" + categoryName + "/" + entryName + "_video.mp4", boost::filesystem::copy_option::overwrite_if_exists);
-						boost::filesystem::copy_file(songFile, mediaDirectoryPath + "/" + categoryName + "/" + entryName + "_song.mp3", boost::filesystem::copy_option::overwrite_if_exists);
+						boost::filesystem::copy_file(videoFile, mediaDirectoryPath + "/" + categoryName + "/" + entryName + ".mp4", boost::filesystem::copy_option::overwrite_if_exists);
+						boost::filesystem::copy_file(songFile, mediaDirectoryPath + "/" + categoryName + "/" + entryName + ".mp3", boost::filesystem::copy_option::overwrite_if_exists);
 					}
 				}
 			}
@@ -400,18 +400,19 @@ MusicQuiz::QuizCreator::QuizData MusicQuiz::QuizFactory::loadQuiz(const std::str
 									MusicQuiz::EntryCreator* entry = new MusicQuiz::EntryCreator(entryName, points, audioPlayer, category);
 									entry->setAnswer(QString::fromStdString(it->second.get<std::string>("Answer")));
 
-									try {
-										entry->setSongStartTime(it->second.get<size_t>("StartTime"));
-									} catch ( ... ) {}
-
-									try {
-										entry->setAnswerStartTime(it->second.get<size_t>("AnswerStartTime"));
-									} catch ( ... ) {}
-
 									/** Media Type */
 									const std::string type = it->second.get<std::string>("<xmlattr>.type");
 									if ( type == "song" ) { // Song
 										entry->setType(MusicQuiz::EntryCreator::EntryType::Song);
+
+										/** Start Time */
+										try {
+											entry->setSongStartTime(it->second.get<size_t>("StartTime"));
+										} catch ( ... ) {}
+
+										try {
+											entry->setAnswerStartTime(it->second.get<size_t>("AnswerStartTime"));
+										} catch ( ... ) {}
 
 										/** Song File */
 										try {
@@ -429,6 +430,10 @@ MusicQuiz::QuizCreator::QuizData MusicQuiz::QuizFactory::loadQuiz(const std::str
 											entry->setVideoSongFile(songFile);
 										} catch ( ... ) {}
 
+										try {
+											entry->setVideoSongStartTime(it->second.get<size_t>("VideoSongStartTime"));
+										} catch ( ... ) {}
+
 										/** Video File */
 										try {
 											QString videoFile = QString::fromStdString(full_path.string() + "/" + it->second.get<std::string>("Media.VideoFile"));
@@ -437,7 +442,11 @@ MusicQuiz::QuizCreator::QuizData MusicQuiz::QuizFactory::loadQuiz(const std::str
 										} catch ( ... ) {}
 
 										try {
-											entry->setVideoStartTime(it->second.get<size_t>("VideoSongStartTime"));
+											entry->setVideoStartTime(it->second.get<size_t>("StartTime"));
+										} catch ( ... ) {}
+
+										try {
+											entry->setVideoAnswerStartTime(it->second.get<size_t>("AnswerStartTime"));
 										} catch ( ... ) {}
 									}
 									categorieEntries.push_back(entry);

@@ -85,9 +85,16 @@ namespace MusicQuiz {
 		/**
 		 * @brief Updates the name of the tab.
 		 *
-		 * param[in] str The new name.
+		 * @param[in] str The new name.
 		 */
 		void updateCategoryTabName(const QString& str);
+
+		/**
+		 * @brief Gets the list of row categories.
+		 *
+		 * @return The list of row categories.
+		 */
+		const std::vector< QString > getRowCategories() const;
 
 		/**
 		 * @brief Saves the quiz.
@@ -122,7 +129,10 @@ namespace MusicQuiz {
 		void quitCreator();
 
 
+
 		void categoryOrderChanged(int, int, int);
+
+
 
 	signals:
 
@@ -145,7 +155,6 @@ namespace MusicQuiz {
 		QTableWidget* _categoriesTable = nullptr;
 		QTableWidget* _rowCategoriesTable = nullptr;
 
-		std::vector< QString > _rowCategories;
 		std::vector< MusicQuiz::CategoryCreator* > _categories;
 
 		/** Audio Player */

@@ -264,7 +264,6 @@ void MusicQuiz::QuizCreator::addRowCategory()
 
 	QWidget* layoutWidget = new QWidget;
 	layoutWidget->setLayout(removeBtnLayout);
-	_rowCategories.push_back(rowCategoryName->text());
 	_rowCategoriesTable->setCellWidget(rowCategoryCount, 1, layoutWidget);
 }
 
@@ -397,7 +396,6 @@ void MusicQuiz::QuizCreator::removeRowCategory()
 
 	/** Delete Row Category in table */
 	_rowCategoriesTable->removeRow(index);
-	_rowCategories.erase(_rowCategories.begin() + index);
 
 	/** Update Button Indices */
 	for ( size_t i = 0; i < _rowCategoriesTable->rowCount(); ++i ) {
@@ -438,6 +436,30 @@ void MusicQuiz::QuizCreator::updateCategoryTabName(const QString& str)
 	}
 }
 
+const std::vector< QString > MusicQuiz::QuizCreator::getRowCategories() const
+{
+	/** Sanity Check */
+	if ( _rowCategoriesTable == nullptr ) {
+		return std::vector< QString >();
+	}
+
+	/** Get Number of Row Categories */
+	const size_t rowCategoryCount = _rowCategoriesTable->rowCount();
+
+	/** Get Row Category Name */
+	std::vector< QString > rowCategories;
+	for ( size_t i = 0; i < rowCategoryCount; ++i ) {
+		QLineEdit* lineEdit = qobject_cast<QLineEdit*>(_rowCategoriesTable->cellWidget(i, 0));
+		if ( lineEdit == nullptr ) {
+			continue;
+		}
+		rowCategories.push_back(lineEdit->text());
+	}
+
+	/** Return */
+	return rowCategories;
+}
+
 void MusicQuiz::QuizCreator::saveQuiz()
 {
 	/** Stop Song */
@@ -463,7 +485,7 @@ void MusicQuiz::QuizCreator::saveQuiz()
 	quizData.quizCategories = _categories;
 
 	/** Quiz Row Categories */
-	quizData.quizRowCategories = _rowCategories;
+	quizData.quizRowCategories = getRowCategories();
 
 	/** Save Quiz */
 	MusicQuiz::QuizFactory::saveQuiz(quizData, this);
@@ -525,7 +547,6 @@ void MusicQuiz::QuizCreator::loadQuiz(const std::string& quizName)
 	_categoriesTable->setRowCount(0);
 
 	/** Clear Row Categories */
-	_rowCategories.clear();
 	_rowCategoriesTable->clear();
 	_rowCategoriesTable->clearContents();
 	_rowCategoriesTable->setRowCount(0);
@@ -589,7 +610,6 @@ void MusicQuiz::QuizCreator::loadQuiz(const std::string& quizName)
 	}
 
 	/** Add Row Categories */
-	_rowCategories = data.quizRowCategories;
 	if ( _rowCategoriesTable != nullptr ) {
 		for ( size_t i = 0; i < data.quizRowCategories.size(); ++i ) {
 			/** Get Number of Row Categories */

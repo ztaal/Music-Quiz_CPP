@@ -3,15 +3,12 @@
 #include <QTime>
 #include <QLabel>
 #include <QString>
-#include <QScrollArea>
 #include <QFileDialog>
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QRadioButton>
 
 #include <boost/filesystem.hpp>
-
-#include "common/Log.hpp"
 
 
 MusicQuiz::EntryCreator::EntryCreator(const QString& name, const size_t points, const media::AudioPlayer::Ptr& audioPlayer, QWidget* parent) :
@@ -724,9 +721,16 @@ void MusicQuiz::EntryCreator::setEntryType(int index)
 		/** Set Type */
 		_entryType = EntryType::Video;
 
-		/** Set Video Minimum Size */
-		const int width = this->width();
-		const int height = int(this->width() * 0.75);
+		/** Set Video Minimum Size */	
+		int width = 0;
+		int height = 0;
+		if ( parentWidget()->parentWidget() != nullptr ) {
+			width = this->parentWidget()->parentWidget()->width();
+			height = int(this->parentWidget()->parentWidget()->width() * 0.75);
+		} else {
+			width = this->width();
+			height = int(this->width() * 0.75);
+		}
 		_videoPlayer->setMinimumSize(QSize(width * 0.5, height * 0.5));
 		_videoPlayer->resize(QSize(width * 0.5, height * 0.5));
 
@@ -818,11 +822,11 @@ void MusicQuiz::EntryCreator::setType(const EntryType& type)
 	/** Set Type */
 	_entryType = type;
 	if ( _entryType == EntryType::Song ) {
-		setEntryType(0);
 		_buttonGroup->button(0)->setChecked(true);
+		setEntryType(0);
 	} else if ( _entryType == EntryType::Video ) {
-		setEntryType(1);
 		_buttonGroup->button(1)->setChecked(true);
+		setEntryType(1);
 	}
 }
 
@@ -1011,5 +1015,5 @@ const size_t MusicQuiz::EntryCreator::getVideoAnswerStartTime()
 		return 0;
 	}
 
-	return toMSec(_answerStartTimeEdit->time());
+	return toMSec(_videoAnswerStartTimeEdit->time());
 }

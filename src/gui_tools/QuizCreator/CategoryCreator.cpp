@@ -8,7 +8,6 @@
 #include <QMessageBox>
 #include <QTableWidgetItem>
 
-#include "common/Log.hpp"
 #include "gui_tools/QuizCreator/EntryCreator.hpp"
 
 
@@ -114,7 +113,7 @@ void MusicQuiz::CategoryCreator::addEntry()
 
 	/** Add Tab */
 	const size_t points = (entryCount + 1) * 100;
-	MusicQuiz::EntryCreator* entry = new MusicQuiz::EntryCreator(entryNameStr, points, _audioPlayer);
+	MusicQuiz::EntryCreator* entry = new MusicQuiz::EntryCreator(entryNameStr, points, _audioPlayer, this);
 	_entries.push_back(entry);
 	_tabWidget->addTab(entry, entryNameStr);
 }
