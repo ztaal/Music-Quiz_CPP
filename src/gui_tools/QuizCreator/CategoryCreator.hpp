@@ -54,11 +54,23 @@ namespace MusicQuiz {
 		const QString getName() const;
 
 		/**
-		 * @brief Gets the entries
+		 * @brief Sets the entries
+		 *
+		 * @param[in] entries The category entries.
+		 */
+		void setEntries(const std::vector< MusicQuiz::EntryCreator* >& entries);
+
+		/**
+		 * @brief Gets the entries.
 		 *
 		 * @return The category entries.
 		 */
 		const std::vector< MusicQuiz::EntryCreator* > getEntries() const;
+
+		/**
+		 * @brief Clears the entries.
+		 */
+		void clearEntries();
 
 	private slots:
 		/**

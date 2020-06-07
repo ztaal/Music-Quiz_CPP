@@ -8,7 +8,6 @@
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QRadioButton>
-#include <QButtonGroup>
 
 #include <boost/filesystem.hpp>
 
@@ -72,14 +71,14 @@ void MusicQuiz::EntryCreator::createLayout()
 	label->setObjectName("quizCreatorLabel");
 	typeLayout->addWidget(label);
 
-	QButtonGroup* buttonGroup = new QButtonGroup;
+	_buttonGroup = new QButtonGroup;
 	QRadioButton* songBtn = new QRadioButton("Song");
 	QRadioButton* videoBtn = new QRadioButton("Video");
 	songBtn->setObjectName("quizCreatorRadioButton");
 	videoBtn->setObjectName("quizCreatorRadioButton");
-	buttonGroup->addButton(songBtn, 0);
-	buttonGroup->addButton(videoBtn, 1);
-	connect(buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(setEntryType(int)));
+	_buttonGroup->addButton(songBtn, 0);
+	_buttonGroup->addButton(videoBtn, 1);
+	connect(_buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(setEntryType(int)));
 	songBtn->setChecked(true);
 
 	typeLayout->addWidget(songBtn);
@@ -386,7 +385,7 @@ void MusicQuiz::EntryCreator::playSong()
 		fileName = _songFileLineEdit->text();
 
 		/** Get Start and End Time */
-		startTime = getMSec(_songStartTimeEdit->time());
+		startTime = toMSec(_songStartTimeEdit->time());
 	} else if ( type == "songAnswer" ) {
 		/** Sanity Check */
 		if ( _answerStartTimeEdit == nullptr || _songFileLineEdit == nullptr ) {
@@ -397,7 +396,7 @@ void MusicQuiz::EntryCreator::playSong()
 		fileName = _songFileLineEdit->text();
 
 		/** Get Start and End Time */
-		startTime = getMSec(_answerStartTimeEdit->time());
+		startTime = toMSec(_answerStartTimeEdit->time());
 	} else if ( type == "videoSong" ) {
 		/** Sanity Check */
 		if ( _videoSongStartTimeEdit == nullptr || _videoSongFileLineEdit == nullptr ) {
@@ -408,7 +407,7 @@ void MusicQuiz::EntryCreator::playSong()
 		fileName = _videoSongFileLineEdit->text();
 
 		/** Get Start and End Time */
-		startTime = getMSec(_videoSongStartTimeEdit->time());
+		startTime = toMSec(_videoSongStartTimeEdit->time());
 	}
 
 	/** Check if file is valid */
@@ -479,8 +478,8 @@ void MusicQuiz::EntryCreator::playVideo()
 		}
 
 		/** Get Start and End Time */
-		const size_t videoStartTime = getMSec(_songStartTimeEdit->time());
-		const size_t songStartTime = getMSec(_videoSongStartTimeEdit->time());
+		const size_t videoStartTime = toMSec(_songStartTimeEdit->time());
+		const size_t songStartTime = toMSec(_videoSongStartTimeEdit->time());
 
 		/** Play Video and Song */
 		_videoPlayer->play(videoFileName, videoStartTime, true);
@@ -499,7 +498,7 @@ void MusicQuiz::EntryCreator::playVideo()
 		}
 
 		/** Get Start and End Time */
-		const size_t videoStartTime = getMSec(_videoAnswerStartTimeEdit->time());
+		const size_t videoStartTime = toMSec(_videoAnswerStartTimeEdit->time());
 
 		/** Play Video */
 		_videoPlayer->play(videoFileName, videoStartTime);
@@ -676,9 +675,23 @@ bool MusicQuiz::EntryCreator::isVideoFileValid(const QString& fileName)
 	return true;
 }
 
-size_t MusicQuiz::EntryCreator::getMSec(const QTime& time)
+size_t MusicQuiz::EntryCreator::toMSec(const QTime& time)
 {
 	return time.hour() * 60000 + time.minute() * 1000;
+}
+
+QTime MusicQuiz::EntryCreator::fromMSec(size_t time)
+{
+	/** Hour */
+	const size_t hour = time / 3600000;
+	time = time - 3600000 * hour;
+
+	/** Minute */
+	const size_t minute = time / 60000;
+	time = time - 60000 * minute;
+
+	/** Return */
+	return QTime(hour, minute);
 }
 
 void MusicQuiz::EntryCreator::setEntryType(int index)
@@ -753,6 +766,17 @@ const QString MusicQuiz::EntryCreator::getName() const
 	return _entryName;
 }
 
+void MusicQuiz::EntryCreator::setAnswer(const QString& answer)
+{
+	/** Sanity Check */
+	if ( _answerLineEdit == nullptr ) {
+		return;
+	}
+
+	/** Set Answer */
+	_answerLineEdit->setText(answer);
+}
+
 const QString MusicQuiz::EntryCreator::getAnswer() const
 {
 	/** Sanity Check */
@@ -768,14 +792,54 @@ void MusicQuiz::EntryCreator::pointsChanged(int points)
 	_points = points;
 }
 
+void MusicQuiz::EntryCreator::setPoints(const size_t points)
+{
+	/** Sanity Check */
+	if ( _pointsSpinbox == nullptr ) {
+		return;
+	}
+
+	/** Set Answer */
+	_pointsSpinbox->setValue(points);
+}
+
 const size_t MusicQuiz::EntryCreator::getPoints() const
 {
 	return _points;
 }
 
+void MusicQuiz::EntryCreator::setType(const EntryType& type)
+{
+	/** Sanity Check */
+	if ( _pointsSpinbox == nullptr ) {
+		return;
+	}
+
+	/** Set Type */
+	_entryType = type;
+	if ( _entryType == EntryType::Song ) {
+		setEntryType(0);
+		_buttonGroup->button(0)->setChecked(true);
+	} else if ( _entryType == EntryType::Video ) {
+		setEntryType(1);
+		_buttonGroup->button(1)->setChecked(true);
+	}
+}
+
 const MusicQuiz::EntryCreator::EntryType MusicQuiz::EntryCreator::getType() const
 {
 	return _entryType;
+}
+
+void MusicQuiz::EntryCreator::setSongFile(const QString& file)
+{
+	/** Sanity Check */
+	if ( _songFileLineEdit == nullptr ) {
+		return;
+	}
+
+	/** Set File */
+	_songFileLineEdit->setText(file);
 }
 
 const QString MusicQuiz::EntryCreator::getSongFile()
@@ -793,6 +857,17 @@ const QString MusicQuiz::EntryCreator::getSongFile()
 	return "";
 }
 
+void MusicQuiz::EntryCreator::setVideoFile(const QString& file)
+{
+	/** Sanity Check */
+	if ( _videoFileLineEdit == nullptr ) {
+		return;
+	}
+
+	/** Set File */
+	_videoFileLineEdit->setText(file);
+}
+
 const QString MusicQuiz::EntryCreator::getVideoFile()
 {
 	/** Sanity Check */
@@ -806,6 +881,17 @@ const QString MusicQuiz::EntryCreator::getVideoFile()
 	}
 
 	return "";
+}
+
+void MusicQuiz::EntryCreator::setVideoSongFile(const QString& file)
+{
+	/** Sanity Check */
+	if ( _videoSongFileLineEdit == nullptr ) {
+		return;
+	}
+
+	/** Set File */
+	_videoSongFileLineEdit->setText(file);
 }
 
 const QString MusicQuiz::EntryCreator::getVideoSongFile()
@@ -823,6 +909,17 @@ const QString MusicQuiz::EntryCreator::getVideoSongFile()
 	return "";
 }
 
+void MusicQuiz::EntryCreator::setSongStartTime(const size_t time)
+{
+	/** Sanity Check */
+	if ( _songStartTimeEdit == nullptr ) {
+		return;
+	}
+
+	/** Set Time */
+	_songStartTimeEdit->setTime(fromMSec(time));
+}
+
 const size_t MusicQuiz::EntryCreator::getSongStartTime()
 {
 	/** Sanity Check */
@@ -830,7 +927,18 @@ const size_t MusicQuiz::EntryCreator::getSongStartTime()
 		return 0;
 	}
 
-	return getMSec(_songStartTimeEdit->time());
+	return toMSec(_songStartTimeEdit->time());
+}
+
+void MusicQuiz::EntryCreator::setAnswerStartTime(const size_t time)
+{
+	/** Sanity Check */
+	if ( _answerStartTimeEdit == nullptr ) {
+		return;
+	}
+
+	/** Set Time */
+	_answerStartTimeEdit->setTime(fromMSec(time));
 }
 
 const size_t MusicQuiz::EntryCreator::getAnswerStartTime()
@@ -840,7 +948,18 @@ const size_t MusicQuiz::EntryCreator::getAnswerStartTime()
 		return 0;
 	}
 
-	return getMSec(_answerStartTimeEdit->time());
+	return toMSec(_answerStartTimeEdit->time());
+}
+
+void MusicQuiz::EntryCreator::setVideoStartTime(const size_t time)
+{
+	/** Sanity Check */
+	if ( _videoStartTimeEdit == nullptr ) {
+		return;
+	}
+
+	/** Set Time */
+	_videoStartTimeEdit->setTime(fromMSec(time));
 }
 
 const size_t MusicQuiz::EntryCreator::getVideoStartTime()
@@ -850,7 +969,18 @@ const size_t MusicQuiz::EntryCreator::getVideoStartTime()
 		return 0;
 	}
 
-	return getMSec(_videoStartTimeEdit->time());
+	return toMSec(_videoStartTimeEdit->time());
+}
+
+void MusicQuiz::EntryCreator::setVideoSongStartTime(const size_t time)
+{
+	/** Sanity Check */
+	if ( _videoSongStartTimeEdit == nullptr ) {
+		return;
+	}
+
+	/** Set Time */
+	_videoSongStartTimeEdit->setTime(fromMSec(time));
 }
 
 const size_t MusicQuiz::EntryCreator::getVideoSongStartTime()
@@ -860,7 +990,18 @@ const size_t MusicQuiz::EntryCreator::getVideoSongStartTime()
 		return 0;
 	}
 
-	return getMSec(_videoSongStartTimeEdit->time());
+	return toMSec(_videoSongStartTimeEdit->time());
+}
+
+void MusicQuiz::EntryCreator::setVideoAnswerStartTime(const size_t time)
+{
+	/** Sanity Check */
+	if ( _videoAnswerStartTimeEdit == nullptr ) {
+		return;
+	}
+
+	/** Set Time */
+	_videoAnswerStartTimeEdit->setTime(fromMSec(time));
 }
 
 const size_t MusicQuiz::EntryCreator::getVideoAnswerStartTime()
@@ -870,5 +1011,5 @@ const size_t MusicQuiz::EntryCreator::getVideoAnswerStartTime()
 		return 0;
 	}
 
-	return getMSec(_answerStartTimeEdit->time());
+	return toMSec(_answerStartTimeEdit->time());
 }

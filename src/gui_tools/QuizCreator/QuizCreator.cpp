@@ -254,7 +254,7 @@ void MusicQuiz::QuizCreator::addRowCategory()
 	_rowCategoriesTable->setCellWidget(rowCategoryCount, 0, rowCategoryName);
 
 	/** Add Remove Category Button */
-	QPushButton* removeBtn = new QPushButton("X");
+	QPushButton* removeBtn = new QPushButton;
 	removeBtn->setObjectName("quizCreatorRemoveBtn");
 	removeBtn->setProperty("index", rowCategoryCount);
 	connect(removeBtn, SIGNAL(released()), this, SLOT(removeRowCategory()));
@@ -326,6 +326,9 @@ void MusicQuiz::QuizCreator::removeCategory()
 	if ( resBtn != QMessageBox::Yes ) {
 		return;
 	}
+
+	/** Delete Entries in the Category */
+	_categories[index]->clearEntries();
 
 	/** Delete Category in table */
 	_categoriesTable->removeRow(index);
@@ -485,7 +488,133 @@ void MusicQuiz::QuizCreator::loadQuiz(const std::string& quizName)
 		return;
 	}
 
-	LOG_INFO("Loading quiz '" << quizName << "'");
+	/** Load Quiz */
+	LOG_INFO("Loading quiz '" << quizName << "'"); 
+	QuizData data;
+	try {
+		data = MusicQuiz::QuizFactory::loadQuiz(quizName, _audioPlayer, _videoPlayer, this);
+	} catch ( const std::exception& err ) {
+		QMessageBox::warning(this, "Info", "Failed to load quiz. " + QString::fromStdString(err.what()));
+		return;
+	} catch ( ... ) {
+		QMessageBox::warning(this, "Info", "Failed to load quiz.");
+		return;
+	}
+
+	/** Remove Tabs */
+	for ( size_t i = _tabWidget->count() - 1; i > 0; --i ) {
+		_tabWidget->removeTab(i);
+	}
+
+	/** Clear Categories */
+	for ( int i = _categories.size() - 1; i >= 0; --i ) {
+		_categories[i]->clearEntries();
+		_categories[i] = nullptr;
+		delete _categories[i];
+	}
+	_categories.clear();
+	_categoriesTable->clear();
+	_categoriesTable->clearContents();
+	_categoriesTable->setRowCount(0);
+
+	/** Clear Row Categories */
+	_rowCategories.clear();
+	_rowCategoriesTable->clear();
+	_rowCategoriesTable->clearContents();
+	_rowCategoriesTable->setRowCount(0);
+
+	/** Set Name */
+	if ( _quizNameLineEdit != nullptr ) {
+		_quizNameLineEdit->setText(data.quizName);
+	}
+
+	/** Set Description */
+	if ( _quizDescriptionTextEdit != nullptr ) {
+		_quizDescriptionTextEdit->setText(data.quizDescription);
+	}
+
+	/** Add Categories to Table */
+	_categories = data.quizCategories;
+	if ( _categoriesTable != nullptr ) {
+		for ( size_t i = 0; i < data.quizCategories.size(); ++i ) {
+			/** Get Number of Entries */
+			const size_t categoryCount = _categoriesTable->rowCount();
+
+			/** Insert New Entry */
+			_categoriesTable->insertRow(categoryCount);
+
+			/** Add Line Edit */
+			QLineEdit* categoryName = new QLineEdit(data.quizCategories[i]->getName());
+			categoryName->setObjectName("quizCreatorCategoryLineEdit");
+			categoryName->setProperty("index", categoryCount);
+			connect(categoryName, SIGNAL(textChanged(const QString&)), this, SLOT(updateCategoryTabName(const QString&)));
+			_categoriesTable->setCellWidget(categoryCount, 0, categoryName);
+
+			/** Add Edit Category Button */
+			QPushButton* editBtn = new QPushButton;
+			editBtn->setObjectName("quizCreatorEditBtn");
+			editBtn->setProperty("index", categoryCount);
+			connect(editBtn, SIGNAL(released()), this, SLOT(editCategory()));
+
+			QHBoxLayout* btnLayout = new QHBoxLayout;
+			btnLayout->addWidget(editBtn, Qt::AlignCenter);
+
+			QWidget* layoutWidget = new QWidget;
+			layoutWidget->setLayout(btnLayout);
+			_categoriesTable->setCellWidget(categoryCount, 1, layoutWidget);
+
+			/** Add Remove Entry Button */
+			QPushButton* removeBtn = new QPushButton;
+			removeBtn->setObjectName("quizCreatorRemoveBtn");
+			removeBtn->setProperty("index", categoryCount);
+			connect(removeBtn, SIGNAL(released()), this, SLOT(removeCategory()));
+
+			btnLayout = new QHBoxLayout;
+			btnLayout->addWidget(removeBtn, Qt::AlignCenter);
+
+			layoutWidget = new QWidget;
+			layoutWidget->setLayout(btnLayout);
+			_categoriesTable->setCellWidget(categoryCount, 2, layoutWidget);
+
+			/** Add Tab */
+			_tabWidget->addTab(_categories[i], data.quizCategories[i]->getName());
+		}
+	}
+
+	/** Add Row Categories */
+	_rowCategories = data.quizRowCategories;
+	if ( _rowCategoriesTable != nullptr ) {
+		for ( size_t i = 0; i < data.quizRowCategories.size(); ++i ) {
+			/** Get Number of Row Categories */
+			const size_t rowCategoryCount = _rowCategoriesTable->rowCount();
+
+			/** Insert New Category */
+			_rowCategoriesTable->insertRow(rowCategoryCount);
+
+			/** Add Line Edit */
+			QLineEdit* rowCategoryName = new QLineEdit(data.quizRowCategories[i]);
+			rowCategoryName->setObjectName("quizCreatorCategoryLineEdit");
+			_rowCategoriesTable->setCellWidget(rowCategoryCount, 0, rowCategoryName);
+
+			/** Add Remove Category Button */
+			QPushButton* removeBtn = new QPushButton;
+			removeBtn->setObjectName("quizCreatorRemoveBtn");
+			removeBtn->setProperty("index", rowCategoryCount);
+			connect(removeBtn, SIGNAL(released()), this, SLOT(removeRowCategory()));
+
+			QHBoxLayout* removeBtnLayout = new QHBoxLayout;
+			removeBtnLayout->addWidget(removeBtn, Qt::AlignCenter);
+
+			QWidget* layoutWidget = new QWidget;
+			layoutWidget->setLayout(removeBtnLayout);
+			_rowCategoriesTable->setCellWidget(rowCategoryCount, 1, layoutWidget);
+		}
+	}
+
+	/** Hidden Categories */
+	if ( _hiddenCategoriesCheckbox != nullptr ) {
+		_hiddenCategoriesCheckbox->setChecked(data.guessTheCategory);
+	}
 }
 
 void MusicQuiz::QuizCreator::previewQuiz()

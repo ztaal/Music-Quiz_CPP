@@ -76,6 +76,19 @@ namespace MusicQuiz {
 		static void saveQuiz(const MusicQuiz::QuizCreator::QuizData& data, QWidget* parent = nullptr);
 
 		/**
+		 * @brief Loads a quiz.
+		 *
+		 * @param[in] quizName The quiz name to load.
+		 * @param[in] audioPlayer The audio player.
+		 * @param[in] videoPlayer The video player
+		 * @param[in] parent The quiz board parent.
+		 *
+		 * @return The quiz data.
+		 */
+		static MusicQuiz::QuizCreator::QuizData loadQuiz(const std::string& quizName, const std::shared_ptr< media::AudioPlayer >& audioPlayer,
+			const std::shared_ptr< media::VideoPlayer >& videoPlayer, QWidget* parent = nullptr);
+
+		/**
 		 * @brief Deletes a directory.
 		 *
 		 * @param[in] dir The directory to delete.

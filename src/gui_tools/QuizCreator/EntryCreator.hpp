@@ -12,6 +12,7 @@
 #include <QCheckBox>
 #include <QGridLayout>
 #include <QPushButton>
+#include <QButtonGroup>
 #include <QTableWidget>
 
 #include "media/AudioPlayer.hpp"
@@ -66,11 +67,25 @@ namespace MusicQuiz {
 		const QString getName() const;
 
 		/**
+		 * @brief Sets the entry answer.
+		 *
+		 * @param[in] answer The answer.
+		 */
+		void setAnswer(const QString& answer);
+
+		/**
 		 * @brief Gets the entry answer.
 		 *
 		 * @return The answer.
 		 */
 		const QString getAnswer() const;
+
+		/**
+		 * @brief Sets the points.
+		 *
+		 * @param[in] points The points.
+		 */
+		void setPoints(size_t points);
 
 		/**
 		 * @brief Gets the points.
@@ -80,11 +95,25 @@ namespace MusicQuiz {
 		const size_t getPoints() const;
 
 		/**
+		 * @brief Sets the entry type [Song, Video].
+		 *
+		 * @param[in] type The entry type.
+		 */
+		void setType(const EntryType& type);
+
+		/**
 		 * @brief Gets the entry type [Song, Video].
 		 *
 		 * @return The entry type.
 		 */
 		const EntryType getType() const;
+
+		/**
+		 * @brief Sets the song file.
+		 *
+		 * @param[in] file The song file.
+		 */
+		void setSongFile(const QString& file);
 
 		/**
 		 * @brief Gets the song file.
@@ -94,11 +123,25 @@ namespace MusicQuiz {
 		const QString getSongFile();
 
 		/**
+		 * @brief Sets the video file.
+		 *
+		 * @param[in] file The video file.
+		 */
+		void setVideoFile(const QString& file);
+
+		/**
 		 * @brief Gets the video file.
 		 *
 		 * @return The video file.
 		 */
 		const QString getVideoFile();
+
+		/**
+		 * @brief Sets the video song file.
+		 *
+		 * @param[in] file The video song file.
+		 */
+		void setVideoSongFile(const QString & file);
 
 		/**
 		 * @brief Gets the video song file.
@@ -108,11 +151,25 @@ namespace MusicQuiz {
 		const QString getVideoSongFile();
 
 		/**
+		 * @brief Sets the song start time.
+		 *
+		 * @param[in] time The song start time.
+		 */
+		void setSongStartTime(size_t time);
+
+		/**
 		 * @brief Gets the song start time.
 		 *
 		 * @return The song start time.
 		 */
 		const size_t getSongStartTime();
+
+		/**
+		 * @brief Sets the answer start time.
+		 *
+		 * @param[in] time The answer start time.
+		 */
+		void setAnswerStartTime(size_t time);
 
 		/**
 		 * @brief Gets the answer start time.
@@ -122,6 +179,13 @@ namespace MusicQuiz {
 		const size_t getAnswerStartTime();
 
 		/**
+		 * @brief Sets the video start time.
+		 *
+		 * @param[in] time The video start time.
+		 */
+		void setVideoStartTime(size_t time);
+
+		/**
 		 * @brief Gets the video start time.
 		 *
 		 * @return The video start time.
@@ -129,11 +193,25 @@ namespace MusicQuiz {
 		const size_t getVideoStartTime();
 
 		/**
+		 * @brief Sets the video song start time.
+		 *
+		 * @param[in] time The video song start time.
+		 */
+		void setVideoSongStartTime(size_t time);
+
+		/**
 		 * @brief Gets the video song start time.
 		 *
 		 * @return The video song start time.
 		 */
 		const size_t getVideoSongStartTime();
+
+		/**
+		 * @brief Sets the video answer start time.
+		 *
+		 * @param[in] time The video answer start time.
+		 */
+		void setVideoAnswerStartTime(size_t time);
 
 		/**
 		 * @brief Gets the video answer start time.
@@ -244,7 +322,17 @@ namespace MusicQuiz {
 		 *
 		 * @return The time in miliseconds.
 		 */
-		size_t getMSec(const QTime& time);
+		size_t toMSec(const QTime& time);
+
+		/**
+		 * @brief Gets the time in QTime from msec.
+		 * @note The Qtime is used so the hh::mm corresponds to mm::ss.
+		 *
+		 * @param[in] time The time.
+		 *
+		 * @return The QTime.
+		 */
+		QTime fromMSec(size_t time);
 
 		/** Variables */
 		size_t _points = 0;
@@ -252,6 +340,7 @@ namespace MusicQuiz {
 		QString _entryName;
 		QLabel* _entryNameLabel = nullptr;
 
+		QButtonGroup* _buttonGroup = nullptr;
 		EntryType _entryType = EntryType::Song;
 
 		QSpinBox* _pointsSpinbox = nullptr;

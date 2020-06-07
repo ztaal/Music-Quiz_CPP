@@ -69,7 +69,6 @@ MusicQuiz::QuizBoard* MusicQuiz::QuizFactory::createQuiz(const size_t idx, const
 	std::vector< QString > rowCategories = MusicQuiz::util::QuizLoader::loadQuizRowCategories(idx);
 
 	/** Apply Settings */
-
 	/** Hidden Team Score */
 	if ( settings.hiddenTeamScore ) {
 		for ( size_t i = 0; i < teams.size(); ++i ) {
@@ -91,7 +90,7 @@ MusicQuiz::QuizBoard* MusicQuiz::QuizFactory::createQuiz(const size_t idx, const
 
 	/** Create Quiz */
 	quizBoard = new MusicQuiz::QuizBoard(categories, rowCategories, teams, settings, preview, parent);
-		
+
 	/** Set Quiz Name */
 	//quizBoard->setQuizName(QString::fromStdString(MusicQuiz::util::QuizLoader::getListOfQuizzes[idx]));
 
@@ -288,8 +287,8 @@ void MusicQuiz::QuizFactory::saveQuiz(const MusicQuiz::QuizCreator::QuizData& da
 						media_tree.put("SongFile", songPath);
 
 						/** Copy Media File */
-						boost::filesystem::copy_file(videoFile, mediaDirectoryPath + "/" + categoryName + "/" + entryName + ".mp4", boost::filesystem::copy_option::overwrite_if_exists);
-						boost::filesystem::copy_file(songFile, mediaDirectoryPath + "/" + categoryName + "/" + entryName + ".mp3", boost::filesystem::copy_option::overwrite_if_exists);
+						boost::filesystem::copy_file(videoFile, mediaDirectoryPath + "/" + categoryName + "/" + entryName + "_video.mp4", boost::filesystem::copy_option::overwrite_if_exists);
+						boost::filesystem::copy_file(songFile, mediaDirectoryPath + "/" + categoryName + "/" + entryName + "_song.mp3", boost::filesystem::copy_option::overwrite_if_exists);
 					}
 				}
 			}
@@ -325,6 +324,147 @@ void MusicQuiz::QuizFactory::saveQuiz(const MusicQuiz::QuizCreator::QuizData& da
 		QMessageBox::warning(parent, "Failed to Save Quiz", "Failed to save the quiz. Unkown Error.");
 		deleteDirectory(mediaDirectoryPath);
 	}
+}
+
+MusicQuiz::QuizCreator::QuizData MusicQuiz::QuizFactory::loadQuiz(const std::string& quizName, const media::AudioPlayer::Ptr& audioPlayer,
+	const media::VideoPlayer::Ptr& videoPlayer, QWidget* parent)
+{
+	/** Get List of Quizzes */
+	std::vector<std::string> quizList = MusicQuiz::util::QuizLoader::getListOfQuizzes();
+	if ( quizList.empty() ) {
+		throw std::runtime_error("No quizzes found in the data folder.");
+	}
+
+	/** Check if Quiz Exists */
+	size_t idx = 0;
+	bool quizExists = false;
+	for ( size_t i = 0; i < quizList.size(); ++i ) {
+		std::replace(quizList[i].begin(), quizList[i].end(), '\\', '/');
+		if ( quizName == quizList[i] ) {
+			idx = i;
+			quizExists = true;
+			break;
+		}
+	}
+
+	/** Sanity Check */
+	if ( !quizExists ) {
+		throw std::runtime_error("Quiz does not exists.");
+	}
+
+	/** Quiz Data */
+	MusicQuiz::QuizCreator::QuizData data;
+
+	/** Load Categories */
+	boost::property_tree::ptree tree;
+	boost::property_tree::read_xml(quizList[idx], tree, boost::property_tree::xml_parser::trim_whitespace);
+	boost::property_tree::ptree sub_tree = tree.get_child("MusicQuiz");
+
+	/** Quiz Name */
+	boost::property_tree::ptree::const_iterator ini_ctrl = tree.begin();
+	data.quizName = QString::fromStdString(ini_ctrl->second.get<std::string>("QuizName"));
+
+	/** Quiz Description */
+	data.quizDescription = QString::fromStdString(ini_ctrl->second.get<std::string>("QuizDescription"));
+
+	/** Hidden Categories */
+	data.guessTheCategory = ini_ctrl->second.get<bool>("QuizGuessTheCateotry.<xmlattr>.enabled");
+
+	/** Categories */
+	std::vector< MusicQuiz::CategoryCreator* > categories;
+	boost::property_tree::ptree::const_iterator ctrl = sub_tree.begin();
+	for ( ; ctrl != sub_tree.end(); ++ctrl ) {
+		if ( ctrl->first == "QuizCategories" ) {
+			boost::property_tree::ptree categoriesTree = ctrl->second;
+			boost::property_tree::ptree::const_iterator sub_ctrl = categoriesTree.begin();
+			try {
+				for ( ; sub_ctrl != categoriesTree.end(); ++sub_ctrl ) {
+					if ( sub_ctrl->first == "Category" ) {
+						/** Category Name */
+						const QString categoryName = QString::fromStdString(sub_ctrl->second.get<std::string>("<xmlattr>.name"));
+
+						/** Category */
+						MusicQuiz::CategoryCreator* category = new MusicQuiz::CategoryCreator(categoryName, audioPlayer, parent);
+
+						/** Category Entries */
+						std::vector< MusicQuiz::EntryCreator* > categorieEntries;
+						boost::property_tree::ptree entryTree = sub_ctrl->second;
+						boost::property_tree::ptree::const_iterator it = entryTree.begin();
+						for ( ; it != entryTree.end(); ++it ) {
+							try {
+								if ( it->first == "QuizEntry" ) {
+									const boost::filesystem::path full_path(boost::filesystem::current_path());
+
+									/** Settings */
+									const QString entryName = QString::fromStdString(it->second.get<std::string>("<xmlattr>.name"));
+									const size_t points = it->second.get<size_t>("Points");
+
+									/** Quiz Entry */
+									MusicQuiz::EntryCreator* entry = new MusicQuiz::EntryCreator(entryName, points, audioPlayer, category);
+									entry->setAnswer(QString::fromStdString(it->second.get<std::string>("Answer")));
+
+									try {
+										entry->setSongStartTime(it->second.get<size_t>("StartTime"));
+									} catch ( ... ) {}
+
+									try {
+										entry->setAnswerStartTime(it->second.get<size_t>("AnswerStartTime"));
+									} catch ( ... ) {}
+
+									/** Media Type */
+									const std::string type = it->second.get<std::string>("<xmlattr>.type");
+									if ( type == "song" ) { // Song
+										entry->setType(MusicQuiz::EntryCreator::EntryType::Song);
+
+										/** Song File */
+										try {
+											QString songFile = QString::fromStdString(full_path.string() + "/" + it->second.get<std::string>("Media.SongFile"));
+											std::replace(songFile.begin(), songFile.end(), '\\', '/');
+											entry->setSongFile(songFile);
+										} catch ( ... ) {}
+									} else if ( type == "video" ) { // Video
+										entry->setType(MusicQuiz::EntryCreator::EntryType::Video);
+
+										/** Song File */
+										try {
+											QString songFile = QString::fromStdString(full_path.string() + "/" + it->second.get<std::string>("Media.SongFile"));
+											std::replace(songFile.begin(), songFile.end(), '\\', '/');
+											entry->setVideoSongFile(songFile);
+										} catch ( ... ) {}
+
+										/** Video File */
+										try {
+											QString videoFile = QString::fromStdString(full_path.string() + "/" + it->second.get<std::string>("Media.VideoFile"));
+											std::replace(videoFile.begin(), videoFile.end(), '\\', '/');
+											entry->setVideoFile(videoFile);
+										} catch ( ... ) {}
+
+										try {
+											entry->setVideoStartTime(it->second.get<size_t>("VideoSongStartTime"));
+										} catch ( ... ) {}
+									}
+									categorieEntries.push_back(entry);
+								}
+							} catch ( ... ) {}
+						}
+						category->setEntries(categorieEntries);
+						categories.push_back(category);
+					}
+				}
+			} catch ( const std::exception& err ) {
+				LOG_ERROR("Failed to load quiz. " << err.what());
+			} catch ( ... ) {
+				LOG_ERROR("Failed to load quiz.");
+			}
+		}
+	}
+	data.quizCategories = categories;
+
+	/** Load Row Categories */
+	data.quizRowCategories = MusicQuiz::util::QuizLoader::loadQuizRowCategories(idx);
+
+	/** Return */
+	return data;
 }
 
 void MusicQuiz::QuizFactory::deleteDirectory(const boost::filesystem::path& dir)

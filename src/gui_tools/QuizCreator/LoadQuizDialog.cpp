@@ -134,7 +134,8 @@ void MusicQuiz::LoadQuizDialog::loadQuiz()
 	}
 	const size_t idx = btn->property("index").toInt();
 
-	/** Find Data to be Exported */
+	/** Emit Signal */
+	std::replace(_quizList[idx].begin(), _quizList[idx].end(), '\\', '/');
 	emit loadSignal(_quizList[idx]);
 
 	/** Close Dialog */

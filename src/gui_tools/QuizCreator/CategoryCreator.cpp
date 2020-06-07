@@ -8,6 +8,7 @@
 #include <QMessageBox>
 #include <QTableWidgetItem>
 
+#include "common/Log.hpp"
 #include "gui_tools/QuizCreator/EntryCreator.hpp"
 
 
@@ -254,7 +255,75 @@ const QString MusicQuiz::CategoryCreator::getName() const
 	return _categoryName;
 }
 
+void MusicQuiz::CategoryCreator::setEntries(const std::vector< MusicQuiz::EntryCreator* >& entries)
+{
+	/** Sanity Check */
+	if ( _entriesTable == nullptr ) {
+		return;
+	}
+	
+	/** Set Entries */
+	_entries = entries;
+
+	/** Add Entries to Table */
+	for ( size_t i = 0; i < _entries.size(); ++i ) {
+		/** Get Number of Entries */
+		const size_t entryCount = _entriesTable->rowCount();
+
+		/** Insert New Entry */
+		_entriesTable->insertRow(entryCount);
+
+		/** Add Line Edit */
+		QLineEdit* entryName = new QLineEdit(_entries[i]->getName());
+		entryName->setObjectName("quizCreatorCategoryLineEdit");
+		entryName->setProperty("index", entryCount);
+		connect(entryName, SIGNAL(textChanged(const QString&)), this, SLOT(updateEntryTabName(const QString&)));
+		_entriesTable->setCellWidget(entryCount, 0, entryName);
+
+		/** Add Edit Category Button */
+		QPushButton* editBtn = new QPushButton;
+		editBtn->setObjectName("quizCreatorEditBtn");
+		editBtn->setProperty("index", entryCount);
+		connect(editBtn, SIGNAL(released()), this, SLOT(editEntry()));
+
+		QHBoxLayout* btnLayout = new QHBoxLayout;
+		btnLayout->addWidget(editBtn, Qt::AlignCenter);
+
+		QWidget* layoutWidget = new QWidget;
+		layoutWidget->setLayout(btnLayout);
+		_entriesTable->setCellWidget(entryCount, 1, layoutWidget);
+
+		/** Add Remove Entry Button */
+		QPushButton* removeBtn = new QPushButton;
+		removeBtn->setObjectName("quizCreatorRemoveBtn");
+		removeBtn->setProperty("index", entryCount);
+		connect(removeBtn, SIGNAL(released()), this, SLOT(removeEntry()));
+
+		btnLayout = new QHBoxLayout;
+		btnLayout->addWidget(removeBtn, Qt::AlignCenter);
+
+		layoutWidget = new QWidget;
+		layoutWidget->setLayout(btnLayout);
+		_entriesTable->setCellWidget(entryCount, 2, layoutWidget);
+
+		/** Add Tab */
+		_tabWidget->addTab(_entries[i], _entries[i]->getName());
+	}
+}
+
 const std::vector< MusicQuiz::EntryCreator* > MusicQuiz::CategoryCreator::getEntries() const
 {
 	return _entries;
+}
+
+void MusicQuiz::CategoryCreator::clearEntries()
+{
+	/** Delete Entries */
+	for ( int i = _entries.size() - 1; i >= 0; --i ) {
+		_entries[i] = nullptr;
+		delete _entries[i];
+	}
+
+	/** Clear Vector */
+	_entries.clear();
 }
