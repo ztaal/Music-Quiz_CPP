@@ -707,6 +707,17 @@ void MusicQuiz::QuizCreator::stopQuizPreview()
 		return;
 	}
 
+	/** Stop Audio */
+	if ( _audioPlayer != nullptr ) {
+		_audioPlayer->stop();
+	}
+
+	/** Stop Video */
+	if ( _videoPlayer != nullptr ) {
+		_videoPlayer->stop();
+		_videoPlayer->hide();
+	}
+
 	/** Stop Quiz */
 	_previewQuizBoard->hide();
 	_previewQuizBoard->close();
