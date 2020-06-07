@@ -488,6 +488,13 @@ void MusicQuiz::QuizCreator::loadQuiz(const std::string& quizName)
 		return;
 	}
 
+	/** Popup to ensure the user wants to load the quiz */
+	QMessageBox::StandardButton resBtn = QMessageBox::question(this, "Load Quiz?", "Are you sure you want to load the quiz? Any unsaved progress will be lost!",
+		QMessageBox::No | QMessageBox::Yes, QMessageBox::Yes);
+	if ( resBtn == QMessageBox::No ) {
+		return;
+	}
+
 	/** Load Quiz */
 	LOG_INFO("Loading quiz '" << quizName << "'"); 
 	QuizData data;
