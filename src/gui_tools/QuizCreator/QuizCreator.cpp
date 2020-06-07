@@ -12,6 +12,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QTableWidgetItem>
+#include <QAbstractItemView>
 
 #include <boost/filesystem.hpp>
 #include <boost/property_tree/ptree.hpp>
@@ -119,13 +120,22 @@ void MusicQuiz::QuizCreator::createLayout()
 	connect(addCategoryBtn, SIGNAL(released()), this, SLOT(addCategory()));
 	setupTabLayout->addWidget(addCategoryBtn, row, 1, 1, 1, Qt::AlignRight);
 
-	_categoriesTable = new QTableWidget(0, 3);
+	_categoriesTable = new QTableWidget(0, 3, this);
 	_categoriesTable->setObjectName("quizCreatorTable");
+	_categoriesTable->setDragDropMode(QAbstractItemView::InternalMove);
+	_categoriesTable->setSelectionMode(QAbstractItemView::SingleSelection);
+	_categoriesTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+	_categoriesTable->setStyleSheet("QHeaderView { qproperty-defaultAlignment: AlignCenter; }");
 	_categoriesTable->horizontalHeader()->setVisible(false);
+	_categoriesTable->horizontalHeader()->setMinimumWidth(40);
 	_categoriesTable->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
 	_categoriesTable->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
 	_categoriesTable->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
+	_categoriesTable->verticalHeader()->setFixedWidth(40);
+	_categoriesTable->verticalHeader()->setSectionsMovable(false); // \todo set this to true to enable dragging.
 	_categoriesTable->verticalHeader()->setDefaultSectionSize(40);
+	_categoriesTable->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed); 
+	connect(_categoriesTable->verticalHeader(), SIGNAL(sectionMoved(int, int, int)), this, SLOT(categoryOrderChanged(int, int, int)));
 	setupTabLayout->addWidget(_categoriesTable, ++row, 0, 1, 2);
 
 	/** Setup Tab - Row Categories */
@@ -718,4 +728,14 @@ void MusicQuiz::QuizCreator::quitCreator()
 		/** Call Destructor */
 		QApplication::quit();
 	}
+}
+
+void MusicQuiz::QuizCreator::categoryOrderChanged(const int, const int oldIdx, const int newIdx)
+{
+	/** Sanity Check */
+	if ( _categoriesTable == nullptr || _tabWidget == nullptr ) {
+		return;
+	}
+
+	// \todo write the code for chaning the order of the tabs and the vector.
 }

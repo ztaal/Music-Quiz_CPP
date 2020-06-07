@@ -108,6 +108,9 @@ namespace MusicQuiz {
 		 */
 		void quitCreator();
 
+
+		void categoryOrderChanged(int, int, int);
+
 	signals:
 
 	protected:
