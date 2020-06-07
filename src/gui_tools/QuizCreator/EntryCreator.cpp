@@ -683,12 +683,12 @@ size_t MusicQuiz::EntryCreator::toMSec(const QTime& time)
 QTime MusicQuiz::EntryCreator::fromMSec(size_t time)
 {
 	/** Hour */
-	const size_t hour = time / 3600000;
-	time = time - 3600000 * hour;
+	const size_t hour = time / 60000;
+	time = time - 60000 * hour;
 
 	/** Minute */
-	const size_t minute = time / 60000;
-	time = time - 60000 * minute;
+	const size_t minute = time / 1000;
+	time = time - 1000 * minute;
 
 	/** Return */
 	return QTime(hour, minute);
