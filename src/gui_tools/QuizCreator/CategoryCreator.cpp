@@ -53,11 +53,18 @@ void MusicQuiz::CategoryCreator::createLayout()
 
 	_entriesTable = new QTableWidget(0, 3);
 	_entriesTable->setObjectName("quizCreatorTable");
+	_entriesTable->setDragDropMode(QAbstractItemView::InternalMove);
+	_entriesTable->setSelectionMode(QAbstractItemView::SingleSelection);
+	_entriesTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+	_entriesTable->setStyleSheet("QHeaderView { qproperty-defaultAlignment: AlignCenter; }");
 	_entriesTable->horizontalHeader()->setVisible(false);
 	_entriesTable->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
 	_entriesTable->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
 	_entriesTable->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
+	_entriesTable->verticalHeader()->setFixedWidth(40);
+	_entriesTable->verticalHeader()->setSectionsMovable(false); // \todo set this to true to enable dragging.
 	_entriesTable->verticalHeader()->setDefaultSectionSize(40);
+	_entriesTable->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 	setupTabLayout->addWidget(_entriesTable, ++row, 0, 1, 2);
 
 	/** Set Layout */

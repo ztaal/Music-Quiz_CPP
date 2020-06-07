@@ -394,18 +394,23 @@ QCheckBox::indicator:unchecked#quizCreatorCheckbox {
 
 QTableWidget#teamTable
 {
-	font-size				: 32px;
-	font-weight				: bold;
-	background-color		: rgb(5, 30, 190);
-	border-color			: rgb(128, 128, 128);
-	border-radius			: 0px;
-	border-width			: 2px;
-	border-style			: solid;
+	font-size						: 32px;
+	font-weight						: bold;
+	background-color				: rgb(5, 30, 190);
+	border-color					: rgb(128, 128, 128);
+	border-radius					: 0px;
+	border-width					: 2px;
+	border-style					: solid;
 }
 
 QTableWidget#quizCreatorTable
 {
-	min-height				: 120px;
+	min-height						: 120px;
+	selection-background-color		: rgba(0, 0, 0, 0);
+}
+
+QHeaderView::section {
+	background-color				: white;	
 }
 
 
@@ -416,7 +421,7 @@ QTableWidget#quizCreatorTable
 
 QMessageBox
 {
-	font-size			: 25px;
+	font-size						: 25px;
 }
 
 

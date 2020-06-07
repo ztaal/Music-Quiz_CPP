@@ -127,7 +127,6 @@ void MusicQuiz::QuizCreator::createLayout()
 	_categoriesTable->setSelectionBehavior(QAbstractItemView::SelectRows);
 	_categoriesTable->setStyleSheet("QHeaderView { qproperty-defaultAlignment: AlignCenter; }");
 	_categoriesTable->horizontalHeader()->setVisible(false);
-	_categoriesTable->horizontalHeader()->setMinimumWidth(40);
 	_categoriesTable->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
 	_categoriesTable->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
 	_categoriesTable->horizontalHeader()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
@@ -151,10 +150,17 @@ void MusicQuiz::QuizCreator::createLayout()
 
 	_rowCategoriesTable = new QTableWidget(0, 2);
 	_rowCategoriesTable->setObjectName("quizCreatorTable");
+	_rowCategoriesTable->setDragDropMode(QAbstractItemView::InternalMove);
+	_rowCategoriesTable->setSelectionMode(QAbstractItemView::SingleSelection);
+	_rowCategoriesTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+	_rowCategoriesTable->setStyleSheet("QHeaderView { qproperty-defaultAlignment: AlignCenter; }");
 	_rowCategoriesTable->horizontalHeader()->setVisible(false);
 	_rowCategoriesTable->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
 	_rowCategoriesTable->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+	_rowCategoriesTable->verticalHeader()->setFixedWidth(40);
+	_rowCategoriesTable->verticalHeader()->setSectionsMovable(false); // \todo set this to true to enable dragging.
 	_rowCategoriesTable->verticalHeader()->setDefaultSectionSize(40);
+	_rowCategoriesTable->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 	setupTabLayout->addWidget(_rowCategoriesTable, ++row, 0, 1, 2);
 
 	/** Bottom Buttons */
