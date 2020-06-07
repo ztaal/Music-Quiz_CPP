@@ -1,7 +1,10 @@
 #include "QuizFactory.hpp"
 
+#include <math.h>
+#include <time.h>
 #include <vector>
 #include <string>
+#include <stdlib.h>
 #include <stdexcept>
 
 #include <QString>
@@ -52,6 +55,9 @@ MusicQuiz::QuizBoard* MusicQuiz::QuizFactory::createQuiz(const std::string& quiz
 MusicQuiz::QuizBoard* MusicQuiz::QuizFactory::createQuiz(const size_t idx, const QuizSettings& settings, const media::AudioPlayer::Ptr& audioPlayer,
 	const media::VideoPlayer::Ptr& videoPlayer, const std::vector<MusicQuiz::QuizTeam*>& teams, bool preview, QWidget* parent)
 {
+	/** Seed Rand */
+	srand(time(NULL));
+
 	/** Create Quiz Board */
 	MusicQuiz::QuizBoard* quizBoard = nullptr;
 
@@ -65,7 +71,6 @@ MusicQuiz::QuizBoard* MusicQuiz::QuizFactory::createQuiz(const size_t idx, const
 	/** Load Row Categories */
 	std::vector< QString > rowCategories = MusicQuiz::util::QuizLoader::loadQuizRowCategories(idx);
 
-	/** Apply Settings */
 	/** Hidden Team Score */
 	if ( settings.hiddenTeamScore ) {
 		for ( size_t i = 0; i < teams.size(); ++i ) {
@@ -73,15 +78,77 @@ MusicQuiz::QuizBoard* MusicQuiz::QuizFactory::createQuiz(const size_t idx, const
 		}
 	}
 
-	/** Hidden Answers */
-	if ( settings.hiddenAnswers ) {
-		for ( size_t i = 0; i < categories.size(); ++i ) {
-			for ( size_t j = 0; j < categories[i]->size(); ++j ) {
-				MusicQuiz::QuizEntry* quizEntry = (*categories[i])[j];
-				if ( quizEntry != nullptr ) {
-					quizEntry->setHiddenAnswer(true);
+	/** Get Number of Entries */
+	size_t numberOfEntries = 0;
+	for ( size_t i = 0; i < categories.size(); ++i ) {
+		numberOfEntries += categories[i]->size();
+	}
+
+	std::vector<size_t> entriesIndicies(numberOfEntries);
+	for ( size_t i = 0; i < numberOfEntries; ++i ) {
+		entriesIndicies[i] = i;
+	}
+
+	/** Get Daily Double Entries */
+	size_t dailyDoubleCount = std::floor(double(numberOfEntries * settings.dailyDoublePercentage) / 100.0);
+	std::vector<size_t> dailyDoubleSelectedElements;
+	if ( settings.dailyDouble ) {
+		/** Ensure that there is atleas one element if the setting is enabled */
+		if ( dailyDoubleCount == 0 ) {
+			dailyDoubleCount = 1;
+		}
+
+		/** Select Elements */
+		while ( dailyDoubleSelectedElements.size() < dailyDoubleCount && !entriesIndicies.empty() ) {
+			const size_t randomIdx = rand() % entriesIndicies.size();
+			dailyDoubleSelectedElements.push_back(entriesIndicies[randomIdx]);
+			entriesIndicies.erase(entriesIndicies.begin() + randomIdx);
+		}
+	}
+
+	/** Get Daily Triple Entries */
+	size_t dailyTripleCount = std::floor(double(numberOfEntries * settings.dailyTriplePercentage) / 100.0);
+	std::vector<size_t> dailyTripleSelectedElements;
+	if ( settings.dailyTriple ) {
+		/** Ensure that there is atleas one element if the setting is enabled */
+		if ( dailyTripleCount == 0 ) {
+			dailyTripleCount = 1;
+		}
+
+		/** Select Elements */
+		while ( dailyTripleSelectedElements.size() < dailyTripleCount && !entriesIndicies.empty() ) {
+			const size_t randomIdx = rand() % entriesIndicies.size();
+			dailyTripleSelectedElements.push_back(entriesIndicies[randomIdx]);
+			entriesIndicies.erase(entriesIndicies.begin() + randomIdx);
+		}
+	}
+
+	/** Apply Settings */
+	size_t counter = 0;
+	for ( size_t i = 0; i < categories.size(); ++i ) {
+		for ( size_t j = 0; j < categories[i]->size(); ++j ) {
+			MusicQuiz::QuizEntry* quizEntry = (*categories[i])[j];
+			if ( quizEntry != nullptr ) {
+				/** Double Points */
+				for ( size_t k = 0; k < dailyDoubleSelectedElements.size(); ++k ) {
+					if ( counter == dailyDoubleSelectedElements[k] ) {
+						quizEntry->setDoublePointsEnabled(true, settings.dailyDoubleHidden);
+					}
+
 				}
+
+				/** Triple Points */
+				for ( size_t k = 0; k < dailyTripleSelectedElements.size(); ++k ) {
+					if ( counter == dailyTripleSelectedElements[k] ) {
+						quizEntry->setTriplePointsEnabled(true, settings.dailyTripleHidden);
+					}
+
+				}
+
+				/** Hidden Answers */
+				quizEntry->setHiddenAnswer(settings.hiddenAnswers);
 			}
+			++counter;
 		}
 	}
 

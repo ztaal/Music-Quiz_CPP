@@ -5,13 +5,13 @@ namespace MusicQuiz {
 	{
 		/** Daily Double */
 		bool dailyDouble = false;
-		bool dailyDoubleHidden = false;
-		bool dailyDoublePercentage = 0;
+		bool dailyDoubleHidden = true;
+		size_t dailyDoublePercentage = 15;
 
 		/** Daily Trible */
 		bool dailyTriple = false;
-		bool dailyTripleHidden = false;
-		bool dailyTriplePercentage = 0;
+		bool dailyTripleHidden = true;
+		size_t dailyTriplePercentage = 5;
 
 		/** Teams */
 		bool hiddenTeamScore = false;

@@ -97,6 +97,22 @@ namespace MusicQuiz {
 		 */
 		void setHiddenAnswer(bool hidden);
 
+		/**
+		 * @brief Enables / disables double points.
+		 *
+		 * @param[in] enabled If true the entry will give double points.
+		 * @param[in] hidden If true the entry will not have a border around showing that it is double points.
+		 */
+		void setDoublePointsEnabled(bool enabled, bool hidden = true);
+
+		/**
+		 * @brief Enables / disables triple points.
+		 *
+		 * @param[in] enabled If true the entry will give triple points.
+		 * @param[in] hidden If true the entry will not have a border around showing that it is triple points.
+		 */
+		void setTriplePointsEnabled(bool enabled, bool hidden = true);
+
 	signals:
 		void answered(size_t points);
 		void played();
@@ -153,8 +169,13 @@ namespace MusicQuiz {
 		std::shared_ptr< media::AudioPlayer > _audioPlayer = nullptr;
 		std::shared_ptr < media::VideoPlayer > _videoPlayer = nullptr;
 
-		bool _hiddenAnswer = false; // setting
-
 		std::function< void(QMouseEvent*) > _mouseEventCallback;
+
+		/** Settings */
+		bool _hiddenAnswer = false;
+		bool _doublePoints = false;
+		bool _triplePoints = false;
+		bool _hiddenDoublePoints = false;
+		bool _hiddenTriplePoints = false;
 	};
 }

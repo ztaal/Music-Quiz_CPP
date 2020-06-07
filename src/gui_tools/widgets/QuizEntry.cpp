@@ -101,7 +101,15 @@ void MusicQuiz::QuizEntry::handleMouseEvent(QMouseEvent* event)
 		applyColor(QColor(0, 128, 0));
 		if ( !_entryAnswered ) {
 			_entryAnswered = true;
-			emit answered(_points);
+
+			/** Points */
+			size_t points = _points;
+			if ( _doublePoints ) {
+				points *= 2;
+			} else if ( _triplePoints) {
+				points *= 3;
+			}
+			emit answered(points);
 		}
 		break;
 	case MusicQuiz::QuizEntry::EntryState::PLAYED:
@@ -224,9 +232,24 @@ void MusicQuiz::QuizEntry::setColor(const QColor& color)
 
 void MusicQuiz::QuizEntry::applyColor(const QColor& color)
 {
+	/** Background Color */
 	std::stringstream ss;
-	ss << "background-color	: rgb(" << color.red() << ", " << color.green() << ", " << color.blue() << ");"
-		<< "border-color : rgb(" << color.red() << ", " << color.green() << ", " << color.blue() << ");";
+	ss << "background-color	: rgb(" << color.red() << ", " << color.green() << ", " << color.blue() << ");";
+	
+	/** Border Color */
+	QColor borderColor = color;
+	if ( _doublePoints ) { // Double Points
+		if ( (_hiddenDoublePoints && _state != QuizEntry::EntryState::IDLE) || !_hiddenDoublePoints ) {
+			borderColor = QColor(255, 255, 0);
+		}
+	} else if ( _triplePoints ) { // Triple Points
+		if ( (_hiddenTriplePoints && _state != QuizEntry::EntryState::IDLE) || !_hiddenTriplePoints ) {
+			borderColor = QColor(220, 0, 185);
+		}
+	}		
+	ss << "border: 3px solid rgb(" << borderColor.red() << ", " << borderColor.green() << ", " << borderColor.blue() << ");";
+
+	/** Text Color */
 	if ( _state == QuizEntry::EntryState::PLAYED ) {
 		ss << "color : rgb(" << 255 - color.red() << ", " << 255 - color.green() << ", " << 255 - color.blue() << ");";
 	} else {
@@ -243,4 +266,28 @@ MusicQuiz::QuizEntry::EntryState MusicQuiz::QuizEntry::getEntryState()
 void MusicQuiz::QuizEntry::setHiddenAnswer(bool hidden)
 {
 	_hiddenAnswer = hidden;
+}
+
+void MusicQuiz::QuizEntry::setDoublePointsEnabled(bool enabled, bool hidden)
+{
+	_doublePoints = enabled;
+	_hiddenDoublePoints = hidden;
+	if ( _doublePoints ) {
+		_triplePoints = false;
+	}
+
+	/** Apply Color */
+	applyColor(QColor(0, 0, 255));
+}
+
+void MusicQuiz::QuizEntry::setTriplePointsEnabled(bool enabled, bool hidden)
+{
+	_triplePoints = enabled;
+	_hiddenTriplePoints = hidden;
+	if ( _triplePoints ) {
+		_doublePoints = false;
+	}
+
+	/** Apply Color */
+	applyColor(QColor(0, 0, 255));
 }

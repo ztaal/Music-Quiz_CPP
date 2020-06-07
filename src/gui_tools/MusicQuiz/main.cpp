@@ -86,6 +86,8 @@ int main(int argc, char* argv[])
 
 
 /** TODO LIST
+ * Generate Cheetsheet
+
  * Quiz Author
 	- Add author to quiz creator.
 	- Add author and quiz name to quiz intro screen.
@@ -97,9 +99,7 @@ int main(int argc, char* argv[])
  * Make settings menu pretty
 
  * Add daily double and daily triple
-	- Add check box in settings
 	- Add percentage slider
-	- Add hidden / shown checkbox
 
  * Update popup boxes cosmetics
 */

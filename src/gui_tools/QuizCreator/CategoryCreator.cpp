@@ -138,10 +138,10 @@ void MusicQuiz::CategoryCreator::editEntry()
 	}
 
 	/** Get Number of Categories */
-	const size_t entryCount = _entriesTable->rowCount();
+	const int entryCount = _entriesTable->rowCount();
 
 	/** Get Index */
-	const size_t index = button->property("index").toInt();
+	const int index = button->property("index").toInt();
 	if ( index >= _tabWidget->count() || index >= entryCount ) {
 		return;
 	}
@@ -163,10 +163,10 @@ void MusicQuiz::CategoryCreator::removeEntry()
 	}
 
 	/** Get Number of Entries */
-	const size_t entryCount = _entriesTable->rowCount();
+	const int entryCount = _entriesTable->rowCount();
 
 	/** Get Index */
-	const size_t index = button->property("index").toInt();
+	const int index = button->property("index").toInt();
 	if ( index >= _tabWidget->count() || index >= entryCount ) {
 		return;
 	}
@@ -192,7 +192,7 @@ void MusicQuiz::CategoryCreator::removeEntry()
 	_tabWidget->removeTab(index + 1);
 
 	/** Update Indices */
-	for ( size_t i = 0; i < _entriesTable->rowCount(); ++i ) {
+	for ( int i = 0; i < _entriesTable->rowCount(); ++i ) {
 		/** Line Edit */
 		QLineEdit* tmpLineEdit = qobject_cast<QLineEdit*>(_entriesTable->cellWidget(i, 0));
 		if ( tmpLineEdit != nullptr ) {
@@ -227,7 +227,7 @@ void MusicQuiz::CategoryCreator::updateEntryTabName(const QString& str)
 	}
 
 	/** Get Index */
-	const size_t index = lineEdit->property("index").toInt() + 1;
+	const int index = lineEdit->property("index").toInt() + 1;
 	if ( index >= _tabWidget->count() ) {
 		return;
 	}

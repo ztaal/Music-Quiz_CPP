@@ -67,6 +67,10 @@ namespace MusicQuiz {
 		 */
 		void showHiddenTeamsInfo();
 		void showHiddenAnswersInfo();
+		void showDailyDoubleInfo();
+		void showDailyTripleInfo();
+		void showDailyDoubleHiddenInfo();
+		void showDailyTripleHiddenInfo();
 
 	signals:
 		void quitSignal();
@@ -82,5 +86,9 @@ namespace MusicQuiz {
 		/** Variables */
 		QCheckBox* _hiddenTeam = nullptr;
 		QCheckBox* _hiddenAnswers = nullptr;
+		QCheckBox* _dailyDouble = nullptr;
+		QCheckBox* _dailyTriple = nullptr;
+		QCheckBox* _dailyDoubleHidden = nullptr;
+		QCheckBox* _dailyTripleHidden = nullptr;
 	};
 }

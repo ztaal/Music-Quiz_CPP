@@ -286,10 +286,10 @@ void MusicQuiz::QuizCreator::editCategory()
 	}
 
 	/** Get Number of Categories */
-	const size_t categoryCount = _categoriesTable->rowCount();
+	const int categoryCount = _categoriesTable->rowCount();
 
 	/** Get Index */
-	const size_t index = button->property("index").toInt();
+	const int index = button->property("index").toInt();
 	if ( index >= _tabWidget->count() || index >= categoryCount ) {
 		return;
 	}	
@@ -311,10 +311,10 @@ void MusicQuiz::QuizCreator::removeCategory()
 	}
 
 	/** Get Number of Categories */
-	const size_t categoryCount = _categoriesTable->rowCount();
+	const int categoryCount = _categoriesTable->rowCount();
 
 	/** Get Index */
-	const size_t index = button->property("index").toInt();
+	const int index = button->property("index").toInt();
 	if ( index >= _tabWidget->count() || index >= categoryCount ) {
 		return;
 	}
@@ -343,7 +343,7 @@ void MusicQuiz::QuizCreator::removeCategory()
 	_tabWidget->removeTab(index + 1);
 
 	/** Update Indices */
-	for ( size_t i = 0; i < _categoriesTable->rowCount(); ++i ) {
+	for ( int i = 0; i < _categoriesTable->rowCount(); ++i ) {
 		/** Line Edit */
 		QLineEdit* tmpLineEdit = qobject_cast<QLineEdit*>(_categoriesTable->cellWidget(i, 0));
 		if ( tmpLineEdit != nullptr ) {
@@ -404,7 +404,7 @@ void MusicQuiz::QuizCreator::removeRowCategory()
 	_rowCategoriesTable->removeRow(index);
 
 	/** Update Button Indices */
-	for ( size_t i = 0; i < _rowCategoriesTable->rowCount(); ++i ) {
+	for ( int i = 0; i < _rowCategoriesTable->rowCount(); ++i ) {
 		QList<QPushButton*> buttons = _rowCategoriesTable->cellWidget(i, 1)->findChildren<QPushButton*>();
 		for ( QPushButton* tmpButton : buttons ) {
 			if ( tmpButton != nullptr ) {
@@ -427,7 +427,7 @@ void MusicQuiz::QuizCreator::updateCategoryTabName(const QString& str)
 	}
 
 	/** Get Index */
-	const size_t index = lineEdit->property("index").toInt() + 1;
+	const int index = lineEdit->property("index").toInt() + 1;
 	if ( index >= _tabWidget->count() ) {
 		return;
 	}

@@ -69,16 +69,57 @@ void MusicQuiz::QuizSettingsDialog::createLayout(const MusicQuiz::QuizSettings& 
 	hiddenAnswersLayout->addWidget(infoBtn);
 	mainlayout->addItem(hiddenAnswersLayout);
 
-
 	/** Daily Double */
-	//bool dailyDouble = false;
-	//bool dailyDoubleHidden = false;
-	//bool dailyDoublePercentage = 0;
+	QHBoxLayout* dailyDoubleLayout = new QHBoxLayout;
+	dailyDoubleLayout->setSpacing(10);
+	_dailyDouble = new QCheckBox("Daily Double");
+	_dailyDouble->setChecked(settings.dailyDouble);
+	dailyDoubleLayout->addWidget(_dailyDouble);
+
+	infoBtn = new QPushButton("?");
+	infoBtn->setObjectName("settingsInfo");
+	connect(infoBtn, SIGNAL(released()), this, SLOT(showDailyDoubleInfo()));
+	dailyDoubleLayout->addWidget(infoBtn);
+	mainlayout->addItem(dailyDoubleLayout);
+
+	/** Daily Double Hidden */
+	QHBoxLayout* dailyDoubleHiddenLayout = new QHBoxLayout;
+	dailyDoubleHiddenLayout->setSpacing(10);
+	_dailyDoubleHidden = new QCheckBox("Daily Double Hidden");
+	_dailyDoubleHidden->setChecked(settings.dailyDoubleHidden);
+	dailyDoubleHiddenLayout->addWidget(_dailyDoubleHidden);
+
+	infoBtn = new QPushButton("?");
+	infoBtn->setObjectName("settingsInfo");
+	connect(infoBtn, SIGNAL(released()), this, SLOT(showDailyDoubleHiddenInfo()));
+	dailyDoubleHiddenLayout->addWidget(infoBtn);
+	mainlayout->addItem(dailyDoubleHiddenLayout);
 
 	/** Daily Trible */
-	//bool dailyTriple = false;
-	//bool dailyTripleHidden = false;
-	//bool dailyTriplePercentage = 0;
+	QHBoxLayout* dailyTripleLayout = new QHBoxLayout;
+	dailyTripleLayout->setSpacing(10);
+	_dailyTriple = new QCheckBox("Daily Triple");
+	_dailyTriple->setChecked(settings.dailyTriple);
+	dailyTripleLayout->addWidget(_dailyTriple);
+
+	infoBtn = new QPushButton("?");
+	infoBtn->setObjectName("settingsInfo");
+	connect(infoBtn, SIGNAL(released()), this, SLOT(showDailyTripleInfo()));
+	dailyTripleLayout->addWidget(infoBtn);
+	mainlayout->addItem(dailyTripleLayout);
+
+	/** Daily Trible Hidden */
+	QHBoxLayout* dailyTripleHiddenLayout = new QHBoxLayout;
+	dailyTripleHiddenLayout->setSpacing(10);
+	_dailyTripleHidden = new QCheckBox("Daily Triple Hidden");
+	_dailyTripleHidden->setChecked(settings.dailyTripleHidden);
+	dailyTripleHiddenLayout->addWidget(_dailyTripleHidden);
+
+	infoBtn = new QPushButton("?");
+	infoBtn->setObjectName("settingsInfo");
+	connect(infoBtn, SIGNAL(released()), this, SLOT(showDailyTripleHiddenInfo()));
+	dailyTripleHiddenLayout->addWidget(infoBtn);
+	mainlayout->addItem(dailyTripleHiddenLayout);
 
 	/** Guess the category */
 	//bool guessTheCategory = false;
@@ -120,6 +161,14 @@ void MusicQuiz::QuizSettingsDialog::saveSettings()
 	/** Hidden Teams */
 	settings.hiddenTeamScore = _hiddenTeam->isChecked();
 
+	/** Daily Double */
+	settings.dailyDouble = _dailyDouble->isChecked();
+	settings.dailyDoubleHidden = _dailyDoubleHidden->isChecked();
+
+	/** Daily Triple */
+	settings.dailyTriple = _dailyTriple->isChecked();
+	settings.dailyTripleHidden = _dailyTripleHidden->isChecked();
+
 	/** Emit Signal with settings */
 	emit settingsUpdated(settings);
 
@@ -153,4 +202,24 @@ void MusicQuiz::QuizSettingsDialog::showHiddenTeamsInfo()
 void MusicQuiz::QuizSettingsDialog::showHiddenAnswersInfo()
 {
 	informationMessageBox("If enabled the quiz answers will be hidden after the song have been guessed.");
+}
+
+void MusicQuiz::QuizSettingsDialog::showDailyDoubleInfo()
+{
+	informationMessageBox("If enabled the set percentage of entries will give double points. The entries are choosen randomly.");
+}
+
+void MusicQuiz::QuizSettingsDialog::showDailyDoubleHiddenInfo()
+{
+	informationMessageBox("If enabled the entries that gives double points will be hidden until it starts playing.");
+}
+
+void MusicQuiz::QuizSettingsDialog::showDailyTripleInfo()
+{
+	informationMessageBox("If enabled the set percentage of entries will give triple points. The entries are choosen randomly.");
+}
+
+void MusicQuiz::QuizSettingsDialog::showDailyTripleHiddenInfo()
+{
+	informationMessageBox("If enabled the entries that gives triple points will be hidden until it starts playing.");
 }

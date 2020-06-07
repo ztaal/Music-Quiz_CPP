@@ -143,7 +143,7 @@ void MusicQuiz::TeamSelector::teamSelected()
 
 	/** Get Teams */
 	std::vector<MusicQuiz::QuizTeam*> teams;
-	for ( size_t i = 0; i < _teamTable->rowCount(); ++i ) {
+	for ( int i = 0; i < _teamTable->rowCount(); ++i ) {
 		const QString teamName = _teamTable->item(i, 1)->text();
 		const QColor teamColor = _teamTable->item(i, 1)->backgroundColor();
 		MusicQuiz::QuizTeam* teamEntry = new MusicQuiz::QuizTeam(teamName, teamColor);
@@ -182,7 +182,7 @@ void MusicQuiz::TeamSelector::addTeam()
 	}
 
 	/** Check if team exisis */
-	for ( size_t i = 0; i < row; ++i ) {
+	for ( int i = 0; i < row; ++i ) {
 		if ( teamName == _teamTable->item(i, 1)->text() ) {
 			LOG_INFO("Team name alredy exists.");
 			return;
@@ -264,8 +264,8 @@ void MusicQuiz::TeamSelector::removeTeam()
 	}
 
 	/** Get Selected Row */
-	size_t selectedRow = 0;
-	for ( size_t i = 0; i < _teamTable->rowCount(); ++i ) {
+	int selectedRow = 0;
+	for ( int i = 0; i < _teamTable->rowCount(); ++i ) {
 		if ( button->property("teamName") == _teamTable->item(i, 1)->text() ) {
 			selectedRow = i;
 			break;
