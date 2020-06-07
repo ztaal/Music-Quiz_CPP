@@ -249,14 +249,6 @@ void MusicQuiz::MusicQuizController::teamSelected(const std::vector<MusicQuiz::Q
 {
 	/** Set Quiz Selected */
 	_teamSelected = true;
-	if ( !teams.empty() ) {
-		LOG_INFO("Selected teams:");
-		for ( size_t i = 0; i < teams.size(); ++i ) {
-			LOG_INFO("\t" << teams[i]->getName().toStdString());
-		}
-	} else {
-		LOG_INFO("Playing Quiz wihtout teams");
-	}
 
 	/** Set Teams */
 	_teams = teams;

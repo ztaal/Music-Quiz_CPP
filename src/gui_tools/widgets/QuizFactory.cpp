@@ -45,9 +45,6 @@ MusicQuiz::QuizBoard* MusicQuiz::QuizFactory::createQuiz(const std::string& quiz
 		throw std::runtime_error("Quiz does not exists.");
 	}
 
-	LOG_DEBUG("QuizName = " << quizName);
-	LOG_DEBUG("QuizListName = " << quizList[idx]);
-
 	/** Create Quiz */
 	return createQuiz(idx, settings, audioPlayer, videoPlayer, teams, preview, parent);
 }

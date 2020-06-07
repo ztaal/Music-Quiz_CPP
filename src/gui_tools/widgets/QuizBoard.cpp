@@ -213,7 +213,6 @@ void MusicQuiz::QuizBoard::handleGameComplete()
 		for ( size_t i = 0; i < _teams.size(); ++i ) {
 			if ( _teams[i]->getScore() == highScore ) {
 				winningTeams.push_back(_teams[i]);
-				LOG_DEBUG("Winning Team(s): " << _teams[i]->getName().toStdString());
 			}
 		}
 
