@@ -91,21 +91,21 @@ namespace MusicQuiz {
 		 *
 		 * @return The song file.
 		 */
-		const QString getSongFile() const;
+		const QString getSongFile();
 
 		/**
 		 * @brief Gets the video file.
 		 *
 		 * @return The video file.
 		 */
-		const QString getVideoFile() const;
+		const QString getVideoFile();
 
 		/**
 		 * @brief Gets the video song file.
 		 *
 		 * @return The video song file.
 		 */
-		const QString getVideoSongFile() const;
+		const QString getVideoSongFile();
 
 		/**
 		 * @brief Gets the song start time.

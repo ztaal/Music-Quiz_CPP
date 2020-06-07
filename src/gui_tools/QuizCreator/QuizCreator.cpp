@@ -25,8 +25,8 @@
 #include "gui_tools/widgets/QuizBoard.hpp"
 #include "gui_tools/widgets/QuizFactory.hpp"
 #include "gui_tools/QuizCreator/EntryCreator.hpp"
-#include "gui_tools/QuizCreator/CategoryCreator.hpp"
 #include "gui_tools/QuizCreator/LoadQuizDialog.hpp"
+#include "gui_tools/QuizCreator/CategoryCreator.hpp"
 
 
 MusicQuiz::QuizCreator::QuizCreator(QWidget* parent) :
@@ -264,6 +264,7 @@ void MusicQuiz::QuizCreator::addRowCategory()
 
 	QWidget* layoutWidget = new QWidget;
 	layoutWidget->setLayout(removeBtnLayout);
+	_rowCategories.push_back(rowCategoryName->text());
 	_rowCategoriesTable->setCellWidget(rowCategoryCount, 1, layoutWidget);
 }
 
@@ -393,6 +394,7 @@ void MusicQuiz::QuizCreator::removeRowCategory()
 
 	/** Delete Row Category in table */
 	_rowCategoriesTable->removeRow(index);
+	_rowCategories.erase(_rowCategories.begin() + index);
 
 	/** Update Button Indices */
 	for ( size_t i = 0; i < _rowCategoriesTable->rowCount(); ++i ) {
@@ -435,201 +437,33 @@ void MusicQuiz::QuizCreator::updateCategoryTabName(const QString& str)
 
 void MusicQuiz::QuizCreator::saveQuiz()
 {
-	try {
-		/** Stop Song */
-		_audioPlayer->stop();
+	/** Stop Song */
+	_audioPlayer->stop();
 
-		/** Get Quiz Name */
-		const std::string quizName = _quizNameLineEdit->text().toStdString();
-		if ( quizName.empty() ) {
-			QMessageBox::information(this, "Info", "Enter a Quiz Name.");
-			return;
-		}
+	/** Get Quiz Data */
+	QuizData quizData;
 
-		/** Get Quiz Description */
-		const std::string quizDescription = _quizDescriptionTextEdit->toPlainText().toStdString();
-		if ( quizName.empty() ) {
-			QMessageBox::information(this, "Info", "Enter a Quiz Description.");
-			return;
-		}
+	/** Quiz Name */
+	quizData.quizName = _quizNameLineEdit->text();
 
-		/** Check if quiz already exists */
-		boost::system::error_code boost_err;
-		const std::string quizPath = "./data/" + quizName;
-		if ( boost::filesystem::is_directory(quizPath) && quizSavedName != quizName ) {
-			QMessageBox::StandardButton resBtn = QMessageBox::question(this, "Overwrite Quiz?", "Quiz already exists, do you want to overwrite existing quiz?",
-				QMessageBox::No | QMessageBox::Yes, QMessageBox::Yes);
+	/** Quiz Author */
+	quizData.quizAuthor = ""; // \todo add this.
 
-			if ( resBtn != QMessageBox::Yes ) {
-				return;
-			}
-		} else if ( !boost::filesystem::is_directory(quizPath) ) {
-			/** Create Folder */
-			boost::filesystem::create_directory(quizPath, boost_err);
-			if ( boost_err ) {
-				QMessageBox::warning(this, "Failed to Save Quiz", "Failed to create directory to save the quiz in.");
-				return;
-			}
-		}
-		quizSavedName = quizName;
+	/** Quiz Description */
+	quizData.quizDescription = _quizDescriptionTextEdit->toPlainText();
 
-		/** Create Media Folder */
-		const std::string mediaDirectoryPath = quizPath + "/mediaTmp";
-		boost::filesystem::create_directory(mediaDirectoryPath, boost_err);
-		if ( boost_err ) {
-			QMessageBox::warning(this, "Failed to Save Quiz", "Failed to create directory to save the media files in.");
-			return;
-		}
+	/** Hidden Categoies */
+	quizData.guessTheCategory = _hiddenCategoriesCheckbox->isChecked();
+	quizData.guessTheCategoryPoints = 500; // \todo implement this.
 
-		/** Wirte Quiz to XML Parser */
-		boost::property_tree::ptree tree;
-		boost::property_tree::ptree& main_tree = tree.put("MusicQuiz", "");
-		main_tree.put("<xmlcomment>", std::string("File content written on the ") + common::TimeUtil::getTimeNow());
+	/** Quiz Categories */
+	quizData.quizCategories = _categories;
 
-		/** Quiz Name */
-		main_tree.put("QuizName", quizName);
+	/** Quiz Row Categories */
+	quizData.quizRowCategories = _rowCategories;
 
-		/** Quiz Author */
-		main_tree.put("QuizAuthor", ""); // \todo add this
-
-		/** Quiz Description */
-		main_tree.put("QuizDescription", quizDescription);
-
-		/** Guess the Category Setting */
-		boost::property_tree::ptree& guessTheCategory_tree = main_tree.add("QuizGuessTheCateotry", 500);
-		guessTheCategory_tree.put("<xmlattr>.enabled", _hiddenCategoriesCheckbox->isChecked());
-
-		/** Categories */
-		const size_t numberOfCategories = _categoriesTable->rowCount();
-		for ( size_t i = 0; i < numberOfCategories; ++i ) {			
-			/** Get Category */
-			const MusicQuiz::CategoryCreator* category = _categories[i];
-
-			/** Create Category tree */
-			boost::property_tree::ptree& category_tree = main_tree.add("QuizCategories.Category", "");
-
-			/** Category Name */
-			const std::string categoryName = category->getName().toStdString();
-			if ( categoryName.empty() ) {
-				QMessageBox::warning(this, "Failed to Save Quiz", "Failed to save quiz. All categories must have a name.");
-				return;
-			}
-			category_tree.put("<xmlattr>.name", categoryName);
-
-			/** Create Category Folder */
-			boost::filesystem::create_directory(mediaDirectoryPath + "/" + categoryName, boost_err);
-			if ( boost_err ) {
-				QMessageBox::warning(this, "Failed to Save Quiz", "Failed to create directory to save the catrgory files in.");
-				return;
-			}
-
-			/** Category Entries */
-			const std::vector< MusicQuiz::EntryCreator* > entries = category->getEntries();
-			const size_t numberOfEntries = entries.size();
-			for ( size_t j = 0; j < numberOfEntries; ++j ) {
-				/** Get Entry */
-				MusicQuiz::EntryCreator* entry = entries[j];
-
-				/** Create Entry tree */
-				boost::property_tree::ptree& entry_tree = category_tree.add("QuizEntry", "");
-
-				/** Entry Name */
-				const std::string entryName = entry->getName().toStdString();
-				if ( entryName.empty() ) {
-					QMessageBox::warning(this, "Failed to Save Quiz", "Failed to save quiz. All entries needs to have a name.");
-					return;
-				}
-				entry_tree.put("<xmlattr>.name", entryName);
-
-				/** Entry Type */
-				const MusicQuiz::EntryCreator::EntryType type = entry->getType();
-				if ( type == MusicQuiz::EntryCreator::EntryType::Song ) {
-					entry_tree.put("<xmlattr>.type", "song");
-				} else if ( type == MusicQuiz::EntryCreator::EntryType::Video ) {
-					entry_tree.put("<xmlattr>.type", "video");
-				}
-
-				/** Entry Answer */
-				const std::string entryAnswer = entry->getAnswer().toStdString();
-				if ( entryAnswer.empty() ) {
-					QMessageBox::warning(this, "Failed to Save Quiz", "Failed to save quiz. Answers have to be set for all entries.");
-					return;
-				}
-				entry_tree.put("Answer", entryAnswer);
-
-				/** Entry Points */
-				entry_tree.put("Points", entry->getPoints());
-
-				/** Media */
-				if ( type == MusicQuiz::EntryCreator::EntryType::Song ) { // Song
-					/** Entry Song Start Time */
-					entry_tree.put("StartTime", entry->getSongStartTime());
-
-					/** Entry Song Answer Start Time */
-					entry_tree.put("AnswerStartTime", entry->getAnswerStartTime());
-
-					/** Media File */
-					const std::string songFile = entry->getSongFile().toStdString();
-					const std::string songPath = quizPath + "/media/" + categoryName + "/" + entryName + ".mp3";
-					boost::property_tree::ptree& media_tree = entry_tree.add("Media", "");
-					media_tree.put("SongFile", songPath);
-
-					/** Copy Media File */
-					boost::filesystem::copy_file(songFile, mediaDirectoryPath + "/" + categoryName + "/" + entryName + ".mp3", boost::filesystem::copy_option::overwrite_if_exists);
-				} else if ( type == MusicQuiz::EntryCreator::EntryType::Video ) { // Video
-					/** Entry Video Start Time */
-					entry_tree.put("StartTime", entry->getVideoStartTime());
-
-					/** Entry Video Song Start Time */
-					entry_tree.put("VideoSongStartTime", entry->getVideoSongStartTime());
-
-					/** Entry Video Answer Start Time */
-					entry_tree.put("AnswerStartTime", entry->getVideoAnswerStartTime());
-
-					/** Media File */
-					const std::string videoFile = entry->getVideoFile().toStdString();
-					const std::string songFile = entry->getVideoSongFile().toStdString();
-					const std::string videoPath = quizPath + "/media/" + categoryName + "/" + entryName + ".mp4";
-					const std::string songPath = quizPath + "/media/" + categoryName + "/" + entryName + ".mp3";
-					boost::property_tree::ptree& media_tree = entry_tree.add("Media", "");
-					media_tree.put("VideoFile", videoPath);
-					media_tree.put("SongFile", songPath);
-
-					/** Copy Media File */
-					boost::filesystem::copy_file(videoFile, mediaDirectoryPath + "/" + categoryName + "/" + entryName + ".mp4", boost::filesystem::copy_option::overwrite_if_exists);
-					boost::filesystem::copy_file(songFile, mediaDirectoryPath + "/" + categoryName + "/" + entryName + ".mp3", boost::filesystem::copy_option::overwrite_if_exists);
-				}
-			}
-		}
-
-		/** Delete Previous Folder */
-		const boost::filesystem::path target(quizPath + "/media");
-		if ( boost::filesystem::exists(target) || boost::filesystem::is_directory(target) ) {
-			boost::filesystem::directory_iterator file(target), end;
-			for ( ; file != end; ++file ) {
-				boost::filesystem::remove_all(file->path());
-			}
-			boost::filesystem::remove_all(target);
-		}
-
-		/** Rename tmp folder */
-		boost::filesystem::rename(mediaDirectoryPath, target);
-
-		/** Save Quiz */
-#if ( BOOST_VERSION >= 105600 )
-	boost::property_tree::xml_writer_settings<std::string> settings('\t', 1);
-#elif
-	boost::property_tree::xml_writer_settings<char> settings('\t', 1);
-#endif
-		boost::property_tree::write_xml(quizPath + "/" + quizName + ".quiz.xml", tree, std::locale(), settings);
-
-		/** Popup to tell user that the quiz was saved */
-		QMessageBox::information(this, "Info", "Quiz saves successfully.");
-	} catch ( const std::exception& err ) {
-		QMessageBox::warning(this, "Failed to Save Quiz", "Failed to save the quiz. " + QString::fromStdString(err.what()));
-	} catch ( ... ) {
-		QMessageBox::warning(this, "Failed to Save Quiz", "Failed to save the quiz. Unkown Error.");
-	}
+	/** Save Quiz */
+	MusicQuiz::QuizFactory::saveQuiz(quizData, this);
 }
 
 void MusicQuiz::QuizCreator::openLoadQuizDialog()

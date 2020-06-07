@@ -5,12 +5,14 @@
 
 #include <QWidget>
 
+#include <boost/filesystem.hpp>
+
 #include "util/QuizSettings.hpp"
 #include "media/AudioPlayer.hpp"
 #include "media/VideoPlayer.hpp"
 #include "gui_tools/widgets/QuizTeam.hpp"
 #include "gui_tools/widgets/QuizBoard.hpp"
-
+#include "gui_tools/QuizCreator/QuizCreator.hpp"
 
 
 namespace MusicQuiz {
@@ -65,6 +67,20 @@ namespace MusicQuiz {
 		static MusicQuiz::QuizBoard* createQuiz(const size_t idx, const MusicQuiz::QuizSettings& settings, const std::shared_ptr< media::AudioPlayer >& audioPlayer,
 			const std::shared_ptr< media::VideoPlayer >& videoPlayer, const std::vector<MusicQuiz::QuizTeam*>& teams = {}, bool preview = false, QWidget* parent = nullptr);
 
+		/**
+		 * @brief Saves the quiz.
+		 *
+		 * @param[in] quizData The quiz data.
+		 * @param[in] parent The quiz board parent.
+		 */
+		static void saveQuiz(const MusicQuiz::QuizCreator::QuizData& data, QWidget* parent = nullptr);
+
+		/**
+		 * @brief Deletes a directory.
+		 *
+		 * @param[in] dir The directory to delete.
+		 */
+		static void deleteDirectory(const boost::filesystem::path& dir);
 	protected:
 	};
 }

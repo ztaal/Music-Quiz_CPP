@@ -23,6 +23,19 @@ namespace MusicQuiz {
 	{
 		Q_OBJECT
 	public:
+		struct QuizData
+		{
+			QString quizName = "";
+			QString quizAuthor = ""; 
+			QString quizDescription = "";
+
+			bool guessTheCategory = false;
+			size_t guessTheCategoryPoints = 0;
+
+			std::vector< QString > quizRowCategories;
+			std::vector< MusicQuiz::CategoryCreator* > quizCategories;
+		};
+
 		/**
 		 * @brief Constructor
 		 *
@@ -120,7 +133,7 @@ namespace MusicQuiz {
 		void createLayout();
 
 		/** Variables */
-		std::string quizSavedName = "";
+		std::string _quizSavedName = "";
 
 		QTabWidget* _tabWidget = nullptr;
 
@@ -132,6 +145,7 @@ namespace MusicQuiz {
 		QTableWidget* _categoriesTable = nullptr;
 		QTableWidget* _rowCategoriesTable = nullptr;
 
+		std::vector< QString > _rowCategories;
 		std::vector< MusicQuiz::CategoryCreator* > _categories;
 
 		/** Audio Player */

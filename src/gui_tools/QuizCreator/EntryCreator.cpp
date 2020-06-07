@@ -778,34 +778,49 @@ const MusicQuiz::EntryCreator::EntryType MusicQuiz::EntryCreator::getType() cons
 	return _entryType;
 }
 
-const QString MusicQuiz::EntryCreator::getSongFile() const
+const QString MusicQuiz::EntryCreator::getSongFile()
 {
 	/** Sanity Check */
 	if ( _songFileLineEdit == nullptr ) {
 		return "";
 	}
 
-	return _songFileLineEdit->text();
+	/** Check if file is valid */
+	if ( isSongFileValid(_songFileLineEdit->text()) ) {
+		return _songFileLineEdit->text();
+	}
+
+	return "";
 }
 
-const QString MusicQuiz::EntryCreator::getVideoFile() const
+const QString MusicQuiz::EntryCreator::getVideoFile()
 {
 	/** Sanity Check */
 	if ( _videoFileLineEdit == nullptr ) {
 		return "";
 	}
 
-	return _videoFileLineEdit->text();
+	/** Check if file is valid */
+	if ( isVideoFileValid(_videoFileLineEdit->text()) ) {
+		return _videoFileLineEdit->text();
+	}
+
+	return "";
 }
 
-const QString MusicQuiz::EntryCreator::getVideoSongFile() const
+const QString MusicQuiz::EntryCreator::getVideoSongFile()
 {
 	/** Sanity Check */
 	if ( _videoSongFileLineEdit == nullptr ) {
 		return "";
 	}
 
-	return _videoSongFileLineEdit->text();
+	/** Check if file is valid */
+	if ( isSongFileValid(_videoSongFileLineEdit->text()) ) {
+		return _videoSongFileLineEdit->text();
+	}
+
+	return "";
 }
 
 const size_t MusicQuiz::EntryCreator::getSongStartTime()
