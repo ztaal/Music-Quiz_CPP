@@ -63,7 +63,11 @@ void MusicQuiz::QuizWinningScreen::createLayout()
 	mainlayout->setRowStretch(1, 5);
 
 	/** Text Label */
-	QLabel* textLabel = new QLabel("The Winner!");
+	QString topLabel = "The Winner!";
+	if ( _winningTeams.size() > 1 ) {
+		topLabel = "The Winners!";
+	}
+	QLabel* textLabel = new QLabel(topLabel);
 	textLabel->setObjectName("winningScreenTextLabel");
 	topLayout->addWidget(textLabel, 0, 0, Qt::AlignCenter);
 
