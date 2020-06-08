@@ -6,8 +6,12 @@
 #include <QObject>
 #include <QWidget>
 #include <QDialog>
+#include <QSlider>
+#include <QLayout>
+#include <QLineEdit>
 #include <QCheckBox>
 #include <QKeyEvent>
+#include <QGridLayout>
 
 #include "util/QuizSettings.hpp"
 
@@ -46,6 +50,34 @@ namespace MusicQuiz {
 
 	private slots:
 		/**
+		 * @brief Enables / diables the daily double settings.
+		 *
+		 * @param[in] enabled If true the daily double settings will be enabled.
+		 */
+		void setDailyDoubleEnabled(bool enabled);
+
+		/**
+		 * @brief Enables / diables the daily triple settings.
+		 *
+		 * @param[in] enabled If true the daily triple settings will be enabled.
+		 */
+		void setDailyTripleEnabled(bool enabled);
+
+		/**
+		 * @brief Updates the daily double line edit.
+		 *
+		 * @param[in] value The new value.
+		 */
+		void setDailyDoublePercentage(int value);
+
+		/**
+		 * @brief Updates the daily triple line edit.
+		 *
+		 * @param[in] value The new value.
+		 */
+		void setDailyTriplePercentage(int value);
+
+		/**
 		 * @brief Closes the dialog and emits a signal with the settings.
 		 */
 		void saveSettings();
@@ -83,12 +115,50 @@ namespace MusicQuiz {
 		 */
 		void createLayout(const MusicQuiz::QuizSettings& settings);
 
+		/**
+		 * @brief Creates the daily double layout.
+		 *
+		 * @param[in] settings The currently set settings.
+		 *
+		 * @return The daily double layout.
+		 */
+		QWidget* getDailyDoubleLayout(const MusicQuiz::QuizSettings& settings);
+
+		/**
+		 * @brief Creates the daily triple layout.
+		 *
+		 * @param[in] settings The currently set settings.
+		 *
+		 * @return The daily triple layout.
+		 */
+		QWidget* getDailyTripleLayout(const MusicQuiz::QuizSettings& settings);
+
+		/**
+		 * @brief Enable / disable a layout and its children.
+		 *
+		 * @param[in] layout The layout.
+		 * @param[in] enabled If true the layout are enabled.
+		 */
+		void setLayoutEnabled(QLayout* layout, bool enabled);
+
 		/** Variables */
 		QCheckBox* _hiddenTeam = nullptr;
 		QCheckBox* _hiddenAnswers = nullptr;
+		
+		/** Daily Double */
 		QCheckBox* _dailyDouble = nullptr;
-		QCheckBox* _dailyTriple = nullptr;
 		QCheckBox* _dailyDoubleHidden = nullptr;
+		QSlider* _dailyDoublePercentage = nullptr;
+		QGridLayout* _dailyDoubleLayout = nullptr;
+		QLineEdit* _dailyDoublePercentageLineEdit = nullptr;
+		const size_t _minDoublePercentage = 5, _maxDoublePercentage = 75;
+
+		/** Daily Triple */
+		QCheckBox* _dailyTriple = nullptr;
 		QCheckBox* _dailyTripleHidden = nullptr;
+		QSlider* _dailyTriplePercentage = nullptr;
+		QGridLayout* _dailyTripleLayout = nullptr;
+		QLineEdit* _dailyTriplePercentageLineEdit = nullptr;
+		const size_t _minTriplePercentage = 5, _maxTriplePercentage = 25;
 	};
 }

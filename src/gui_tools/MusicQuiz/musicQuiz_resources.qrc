@@ -16,5 +16,6 @@
         <file>imgs/add_icon_black.png</file>
         <file>imgs/add_icon_yellow.png</file>
         <file>imgs/edit_icon_black.png</file>
+        <file>imgs/question_mark_black.png</file>
     </qresource>
 </RCC>

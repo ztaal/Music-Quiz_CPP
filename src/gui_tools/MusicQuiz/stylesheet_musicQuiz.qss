@@ -85,14 +85,6 @@ QPushButton#QuizEntry_rowCategoryLabel
 	min-height			: 100px;
 }
 
-QPushButton#settingsInfo
-{
-	min-width			: 30px;
-	max-width			: 30px;
-	min-height			: 30px;
-	max-height			: 30px;
-}
-
 QPushButton#menuButton
 {
 	color				: Yellow;
@@ -191,6 +183,17 @@ QPushButton#quizCreatorBtn
 	min-height			: 40px;
 }
 
+QPushButton#settingsInfo
+{
+	background-color	: rgba(0, 0, 0, 0);
+
+	min-height			: 15px;
+	min-width			: 15px;
+	max-height			: 15px;
+	max-width			: 15px;
+
+	image				: url(:/imgs/question_mark_black.png);
+}
 
 
 /****************************************/

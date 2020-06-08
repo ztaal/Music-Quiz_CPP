@@ -92,7 +92,7 @@ MusicQuiz::QuizBoard* MusicQuiz::QuizFactory::createQuiz(const size_t idx, const
 	/** Get Daily Double Entries */
 	size_t dailyDoubleCount = std::floor(double(numberOfEntries * settings.dailyDoublePercentage) / 100.0);
 	std::vector<size_t> dailyDoubleSelectedElements;
-	if ( settings.dailyDouble ) {
+	if ( settings.dailyDouble && !teams.empty() ) {
 		/** Ensure that there is atleas one element if the setting is enabled */
 		if ( dailyDoubleCount == 0 ) {
 			dailyDoubleCount = 1;
@@ -109,7 +109,7 @@ MusicQuiz::QuizBoard* MusicQuiz::QuizFactory::createQuiz(const size_t idx, const
 	/** Get Daily Triple Entries */
 	size_t dailyTripleCount = std::floor(double(numberOfEntries * settings.dailyTriplePercentage) / 100.0);
 	std::vector<size_t> dailyTripleSelectedElements;
-	if ( settings.dailyTriple ) {
+	if ( settings.dailyTriple && !teams.empty() ) {
 		/** Ensure that there is atleas one element if the setting is enabled */
 		if ( dailyTripleCount == 0 ) {
 			dailyTripleCount = 1;

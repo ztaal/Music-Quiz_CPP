@@ -98,8 +98,5 @@ int main(int argc, char* argv[])
 
  * Make settings menu pretty
 
- * Add daily double and daily triple
-	- Add percentage slider
-
  * Update popup boxes cosmetics
 */
