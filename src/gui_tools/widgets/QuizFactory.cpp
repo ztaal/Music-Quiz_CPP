@@ -4,6 +4,7 @@
 #include <time.h>
 #include <vector>
 #include <string>
+#include <fstream>
 #include <stdlib.h>
 #include <stdexcept>
 
@@ -378,6 +379,25 @@ void MusicQuiz::QuizFactory::saveQuiz(const MusicQuiz::QuizCreator::QuizData& da
 		boost::property_tree::xml_writer_settings<char> settings('\t', 1);
 #endif
 		boost::property_tree::write_xml(quizPath + "/" + quizName + ".quiz.xml", tree, std::locale(), settings);
+
+		/** Create Cheat Sheet */
+		std::ofstream cheatSheet(quizPath + "/" + quizName + ".cheatsheet.txt");
+		if ( cheatSheet.is_open() ) {
+			cheatSheet << "--------------   CHEATSHEET   --------------\n"
+				<< "Quiz: " << quizName << "\n"
+				<< "Guess the Category: " << (data.guessTheCategory ? "Enabled" : "Disabled");
+
+			const std::vector< MusicQuiz::CategoryCreator* > categories = data.quizCategories;
+			for ( size_t i = 0; i < categories.size(); ++i ) {
+				cheatSheet << "\n\n-----  " << categories[i]->getName().toStdString() << "  -----";
+				std::vector< MusicQuiz::EntryCreator* > categoryEntries = data.quizCategories[i]->getEntries();
+				for ( size_t j = 0; j < categoryEntries.size(); ++j ) {
+					cheatSheet << "\n#" << j + 1 << " - " << categoryEntries[j]->getPoints() << " - " << categoryEntries[j]->getAnswer().toStdString();
+				}
+			}
+			cheatSheet.flush();
+			cheatSheet.close();
+		}
 
 		/** Popup to tell user that the quiz was saved */
 		QMessageBox::information(parent, "Info", "Quiz saves successfully.");
