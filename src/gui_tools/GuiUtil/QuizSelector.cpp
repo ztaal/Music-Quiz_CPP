@@ -67,7 +67,6 @@ void MusicQuiz::QuizSelector::createLayout()
 	categoryLayout->setVerticalSpacing(20);
 	mainlayout->setColumnStretch(0, 1);
 	mainlayout->setColumnStretch(1, 4);
-	//mainlayout->setColumnStretch(2, 1);
 
 	/** Quiz Selection List */
 	_quizSelectionList = new QListWidget;
@@ -256,12 +255,19 @@ void MusicQuiz::QuizSelector::quizSelected()
 			return;
 	}
 
-	QString msg = QString::fromStdString("Are you sure you want to select quiz '" + _quizPreviews[currentIndex].quizName + "'.");
+	/** Quiz Name */
+	const QString quizName = QString::fromStdString(_quizPreviews[currentIndex].quizName);
+
+	/** Quiz Name */
+	const QString quizAuthor = QString::fromStdString(_quizPreviews[currentIndex].quizAuthor);
+
+	/** Popup Messagebox */
+	QString msg = "Are you sure you want to select quiz '" + quizName + "'?";
 	QMessageBox::StandardButton resBtn = QMessageBox::question(this, "Select Quiz?", msg,
 		QMessageBox::No | QMessageBox::Yes, QMessageBox::Yes);
 
 	if ( resBtn == QMessageBox::Yes ) {
-		emit quizSelectedSignal(currentIndex, _settings);
+		emit quizSelectedSignal(currentIndex, quizName, quizAuthor, _settings);
 	}
 }
 

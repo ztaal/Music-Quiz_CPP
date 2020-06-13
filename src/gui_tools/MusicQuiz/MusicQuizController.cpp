@@ -106,7 +106,7 @@ void MusicQuiz::MusicQuizController::executeQuiz()
 
 		/** Connect Signals */
 		connect(_quizSelector, SIGNAL(quitSignal()), this, SLOT(quitQuiz()));
-		connect(_quizSelector, SIGNAL(quizSelectedSignal(size_t, const MusicQuiz::QuizSettings&)), this, SLOT(quizSelected(size_t, const MusicQuiz::QuizSettings&)));
+		connect(_quizSelector, SIGNAL(quizSelectedSignal(size_t, const QString&, const QString&, const MusicQuiz::QuizSettings&)), this, SLOT(quizSelected(size_t, const QString&, const QString&, const MusicQuiz::QuizSettings&)));
 
 		/** Show widget */
 		_quizSelector->exec();
@@ -144,7 +144,7 @@ void MusicQuiz::MusicQuizController::executeQuiz()
 		}
 
 		/** Show Intro Screen */
-		_quizIntro = new MusicQuiz::QuizIntroScreen;
+		_quizIntro = new MusicQuiz::QuizIntroScreen(_quizName, _quizAuthor, this);
 
 		/** Connect Signals */
 		try {
@@ -237,12 +237,13 @@ void MusicQuiz::MusicQuizController::quitQuiz()
 	QApplication::quit();
 }
 
-void MusicQuiz::MusicQuizController::quizSelected(const size_t quizIdx, const MusicQuiz::QuizSettings& settings)
+void MusicQuiz::MusicQuizController::quizSelected(const size_t quizIdx, const QString& quizName, const QString& quizAuthor, const MusicQuiz::QuizSettings& settings)
 {
 	/** Set Quiz Selected */
 	_quizSelected = true;
 	_selectedQuizIdx = quizIdx;
-	LOG_INFO("Quiz Selected #" << _selectedQuizIdx);
+	_quizName = quizName;
+	_quizAuthor = quizAuthor;
 
 	/** Set Settings */
 	_settings = settings;

@@ -95,7 +95,7 @@ namespace MusicQuiz {
 
 	signals:
 		void quitSignal();
-		void quizSelectedSignal(size_t quizIdx, const MusicQuiz::QuizSettings& settings);
+		void quizSelectedSignal(size_t quizIdx, const QString& quizName, const QString& quizAuthor, const MusicQuiz::QuizSettings& settings);
 	protected:
 		/**
 		 * @brief Creates the category layout.

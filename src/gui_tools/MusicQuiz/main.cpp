@@ -87,7 +87,6 @@ int main(int argc, char* argv[])
 
 /** TODO LIST
  * Quiz Author
-	- Add author to quiz creator.
 	- Add author and quiz name to quiz intro screen.
 
  * Add guess the category in music quiz

@@ -16,9 +16,11 @@ namespace MusicQuiz {
 		/**
 		 * @brief Constructor
 		 *
+		 * @param[in] quizName The quiz name.
+		 * @param[in] quizAuhtor The quiz author.
 		 * @param[in] parent The parent widget.
 		 */
-		explicit QuizIntroScreen(QWidget* parent = nullptr);
+		explicit QuizIntroScreen(const QString& quizName, const QString& quizAuhtor, QWidget* parent = nullptr);
 
 		/**
 		 * @brief Destructor
@@ -48,7 +50,10 @@ namespace MusicQuiz {
 		void createLayout();
 
 		/** Variables */
+		QString _quizName = "";
+		QString _quizAuthor = "";
+
 		QTimer _timer;
-		const size_t _introDisplayTime = 2500; // in ms
+		const size_t _introDisplayTime = 4000; // in ms
 	};
 }

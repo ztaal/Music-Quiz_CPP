@@ -242,7 +242,20 @@ QLabel#authorLabel
 
 QLabel#quizIntroLabel
 {
-	font-size			: 100px;
+	font-size			: 150px;
+	font-weight			: bold;
+	color				: Yellow;
+}
+
+QLabel#quizIntroNameLabel
+{
+	font-size			: 70px;
+	color				: Yellow;
+}
+
+QLabel#quizIntroAuthorLabel
+{
+	font-size			: 30px;
 	color				: Yellow;
 }
 

@@ -78,9 +78,11 @@ namespace MusicQuiz {
 		 * @brief Handles quiz selected.
 		 *
 		 * @param[in] quizIdx The selected quiz index.
+		 * @param[in] quizName The selected quiz name.
+		 * @param[in] quizAuthor The selected quiz author.
 		 * @param[in] settings The quiz settings.
 		 */
-		void quizSelected(size_t quizIdx, const MusicQuiz::QuizSettings& settings);
+		void quizSelected(size_t quizIdx, const QString& quizName, const QString& quizAuthor, const MusicQuiz::QuizSettings& settings);
 
 		/**
 		 * @brief Handles team selected.
@@ -127,6 +129,8 @@ namespace MusicQuiz {
 
 		/** Quiz Settings */
 		size_t _selectedQuizIdx = 0;
+		QString _quizName = "";
+		QString _quizAuthor = "";
 		MusicQuiz::QuizSettings _settings;
 
 		/** Audio Player */
