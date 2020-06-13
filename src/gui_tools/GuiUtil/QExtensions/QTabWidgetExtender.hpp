@@ -13,7 +13,7 @@ namespace MusicQuiz {
 			 *
 			 * @param[in] parent The parent widget.
 			 */
-			explicit QTabWidgetExtender(QWidget *parent = nullptr);
+			explicit QTabWidgetExtender(QWidget* parent = nullptr);
 
 			/**
 			 * @brief Default destructor.

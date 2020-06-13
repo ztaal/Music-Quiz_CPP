@@ -141,7 +141,7 @@ namespace MusicQuiz {
 		 *
 		 * @param[in] file The video song file.
 		 */
-		void setVideoSongFile(const QString & file);
+		void setVideoSongFile(const QString& file);
 
 		/**
 		 * @brief Gets the video song file.
@@ -295,7 +295,7 @@ namespace MusicQuiz {
 		 * @brief Creates the video file category layout.
 		 */
 		QGridLayout* createVideoFileLayout();
-		
+
 		/**
 		 * @brief Checks if the song file name is valid.
 		 *

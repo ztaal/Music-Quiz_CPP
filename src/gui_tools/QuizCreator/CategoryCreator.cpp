@@ -267,7 +267,7 @@ void MusicQuiz::CategoryCreator::setEntries(const std::vector< MusicQuiz::EntryC
 	if ( _entriesTable == nullptr ) {
 		return;
 	}
-	
+
 	/** Set Entries */
 	_entries = entries;
 

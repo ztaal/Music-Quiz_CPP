@@ -214,7 +214,7 @@ void MusicQuiz::MusicQuizController::executeQuiz()
 
 			/** Connect Signals */
 			connect(_quizWinningScreen, SIGNAL(winningScreenCompleteSignal()), this, SLOT(quitQuiz()));
-				
+
 			/** Start Winning Song */
 			_audioPlayer->play(_vicatorySongFile, true);
 

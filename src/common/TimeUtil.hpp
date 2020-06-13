@@ -16,8 +16,8 @@ namespace common {
 		/** Deleted Constructor */
 		~TimeUtil() = delete;
 
-		/** 
-		 * @brief Get the current time in GMT as a string of the format Www Mmm dd hh:mm:ss yyyy 
+		/**
+		 * @brief Get the current time in GMT as a string of the format Www Mmm dd hh:mm:ss yyyy
 					Where Www is weekday, Mmm the month (in letters), dd the day hh:mm:ss the time, and yyyy the year.
 		 *
 		 * @return The current time.

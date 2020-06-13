@@ -176,7 +176,7 @@ std::vector<MusicQuiz::QuizCategory*> MusicQuiz::util::QuizLoader::loadQuizCateg
 									/** Check if file exsists */
 									if ( !boost::filesystem::exists(songFile.toStdString()) ) {
 										err += "Missing song file '" + songFile.toStdString() + "'\n";
-									} 
+									}
 
 									/** Push Back Song Entry */
 									categorieEntries.push_back(new MusicQuiz::QuizEntry(songFile, answer, points, startTime, answerStartTime, audioPlayer));
@@ -210,7 +210,7 @@ std::vector<MusicQuiz::QuizCategory*> MusicQuiz::util::QuizLoader::loadQuizCateg
 			} catch ( ... ) {
 				LOG_ERROR("Failed to load category.");
 			}
-			
+
 		}
 	}
 

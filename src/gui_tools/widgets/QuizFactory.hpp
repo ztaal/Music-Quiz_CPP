@@ -17,7 +17,7 @@
 
 namespace MusicQuiz {
 	class QuizFactory
-{
+	{
 	public:
 		/**
 		 * @brief Deleted constructor.
@@ -49,7 +49,7 @@ namespace MusicQuiz {
 		 * @return The quiz board.
 		 */
 		static MusicQuiz::QuizBoard* createQuiz(const std::string& quizName, const MusicQuiz::QuizSettings& settings, const std::shared_ptr< media::AudioPlayer >& audioPlayer,
-			const std::shared_ptr< media::VideoPlayer >& videoPlayer, const std::vector<MusicQuiz::QuizTeam*>& teams = {}, bool preview = false, QWidget * parent = nullptr);
+			const std::shared_ptr< media::VideoPlayer >& videoPlayer, const std::vector<MusicQuiz::QuizTeam*>& teams = {}, bool preview = false, QWidget* parent = nullptr);
 
 		/**
 		 * @brief Creates the music quiz.

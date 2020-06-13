@@ -54,7 +54,7 @@ MusicQuiz::QuizCreator::QuizCreator(QWidget* parent) :
 	_audioPlayer = std::make_shared<media::AudioPlayer>();
 
 	/** Create Video Player */
-	_videoPlayer = std::make_shared<media::VideoPlayer>();	
+	_videoPlayer = std::make_shared<media::VideoPlayer>();
 	_videoPlayer->setWindowFlags(windowFlags() | Qt::Window | Qt::WindowMaximizeButtonHint | Qt::WindowMinimizeButtonHint | Qt::WindowStaysOnTopHint);
 
 	/** Set Video Player Size */
@@ -142,7 +142,7 @@ void MusicQuiz::QuizCreator::createLayout()
 	_categoriesTable->verticalHeader()->setFixedWidth(40);
 	_categoriesTable->verticalHeader()->setSectionsMovable(false); // \todo set this to true to enable dragging.
 	_categoriesTable->verticalHeader()->setDefaultSectionSize(40);
-	_categoriesTable->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed); 
+	_categoriesTable->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 	connect(_categoriesTable->verticalHeader(), SIGNAL(sectionMoved(int, int, int)), this, SLOT(categoryOrderChanged(int, int, int)));
 	setupTabLayout->addWidget(_categoriesTable, ++row, 0, 1, 2);
 
@@ -301,8 +301,8 @@ void MusicQuiz::QuizCreator::editCategory()
 	const int index = button->property("index").toInt();
 	if ( index >= _tabWidget->count() || index >= categoryCount ) {
 		return;
-	}	
-	
+	}
+
 	/** Go to the Tab */
 	_tabWidget->setCurrentIndex(index + 1);
 }
@@ -533,7 +533,7 @@ void MusicQuiz::QuizCreator::loadQuiz(const std::string& quizName)
 	}
 
 	/** Load Quiz */
-	LOG_INFO("Loading quiz '" << quizName << "'"); 
+	LOG_INFO("Loading quiz '" << quizName << "'");
 	QuizData data;
 	try {
 		data = MusicQuiz::QuizFactory::loadQuiz(quizName, _audioPlayer, _videoPlayer, this);

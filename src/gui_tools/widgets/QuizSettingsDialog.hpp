@@ -81,7 +81,7 @@ namespace MusicQuiz {
 		 * @brief Closes the dialog and emits a signal with the settings.
 		 */
 		void saveSettings();
-		
+
 		/**
 		 * @brief Emits the quit signal.
 		 */
@@ -144,7 +144,7 @@ namespace MusicQuiz {
 		/** Variables */
 		QCheckBox* _hiddenTeam = nullptr;
 		QCheckBox* _hiddenAnswers = nullptr;
-		
+
 		/** Daily Double */
 		QCheckBox* _dailyDouble = nullptr;
 		QCheckBox* _dailyDoubleHidden = nullptr;

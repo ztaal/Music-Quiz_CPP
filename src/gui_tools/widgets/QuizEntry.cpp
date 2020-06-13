@@ -106,7 +106,7 @@ void MusicQuiz::QuizEntry::handleMouseEvent(QMouseEvent* event)
 			size_t points = _points;
 			if ( _doublePoints ) {
 				points *= 2;
-			} else if ( _triplePoints) {
+			} else if ( _triplePoints ) {
 				points *= 3;
 			}
 			emit answered(points);
@@ -235,7 +235,7 @@ void MusicQuiz::QuizEntry::applyColor(const QColor& color)
 	/** Background Color */
 	std::stringstream ss;
 	ss << "background-color	: rgb(" << color.red() << ", " << color.green() << ", " << color.blue() << ");";
-	
+
 	/** Border Color */
 	QColor borderColor = color;
 	if ( _doublePoints ) { // Double Points
@@ -246,7 +246,7 @@ void MusicQuiz::QuizEntry::applyColor(const QColor& color)
 		if ( (_hiddenTriplePoints && _state != QuizEntry::EntryState::IDLE) || !_hiddenTriplePoints ) {
 			borderColor = QColor(220, 0, 185);
 		}
-	}		
+	}
 	ss << "border: 3px solid rgb(" << borderColor.red() << ", " << borderColor.green() << ", " << borderColor.blue() << ");";
 
 	/** Text Color */

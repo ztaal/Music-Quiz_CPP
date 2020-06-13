@@ -48,7 +48,7 @@ namespace MusicQuiz {
 		 *
 		 * @param[in] parent The parent widget.
 		 */
-		explicit MusicQuizController(QWidget *parent = nullptr);
+		explicit MusicQuizController(QWidget* parent = nullptr);
 
 		/**
 		 * @brief Destructor

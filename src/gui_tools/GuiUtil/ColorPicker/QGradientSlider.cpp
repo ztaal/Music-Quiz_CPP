@@ -8,7 +8,7 @@
 #include <QStyleOptionSlider>
 
 
-ColorPicker::QGradientSlider::QGradientSlider(QWidget* parent) : 
+ColorPicker::QGradientSlider::QGradientSlider(QWidget* parent) :
 	QGradientSlider(Qt::Horizontal, parent)
 {}
 

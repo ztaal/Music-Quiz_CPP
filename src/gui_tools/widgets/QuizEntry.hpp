@@ -30,7 +30,7 @@ namespace MusicQuiz {
 		 * @param[in] audioPlayer The audio player.
 		 * @param[in] parent The parent widget.
 		 */
-		explicit QuizEntry(const QString &audioFile, const QString &answer, size_t points, size_t startTime, size_t answerStartTime,
+		explicit QuizEntry(const QString& audioFile, const QString& answer, size_t points, size_t startTime, size_t answerStartTime,
 			const std::shared_ptr< media::AudioPlayer >& audioPlayer, QWidget* parent = nullptr);
 
 		/**
@@ -88,7 +88,7 @@ namespace MusicQuiz {
 		 *
 		 * @param[in] color The color.
 		 */
-		void setColor(const QColor &color);
+		void setColor(const QColor& color);
 
 		/**
 		 * @brief Enables / disables the hidden answers setting.
@@ -162,7 +162,7 @@ namespace MusicQuiz {
 
 		QString _audioFile = "";
 		QString _videoFile = "";
-		
+
 		EntryType _type = EntryType::Song;
 		EntryState _state = EntryState::IDLE;
 

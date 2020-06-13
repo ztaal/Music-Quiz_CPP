@@ -125,7 +125,7 @@ void MusicQuiz::LoadQuizDialog::loadQuiz()
 	if ( _buttonGroup == nullptr ) {
 		return;
 	}
-	
+
 	/** Get Index */
 	QRadioButton* btn = qobject_cast<QRadioButton*>(_buttonGroup->checkedButton());
 	if ( btn == nullptr ) {

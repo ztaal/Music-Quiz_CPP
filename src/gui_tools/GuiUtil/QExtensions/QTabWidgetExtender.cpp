@@ -3,7 +3,7 @@
 #include "gui_tools/GuiUtil/QExtensions/QTabBarExtender.hpp"
 
 
-MusicQuiz::QExtensions::QTabWidgetExtender::QTabWidgetExtender(QWidget *parent) :
+MusicQuiz::QExtensions::QTabWidgetExtender::QTabWidgetExtender(QWidget* parent) :
 	QTabWidget(parent)
 {
 	setTabBar(new QTabBarExtender);

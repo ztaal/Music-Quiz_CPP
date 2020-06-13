@@ -8,14 +8,14 @@
 
 
 media::VideoPlayer::VideoPlayer(QWidget* parent) :
-		QWidget(parent)
+	QWidget(parent)
 {
 	/** Create Video Widget */
 	QVBoxLayout* layout = new QVBoxLayout;
 	_videoWidget = new QVideoWidget(this);
 	layout->addWidget(_videoWidget);
 	_videoWidget->show();
-	
+
 	/** Create Media Player */
 	_player = new QMediaPlayer(this);
 	_player->setVideoOutput(_videoWidget);
@@ -73,7 +73,7 @@ void media::VideoPlayer::play(const QString& videoFile, const size_t startTime, 
 		_player->setVolume(0);
 	} else {
 		_player->setVolume(100);
-}
+	}
 
 	/** Set Start Time */
 	_player->setPosition(startTime);

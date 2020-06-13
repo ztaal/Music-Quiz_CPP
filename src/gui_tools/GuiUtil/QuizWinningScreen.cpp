@@ -20,7 +20,7 @@ MusicQuiz::QuizWinningScreen::QuizWinningScreen(const std::vector<MusicQuiz::Qui
 	setWindowFlags(windowFlags() | Qt::Window | Qt::FramelessWindowHint | Qt::WindowMaximizeButtonHint | Qt::WindowMinimizeButtonHint | Qt::MSWindowsFixedSizeDialogHint);
 
 	/** Set Object Name */
-	setObjectName("QuizWinningScreen"); 
+	setObjectName("QuizWinningScreen");
 
 	/** Create Layout */
 	createLayout();

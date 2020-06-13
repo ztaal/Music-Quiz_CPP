@@ -93,7 +93,7 @@ namespace ColorPicker {
 		void setColorSaturation(qreal value);
 
 		/**
-		 * @brief Sets the Hue Saturation and ColorValue, 
+		 * @brief Sets the Hue Saturation and ColorValue,
 		 * @note Ignores the alpha value.
 		 *
 		 * @param[in] color The color.

@@ -100,7 +100,7 @@ void MusicQuiz::TeamSelector::createLayout()
 	selectionLayout->addWidget(_hueSlider, 1, 1);
 
 	/** Add Button */
-	QPushButton* addBtn = new QPushButton; 
+	QPushButton* addBtn = new QPushButton;
 	QPixmap pixmap(":/imgs/add_icon_yellow.png");
 	QIcon icon(pixmap);
 	addBtn->setIcon(icon);

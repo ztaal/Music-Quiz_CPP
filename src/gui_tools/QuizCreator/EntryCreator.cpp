@@ -721,7 +721,7 @@ void MusicQuiz::EntryCreator::setEntryType(int index)
 		/** Set Type */
 		_entryType = EntryType::Video;
 
-		/** Set Video Minimum Size */	
+		/** Set Video Minimum Size */
 		int width = 0;
 		int height = 0;
 		if ( parentWidget()->parentWidget() != nullptr ) {

@@ -142,7 +142,7 @@ QWidget* MusicQuiz::QuizSettingsDialog::getDailyDoubleLayout(const MusicQuiz::Qu
 	checkBoxLayout->addWidget(infoBtn, Qt::AlignRight);
 	_dailyDoubleLayout->addItem(checkBoxLayout, 0, 0, 1, 2);
 
-	/** Percentage */	
+	/** Percentage */
 	QLabel* label = new QLabel("Percentage");
 	_dailyDoublePercentageLineEdit = new QLineEdit(QString::number(settings.dailyDoublePercentage) + " %");
 	_dailyDoublePercentageLineEdit->setStyleSheet("* { background-color: rgba(0, 0, 0, 0); border: none;}");
@@ -150,7 +150,7 @@ QWidget* MusicQuiz::QuizSettingsDialog::getDailyDoubleLayout(const MusicQuiz::Qu
 	_dailyDoublePercentageLineEdit->setReadOnly(true);
 	_dailyDoubleLayout->addWidget(label, 1, 0, Qt::AlignLeft);
 	_dailyDoubleLayout->addWidget(_dailyDoublePercentageLineEdit, 1, 1, Qt::AlignRight);
-	
+
 	_dailyDoublePercentage = new QSlider(Qt::Horizontal);
 	_dailyDoublePercentage->setRange(_minDoublePercentage, _maxDoublePercentage);
 	_dailyDoublePercentage->setPageStep(1);

@@ -26,7 +26,7 @@ namespace MusicQuiz {
 		struct QuizData
 		{
 			QString quizName = "";
-			QString quizAuthor = ""; 
+			QString quizAuthor = "";
 			QString quizDescription = "";
 
 			bool guessTheCategory = false;
@@ -81,7 +81,7 @@ namespace MusicQuiz {
 		 * @brief Removes a row category.
 		 */
 		void removeRowCategory();
-		
+
 		/**
 		 * @brief Updates the name of the tab.
 		 *
@@ -106,13 +106,13 @@ namespace MusicQuiz {
 		 *
 		 * param[in] quizName The quiz name to load.
 		 */
-		void loadQuiz(const std::string& quizName); 
+		void loadQuiz(const std::string& quizName);
 
 		/**
 		 * @brief Opens a dialog to select which quiz to load.
 		 */
 		void openLoadQuizDialog();
-		
+
 		/**
 		 * @brief Previews the quiz.
 		 */
@@ -150,7 +150,7 @@ namespace MusicQuiz {
 		QLineEdit* _quizNameLineEdit = nullptr;
 		QLineEdit* _quizAuthorLineEdit = nullptr;
 		QTextEdit* _quizDescriptionTextEdit = nullptr;
-		
+
 		QCheckBox* _hiddenCategoriesCheckbox = nullptr;
 
 		QTableWidget* _categoriesTable = nullptr;
