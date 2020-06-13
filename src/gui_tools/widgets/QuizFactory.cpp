@@ -171,12 +171,21 @@ void MusicQuiz::QuizFactory::saveQuiz(const MusicQuiz::QuizCreator::QuizData& da
 		/** Get Quiz Name */
 		const std::string quizName = data.quizName.toStdString();
 		if ( quizName.empty() ) {
+			QMessageBox::warning(parent, "Failed to Save Quiz", "The quiz name needs to be set before saving.");
+			return;
+		}
+
+		/** Get Quiz Name */
+		const std::string quizAuthor = data.quizAuthor.toStdString();
+		if ( quizAuthor.empty() ) {
+			QMessageBox::warning(parent, "Failed to Save Quiz", "The author needs to be set before saving.");
 			return;
 		}
 
 		/** Get Quiz Description */
 		const std::string quizDescription = data.quizDescription.toStdString();
 		if ( quizName.empty() ) {
+			QMessageBox::warning(parent, "Failed to Save Quiz", "The description needs to be set before saving.");
 			return;
 		}
 
@@ -216,7 +225,7 @@ void MusicQuiz::QuizFactory::saveQuiz(const MusicQuiz::QuizCreator::QuizData& da
 		main_tree.put("QuizName", quizName);
 
 		/** Quiz Author */
-		main_tree.put("QuizAuthor", ""); // \todo add this
+		main_tree.put("QuizAuthor", quizAuthor);
 
 		/** Quiz Description */
 		main_tree.put("QuizDescription", quizDescription);
@@ -447,6 +456,9 @@ MusicQuiz::QuizCreator::QuizData MusicQuiz::QuizFactory::loadQuiz(const std::str
 	/** Quiz Name */
 	boost::property_tree::ptree::const_iterator ini_ctrl = tree.begin();
 	data.quizName = QString::fromStdString(ini_ctrl->second.get<std::string>("QuizName"));
+
+	/** Quiz Author */
+	data.quizAuthor = QString::fromStdString(ini_ctrl->second.get<std::string>("QuizAuthor"));
 
 	/** Quiz Description */
 	data.quizDescription = QString::fromStdString(ini_ctrl->second.get<std::string>("QuizDescription"));

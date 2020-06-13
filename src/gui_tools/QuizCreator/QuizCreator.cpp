@@ -91,6 +91,15 @@ void MusicQuiz::QuizCreator::createLayout()
 	_quizNameLineEdit->setObjectName("quizCreatorLineEdit");
 	setupTabLayout->addWidget(_quizNameLineEdit, ++row, 0, 1, 2);
 
+	/** Setup Tab - Quiz Author */
+	label = new QLabel("Quiz Author:");
+	label->setObjectName("quizCreatorLabel");
+	setupTabLayout->addWidget(label, ++row, 0, 1, 2, Qt::AlignLeft);
+
+	_quizAuthorLineEdit = new QLineEdit;
+	_quizAuthorLineEdit->setObjectName("quizCreatorLineEdit");
+	setupTabLayout->addWidget(_quizAuthorLineEdit, ++row, 0, 1, 2);
+
 	/** Setup Tab - Quiz Description */
 	label = new QLabel("Quiz Description:");
 	label->setObjectName("quizCreatorLabel");
@@ -478,7 +487,7 @@ void MusicQuiz::QuizCreator::saveQuiz()
 	quizData.quizName = _quizNameLineEdit->text();
 
 	/** Quiz Author */
-	quizData.quizAuthor = ""; // \todo add this.
+	quizData.quizAuthor = _quizAuthorLineEdit->text();
 
 	/** Quiz Description */
 	quizData.quizDescription = _quizDescriptionTextEdit->toPlainText();
@@ -560,6 +569,11 @@ void MusicQuiz::QuizCreator::loadQuiz(const std::string& quizName)
 	/** Set Name */
 	if ( _quizNameLineEdit != nullptr ) {
 		_quizNameLineEdit->setText(data.quizName);
+	}
+
+	/** Set Author */
+	if ( _quizAuthorLineEdit != nullptr ) {
+		_quizAuthorLineEdit->setText(data.quizAuthor);
 	}
 
 	/** Set Description */
@@ -663,11 +677,6 @@ void MusicQuiz::QuizCreator::previewQuiz()
 		QMessageBox::information(nullptr, "Info", "Quiz must be saved before the preview can be shown.");
 		return;
 	}
-
-	/** Save Quiz */
-	try {
-		//saveQuiz();
-	} catch ( ... ) {}
 
 	/** Create Dummy Teams */
 	MusicQuiz::QuizTeam* dummyTeamOne = new QuizTeam("Team 1", QColor(255, 0, 0));

@@ -148,6 +148,7 @@ namespace MusicQuiz {
 		QTabWidget* _tabWidget = nullptr;
 
 		QLineEdit* _quizNameLineEdit = nullptr;
+		QLineEdit* _quizAuthorLineEdit = nullptr;
 		QTextEdit* _quizDescriptionTextEdit = nullptr;
 		
 		QCheckBox* _hiddenCategoriesCheckbox = nullptr;
