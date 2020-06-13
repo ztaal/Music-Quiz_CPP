@@ -88,7 +88,5 @@ int main(int argc, char* argv[])
 /** TODO LIST
  * Add guess the category in music quiz
 
- * Make settings menu pretty
-
  * Update popup boxes cosmetics
 */

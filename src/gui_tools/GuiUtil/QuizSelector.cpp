@@ -274,6 +274,7 @@ void MusicQuiz::QuizSelector::quizSelected()
 void MusicQuiz::QuizSelector::openSettingsDialog()
 {
 	MusicQuiz::QuizSettingsDialog* settingsDialog = new MusicQuiz::QuizSettingsDialog(_settings, this);
+	settingsDialog->setObjectName("settingsDialog");
 	connect(settingsDialog, SIGNAL(settingsUpdated(const MusicQuiz::QuizSettings&)), this, SLOT(updateSettings(const MusicQuiz::QuizSettings&)));
 	settingsDialog->exec();
 }

@@ -17,5 +17,9 @@
         <file>imgs/add_icon_yellow.png</file>
         <file>imgs/edit_icon_black.png</file>
         <file>imgs/question_mark_black.png</file>
+        <file>imgs/checkbox_checked_yellow_disabled.png</file>
+        <file>imgs/checkbox_unchecked_yellow_disabled.png</file>
+        <file>imgs/question_mark_yellow.png</file>
+        <file>imgs/question_mark_yellow_disabled.png</file>
     </qresource>
 </RCC>

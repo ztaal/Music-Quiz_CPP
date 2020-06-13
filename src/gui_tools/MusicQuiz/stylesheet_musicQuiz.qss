@@ -14,6 +14,12 @@ QDialog#QuizSelector
 	background-color	: rgb(25, 25, 255);
 }
 
+QDialog#settingsDialog
+{
+	color				: Yellow;
+	background-color	: rgb(25, 25, 255);
+}
+
 QDialog#TeamSelector
 {
 	color				: Yellow;
@@ -93,6 +99,16 @@ QPushButton#menuButton
 
 	min-height			: 75px;
 	min-width			: 200px;
+}
+
+QPushButton#settingsButton
+{
+	color				: Yellow;
+	background-color	: rgb(115, 115, 115);
+	font-size			: 28px;
+
+	min-height			: 50px;
+	min-width			: 100px;
 }
 
 QPushButton#addButton
@@ -187,12 +203,17 @@ QPushButton#settingsInfo
 {
 	background-color	: rgba(0, 0, 0, 0);
 
-	min-height			: 15px;
-	min-width			: 15px;
-	max-height			: 15px;
-	max-width			: 15px;
+	min-height			: 25px;
+	min-width			: 25px;
+	max-height			: 25px;
+	max-width			: 25px;
 
-	image				: url(:/imgs/question_mark_black.png);
+	image				: url(:/imgs/question_mark_yellow.png);
+}
+
+QPushButton#settingsInfo:disabled
+{
+	image				: url(:/imgs/question_mark_yellow_disabled.png);
 }
 
 
@@ -230,8 +251,13 @@ QLabel#teamInfoLabel
 
 QLabel#settingsLabel
 {
-	font-size			: 18px;
-	color				: Black;
+	font-size			: 22px;
+	color				: Yellow;
+}
+
+QLabel#settingsLabel:disabled
+{
+	color				: rgb(100, 100, 0);
 }
 
 QLabel#authorLabel
@@ -242,7 +268,7 @@ QLabel#authorLabel
 
 QLabel#quizIntroLabel
 {
-	font-size			: 150px;
+	font-size			: 175px;
 	font-weight			: bold;
 	color				: Yellow;
 }
@@ -345,6 +371,19 @@ QLineEdit#_teamLineEdit
 	border							: 2px solid rgb(128, 128, 128)
 }
 
+QLineEdit#settingsLineEdit
+{
+	color							: Yellow;
+	border							: none;
+	font-size						: 22px;
+	background-color				: rgba(0, 0, 0, 0);
+}
+
+QLineEdit#settingsLineEdit:disabled
+{
+	color							: rgb(100, 100, 0);
+}
+
 QLineEdit#quizCreatorLineEdit
 {
 	font-size						: 20px;
@@ -402,6 +441,38 @@ QCheckBox::indicator:unchecked#quizCreatorCheckbox {
 	image		: url(:/imgs/checkbox_unchecked_black.png);
 }
 
+
+QCheckBox#settingsCheckbox
+{
+	font-size	: 22px;
+	color		: Yellow;
+}
+
+QCheckBox#settingsCheckbox:disabled
+{
+	color		: rgb(100, 100, 0);
+}
+
+QCheckBox::indicator#settingsCheckbox {
+	width		: 30px;
+	height		: 30px;
+}
+
+QCheckBox::indicator:checked#settingsCheckbox {
+	image		: url(:/imgs/checkbox_checked_yellow.png);
+}
+
+QCheckBox::indicator:unchecked#settingsCheckbox {
+	image		: url(:/imgs/checkbox_unchecked_yellow.png);
+}
+
+QCheckBox::indicator:checked#settingsCheckbox:disabled {
+	image		: url(:/imgs/checkbox_checked_yellow_disabled.png);
+}
+
+QCheckBox::indicator:unchecked#settingsCheckbox:disabled {
+	image		: url(:/imgs/checkbox_unchecked_yellow_disabled.png);
+}
 
 
 /****************************************/
@@ -522,4 +593,60 @@ QVideoWidget
 {
 	background-color		: black;
 	border					: 1px solid black;
+}
+
+
+
+/****************************************/
+/*****			 QFrame				*****/
+/****************************************/
+
+QFrame#settingsLine
+{
+	border					: 1px solid Yellow;
+	background-color		: Yellow;
+}
+
+
+
+/****************************************/
+/*****			 QSlider			*****/
+/****************************************/
+
+QSlider::handle:horizontal#settingsSlider
+{
+	background-color		: Yellow;
+}
+
+QSlider::groove:horizontal#settingsSlider {
+    height					: 7px;
+    margin					: 2px 0;
+    border					: 1px solid #999999;
+    background				 qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #B1B1B1, stop:1 #c4c4c4);
+}
+
+QSlider::handle:horizontal#settingsSlider {
+    width					: 28px;
+    margin					: -7px 0;
+    border-radius			: 4px;
+    border					: 1px solid #5c5c5c;
+    background				: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #b4b4b4, stop:1 #8f8f8f);
+}
+
+QSlider::sub-page:horizontal#settingsSlider {
+    height					: 7px;
+    background				: rgb(230, 230, 0);
+}
+
+QSlider::add-page:horizontal#settingsSlider {
+    height					: 7px;
+    background				: Lightgrey;
+}
+
+QSlider::sub-page:horizontal#settingsSlider:disabled {
+    background				: Grey;
+}
+
+QSlider::add-page:horizontal#settingsSlider:disabled {
+    background				: Grey;
 }

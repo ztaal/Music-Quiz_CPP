@@ -24,6 +24,15 @@ MusicQuiz::QuizSettingsDialog::QuizSettingsDialog(const MusicQuiz::QuizSettings&
 	/** Set Title */
 	setWindowTitle("Settings");
 
+	/** Set Size */
+	const size_t width = 400;
+	const size_t height = 425;
+	if ( parent == nullptr ) {
+		resize(width, height);
+	} else {
+		setGeometry(parent->x() + parent->width() / 2 - width / 2, parent->y() + parent->height() / 2 - height / 2, width, height);
+	}
+
 	/** Create Layout */
 	createLayout(settings);
 }
@@ -32,12 +41,13 @@ void MusicQuiz::QuizSettingsDialog::createLayout(const MusicQuiz::QuizSettings& 
 {
 	/** Layout */
 	QVBoxLayout* mainlayout = new QVBoxLayout;
-	mainlayout->setSpacing(10);
+	mainlayout->setSpacing(15);
 
 	/** Hidden Teams */
 	QHBoxLayout* hiddenTeamLayout = new QHBoxLayout;
-	hiddenTeamLayout->setSpacing(10);
+	hiddenTeamLayout->setSpacing(5);
 	_hiddenTeam = new QCheckBox("Hidden Teams");
+	_hiddenTeam->setObjectName("settingsCheckbox");
 	_hiddenTeam->setChecked(settings.hiddenTeamScore);
 	hiddenTeamLayout->addWidget(_hiddenTeam);
 
@@ -49,8 +59,9 @@ void MusicQuiz::QuizSettingsDialog::createLayout(const MusicQuiz::QuizSettings& 
 
 	/** Hidden Anwsers */
 	QHBoxLayout* hiddenAnswersLayout = new QHBoxLayout;
-	hiddenAnswersLayout->setSpacing(10);
+	hiddenAnswersLayout->setSpacing(5);
 	_hiddenAnswers = new QCheckBox("Hidden Answers");
+	_hiddenAnswers->setObjectName("settingsCheckbox");
 	_hiddenAnswers->setChecked(settings.hiddenTeamScore);
 	hiddenAnswersLayout->addWidget(_hiddenAnswers);
 
@@ -62,6 +73,7 @@ void MusicQuiz::QuizSettingsDialog::createLayout(const MusicQuiz::QuizSettings& 
 
 	/** Line */
 	QFrame* line = new QFrame;
+	line->setObjectName("settingsLine");
 	line->setFrameShape(QFrame::HLine);
 	mainlayout->addWidget(line);
 
@@ -73,6 +85,7 @@ void MusicQuiz::QuizSettingsDialog::createLayout(const MusicQuiz::QuizSettings& 
 
 	/** Line */
 	line = new QFrame;
+	line->setObjectName("settingsLine");
 	line->setFrameShape(QFrame::HLine);
 	mainlayout->addWidget(line);
 
@@ -86,11 +99,13 @@ void MusicQuiz::QuizSettingsDialog::createLayout(const MusicQuiz::QuizSettings& 
 	QHBoxLayout* buttonLayout = new QHBoxLayout;
 	buttonLayout->setSpacing(10);
 	QPushButton* saveBtn = new QPushButton("Save");
+	saveBtn->setObjectName("settingsButton");
 	connect(saveBtn, SIGNAL(released()), this, SLOT(saveSettings()));
 	buttonLayout->addWidget(saveBtn);
 
 	/** Close Button */
 	QPushButton* closeBtn = new QPushButton("Close");
+	closeBtn->setObjectName("settingsButton");
 	connect(closeBtn, SIGNAL(released()), this, SLOT(close()));
 	buttonLayout->addWidget(closeBtn);
 	mainlayout->addItem(buttonLayout);
@@ -104,6 +119,7 @@ QWidget* MusicQuiz::QuizSettingsDialog::getDailyDoubleLayout(const MusicQuiz::Qu
 	/** Layout */
 	QGridLayout* mainlayout = new QGridLayout;
 	mainlayout->setColumnStretch(1, 1);
+	mainlayout->setVerticalSpacing(10);
 	mainlayout->setHorizontalSpacing(0);
 	mainlayout->setContentsMargins(0, 10, 0, 10);
 	int row = 0;
@@ -112,6 +128,7 @@ QWidget* MusicQuiz::QuizSettingsDialog::getDailyDoubleLayout(const MusicQuiz::Qu
 	QHBoxLayout* checkBoxLayout = new QHBoxLayout;
 	_dailyDouble = new QCheckBox("Daily Double");
 	_dailyDouble->setChecked(settings.dailyDouble);
+	_dailyDouble->setObjectName("settingsCheckbox");
 	connect(_dailyDouble, SIGNAL(toggled(bool)), this, SLOT(setDailyDoubleEnabled(bool)));
 	checkBoxLayout->addWidget(_dailyDouble);
 
@@ -122,17 +139,18 @@ QWidget* MusicQuiz::QuizSettingsDialog::getDailyDoubleLayout(const MusicQuiz::Qu
 	mainlayout->addItem(checkBoxLayout, 0, 0, 1, 2, Qt::AlignLeft);
 
 	/** Spacer */
-	mainlayout->addItem(new QSpacerItem(20, 0, QSizePolicy::Fixed, QSizePolicy::Fixed), 1, 0);
+	mainlayout->addItem(new QSpacerItem(35, 0, QSizePolicy::Fixed, QSizePolicy::Fixed), 1, 0);
 
 	/** Options Layout */
 	_dailyDoubleLayout = new QGridLayout;
 	_dailyDoubleLayout->setHorizontalSpacing(10);
-	_dailyDoubleLayout->setVerticalSpacing(5);
+	_dailyDoubleLayout->setVerticalSpacing(10);
 	mainlayout->addItem(_dailyDoubleLayout, 1, 1);
 
 	/** Hidden Checkbox */
 	checkBoxLayout = new QHBoxLayout;
 	_dailyDoubleHidden = new QCheckBox("Hidden");
+	_dailyDoubleHidden->setObjectName("settingsCheckbox");
 	_dailyDoubleHidden->setChecked(settings.dailyDoubleHidden);
 	checkBoxLayout->addWidget(_dailyDoubleHidden);
 
@@ -142,16 +160,18 @@ QWidget* MusicQuiz::QuizSettingsDialog::getDailyDoubleLayout(const MusicQuiz::Qu
 	checkBoxLayout->addWidget(infoBtn, Qt::AlignRight);
 	_dailyDoubleLayout->addItem(checkBoxLayout, 0, 0, 1, 2);
 
-	/** Percentage */
-	QLabel* label = new QLabel("Percentage");
+	/** Freqency */
+	QLabel* label = new QLabel("Frequency");
+	label->setObjectName("settingsLabel");
 	_dailyDoublePercentageLineEdit = new QLineEdit(QString::number(settings.dailyDoublePercentage) + " %");
-	_dailyDoublePercentageLineEdit->setStyleSheet("* { background-color: rgba(0, 0, 0, 0); border: none;}");
+	_dailyDoublePercentageLineEdit->setObjectName("settingsLineEdit");
 	_dailyDoublePercentageLineEdit->setAlignment(Qt::AlignRight);
 	_dailyDoublePercentageLineEdit->setReadOnly(true);
 	_dailyDoubleLayout->addWidget(label, 1, 0, Qt::AlignLeft);
 	_dailyDoubleLayout->addWidget(_dailyDoublePercentageLineEdit, 1, 1, Qt::AlignRight);
 
 	_dailyDoublePercentage = new QSlider(Qt::Horizontal);
+	_dailyDoublePercentage->setObjectName("settingsSlider");
 	_dailyDoublePercentage->setRange(_minDoublePercentage, _maxDoublePercentage);
 	_dailyDoublePercentage->setPageStep(1);
 	_dailyDoublePercentage->setSingleStep(1);
@@ -173,6 +193,7 @@ QWidget* MusicQuiz::QuizSettingsDialog::getDailyTripleLayout(const MusicQuiz::Qu
 	/** Layout */
 	QGridLayout* mainlayout = new QGridLayout;
 	mainlayout->setColumnStretch(1, 1);
+	mainlayout->setVerticalSpacing(10);
 	mainlayout->setHorizontalSpacing(0);
 	mainlayout->setContentsMargins(0, 10, 0, 10);
 	int row = 0;
@@ -181,6 +202,7 @@ QWidget* MusicQuiz::QuizSettingsDialog::getDailyTripleLayout(const MusicQuiz::Qu
 	QHBoxLayout* checkBoxLayout = new QHBoxLayout;
 	_dailyTriple = new QCheckBox("Daily Triple");
 	_dailyTriple->setChecked(settings.dailyDouble);
+	_dailyTriple->setObjectName("settingsCheckbox");
 	connect(_dailyTriple, SIGNAL(toggled(bool)), this, SLOT(setDailyTripleEnabled(bool)));
 	checkBoxLayout->addWidget(_dailyTriple);
 
@@ -191,17 +213,18 @@ QWidget* MusicQuiz::QuizSettingsDialog::getDailyTripleLayout(const MusicQuiz::Qu
 	mainlayout->addItem(checkBoxLayout, 0, 0, 1, 2, Qt::AlignLeft);
 
 	/** Spacer */
-	mainlayout->addItem(new QSpacerItem(20, 0, QSizePolicy::Fixed, QSizePolicy::Fixed), 1, 0);
+	mainlayout->addItem(new QSpacerItem(35, 0, QSizePolicy::Fixed, QSizePolicy::Fixed), 1, 0);
 
 	/** Options Layout */
 	_dailyTripleLayout = new QGridLayout;
 	_dailyTripleLayout->setHorizontalSpacing(10);
-	_dailyTripleLayout->setVerticalSpacing(5);
+	_dailyTripleLayout->setVerticalSpacing(10);
 	mainlayout->addItem(_dailyTripleLayout, 1, 1);
 
 	/** Hidden Checkbox */
 	checkBoxLayout = new QHBoxLayout;
 	_dailyTripleHidden = new QCheckBox("Hidden");
+	_dailyTripleHidden->setObjectName("settingsCheckbox");
 	_dailyTripleHidden->setChecked(settings.dailyTripleHidden);
 	checkBoxLayout->addWidget(_dailyTripleHidden);
 
@@ -211,16 +234,18 @@ QWidget* MusicQuiz::QuizSettingsDialog::getDailyTripleLayout(const MusicQuiz::Qu
 	checkBoxLayout->addWidget(infoBtn, Qt::AlignRight);
 	_dailyTripleLayout->addItem(checkBoxLayout, 0, 0, 1, 2);
 
-	/** Percentage */
-	QLabel* label = new QLabel("Percentage");
+	/** Frequency */
+	QLabel* label = new QLabel("Frequency");
+	label->setObjectName("settingsLabel");
 	_dailyTriplePercentageLineEdit = new QLineEdit(QString::number(settings.dailyTriplePercentage) + " %");
-	_dailyTriplePercentageLineEdit->setStyleSheet("* { background-color: rgba(0, 0, 0, 0); border: none;}");
+	_dailyTriplePercentageLineEdit->setObjectName("settingsLineEdit");
 	_dailyTriplePercentageLineEdit->setAlignment(Qt::AlignRight);
 	_dailyTriplePercentageLineEdit->setReadOnly(true);
 	_dailyTripleLayout->addWidget(label, 1, 0, Qt::AlignLeft);
 	_dailyTripleLayout->addWidget(_dailyTriplePercentageLineEdit, 1, 1, Qt::AlignRight);
 
 	_dailyTriplePercentage = new QSlider(Qt::Horizontal);
+	_dailyTriplePercentage->setObjectName("settingsSlider");
 	_dailyTriplePercentage->setRange(_minTriplePercentage, _maxTriplePercentage);
 	_dailyTriplePercentage->setPageStep(1);
 	_dailyTriplePercentage->setSingleStep(1);
