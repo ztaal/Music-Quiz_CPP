@@ -34,10 +34,13 @@ void MusicQuiz::QuizCategory::createLayout()
 	mainlayout->setSpacing(10);
 
 	/** Category Name */
-	QPushButton* categoryBtn = new QPushButton(QString::fromLocal8Bit(_name.toStdString().c_str()), this);
-	categoryBtn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-	categoryBtn->setObjectName("QuizEntry_categoryLabel");
-	mainlayout->addWidget(categoryBtn);
+	_categoryBtn = new MusicQuiz::QExtensions::QPushButtonExtender(this);
+	_categoryBtn->setObjectName("QuizEntry_categoryLabel");
+	_categoryBtn->setText(QString::fromLocal8Bit(_name.toStdString().c_str()));
+	_categoryBtn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	connect(_categoryBtn, SIGNAL(leftClicked()), this, SLOT(leftClickEvent()));
+	connect(_categoryBtn, SIGNAL(rightClicked()), this, SLOT(rightClickEvent()));
+	mainlayout->addWidget(_categoryBtn);
 
 	/** Add Entries */
 	for ( size_t i = 0; i < _entries.size(); ++i ) {
@@ -48,7 +51,58 @@ void MusicQuiz::QuizCategory::createLayout()
 	setLayout(mainlayout);
 }
 
+void MusicQuiz::QuizCategory::enableGuessTheCategory(const size_t points)
+{
+	_guessTheCategory = true;
+	_points = points;
+
+	if ( _guessTheCategory && _categoryBtn != nullptr ) {
+		_categoryBtn->setText("?");
+	}
+}
+
 size_t MusicQuiz::QuizCategory::size()
 {
 	return _entries.size();
+}
+
+void MusicQuiz::QuizCategory::leftClickEvent()
+{
+	if ( !_guessTheCategory ) {
+		return;
+	}
+
+	switch ( _state )
+	{
+	case CategoryState::IDLE:
+		_state = CategoryState::GUESSED;
+		_categoryBtn->setText(QString::fromLocal8Bit(_name.toStdString().c_str()));
+		emit guessed(_points);
+		break;
+	case CategoryState::GUESSED:
+		break;
+	default:
+		throw std::runtime_error("Unknown Quiz Entry State Encountered.");
+		break;
+	}
+}
+
+void MusicQuiz::QuizCategory::rightClickEvent()
+{
+	if ( !_guessTheCategory ) {
+		return;
+	}
+
+	switch ( _state )
+	{
+	case CategoryState::IDLE:
+		break;
+	case CategoryState::GUESSED:
+		_categoryBtn->setText("?");
+		_state = CategoryState::IDLE;
+		break;
+	default:
+		throw std::runtime_error("Unknown Quiz Entry State Encountered.");
+		break;
+	}
 }

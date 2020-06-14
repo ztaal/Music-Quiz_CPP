@@ -7,6 +7,8 @@
 #include <QObject>
 #include <QWidget>
 
+#include "gui_tools/GuiUtil/QExtensions/QPushButtonExtender.hpp"
+
 
 namespace MusicQuiz {
 	class QuizEntry;
@@ -34,6 +36,11 @@ namespace MusicQuiz {
 		QuizCategory(const QuizCategory&) = delete;
 		QuizCategory& operator=(const QuizCategory&) = delete;
 
+		enum class CategoryState
+		{
+			IDLE, GUESSED
+		};
+
 		/**
 		 * @brief Gets the size of the category.
 		 *
@@ -48,6 +55,27 @@ namespace MusicQuiz {
 		};
 	public slots:
 
+		/**
+		 * @brief Enables guess the category.
+		 *
+		 * @param[in] enabled Enabled if true.
+		 */
+		void enableGuessTheCategory(size_t points);
+
+	private slots:
+		/**
+		 * @brief Handles the mouse right click event.
+		 */
+		void rightClickEvent();
+
+		/**
+		 * @brief Handles the mouse left click event.
+		 */
+		void leftClickEvent();
+
+	signals:
+		void guessed(size_t points);
+
 	protected:
 		/**
 		 * @brief Creates the category layout.
@@ -56,6 +84,10 @@ namespace MusicQuiz {
 
 		/** Variables */
 		QString _name = "";
+		size_t _points = 0;
+		bool _guessTheCategory = false;
+		CategoryState _state = CategoryState::IDLE;
 		std::vector<MusicQuiz::QuizEntry*> _entries;
+		MusicQuiz::QExtensions::QPushButtonExtender* _categoryBtn = nullptr;
 	};
 }

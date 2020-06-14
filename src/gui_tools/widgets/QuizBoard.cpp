@@ -158,7 +158,6 @@ void MusicQuiz::QuizBoard::handleAnswer(const size_t points)
 	}
 
 	if ( !_teams.empty() ) {
-
 		/** Select which team guessed the entry */
 		QMessageBox msgBox(QMessageBox::Question, "Select Team", "Select Team", QMessageBox::NoButton, nullptr, Qt::WindowStaysOnTopHint);
 		std::vector< QAbstractButton* > teamButtons;

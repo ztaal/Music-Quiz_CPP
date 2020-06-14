@@ -38,7 +38,13 @@ MusicQuiz::QuizSelector::QuizSelector(QWidget* parent) :
 
 	/** Load Quiz Previews */
 	for ( size_t i = 0; i < _quizList.size(); ++i ) {
-		_quizPreviews.push_back(MusicQuiz::util::QuizLoader::getQuizPreview(i));
+		try {
+			_quizPreviews.push_back(MusicQuiz::util::QuizLoader::getQuizPreview(i));
+		} catch ( const std::exception& err ) {
+			LOG_ERROR("Failed to load quiz #" << i << ". " << err.what());
+		} catch ( ... ) {
+			LOG_ERROR("Failed to load quiz #" << i << ".");
+		}
 	}
 
 	/** Create Layout */
@@ -260,6 +266,9 @@ void MusicQuiz::QuizSelector::quizSelected()
 
 	/** Quiz Name */
 	const QString quizAuthor = QString::fromStdString(_quizPreviews[currentIndex].quizAuthor);
+
+	/** Guess The Category */
+	_settings.guessTheCategory = _quizPreviews[currentIndex].guessTheCategory;
 
 	/** Popup Messagebox */
 	QString msg = "Are you sure you want to select quiz '" + quizName + "'?";

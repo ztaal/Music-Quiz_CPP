@@ -127,6 +127,9 @@ MusicQuiz::QuizBoard* MusicQuiz::QuizFactory::createQuiz(const size_t idx, const
 	/** Apply Settings */
 	size_t counter = 0;
 	for ( size_t i = 0; i < categories.size(); ++i ) {
+		if ( settings.guessTheCategory ) {
+			categories[i]->enableGuessTheCategory(settings.pointsPerCategory);
+		}
 		for ( size_t j = 0; j < categories[i]->size(); ++j ) {
 			MusicQuiz::QuizEntry* quizEntry = (*categories[i])[j];
 			if ( quizEntry != nullptr ) {
@@ -155,9 +158,6 @@ MusicQuiz::QuizBoard* MusicQuiz::QuizFactory::createQuiz(const size_t idx, const
 
 	/** Create Quiz */
 	quizBoard = new MusicQuiz::QuizBoard(categories, rowCategories, teams, settings, preview, parent);
-
-	/** Set Quiz Name */
-	//quizBoard->setQuizName(QString::fromStdString(MusicQuiz::util::QuizLoader::getListOfQuizzes[idx]));
 
 	return quizBoard;
 }
@@ -231,8 +231,8 @@ void MusicQuiz::QuizFactory::saveQuiz(const MusicQuiz::QuizCreator::QuizData& da
 		main_tree.put("QuizDescription", quizDescription);
 
 		/** Guess the Category Setting */
-		boost::property_tree::ptree& guessTheCategory_tree = main_tree.add("QuizGuessTheCateotry", 500);
-		guessTheCategory_tree.put("<xmlattr>.enabled", data.guessTheCategory);
+		boost::property_tree::ptree& guessTheCategory_tree = main_tree.add("QuizGuessTheCategory", 500);
+		guessTheCategory_tree.put<bool>("<xmlattr>.enabled", data.guessTheCategory);
 
 		/** Categories */
 		const size_t numberOfCategories = data.quizCategories.size();
@@ -464,7 +464,7 @@ MusicQuiz::QuizCreator::QuizData MusicQuiz::QuizFactory::loadQuiz(const std::str
 	data.quizDescription = QString::fromStdString(ini_ctrl->second.get<std::string>("QuizDescription"));
 
 	/** Hidden Categories */
-	data.guessTheCategory = ini_ctrl->second.get<bool>("QuizGuessTheCateotry.<xmlattr>.enabled");
+	data.guessTheCategory = ini_ctrl->second.get("QuizGuessTheCategory.<xmlattr>.enabled", false);
 
 	/** Categories */
 	std::vector< MusicQuiz::CategoryCreator* > categories;

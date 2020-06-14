@@ -71,9 +71,7 @@ MusicQuiz::util::QuizLoader::QuizPreview MusicQuiz::util::QuizLoader::getQuizPre
 	quizPreview.quizDescription = sub_tree.get<std::string>("QuizDescription");
 
 	/** Guess the Category */
-	try {
-		quizPreview.guessTheCategory = sub_tree.get<bool>("QuizGuessTheCateotry.<xmlattr>.enabled");
-	} catch ( ... ) {}
+	quizPreview.guessTheCategory = sub_tree.get("QuizGuessTheCategory.<xmlattr>.enabled", false);
 
 	/** Categories & Row Categories */
 	boost::property_tree::ptree::const_iterator ctrl = sub_tree.begin();
