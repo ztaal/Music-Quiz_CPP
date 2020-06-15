@@ -89,7 +89,7 @@ void MusicQuiz::QuizCategory::leftClickEvent()
 
 void MusicQuiz::QuizCategory::rightClickEvent()
 {
-	if ( !_guessTheCategory ) {
+	if ( _categoryBtn == nullptr || !_guessTheCategory ) {
 		return;
 	}
 
@@ -99,10 +99,33 @@ void MusicQuiz::QuizCategory::rightClickEvent()
 		break;
 	case CategoryState::GUESSED:
 		_categoryBtn->setText("?");
+		setCategoryColor(QColor(0, 0, 255));
 		_state = CategoryState::IDLE;
 		break;
 	default:
 		throw std::runtime_error("Unknown Quiz Entry State Encountered.");
 		break;
 	}
+}
+
+void MusicQuiz::QuizCategory::setCategoryColor(const QColor& color)
+{
+	if ( _categoryBtn == nullptr || !_guessTheCategory ) {
+		return;
+	}
+
+	_categoryBtn->setColor(color);
+}
+
+bool MusicQuiz::QuizCategory::hasCateogryBeenGuessed()
+{
+	if ( _categoryBtn == nullptr || !_guessTheCategory ) {
+		return true;
+	}
+
+	if ( _state == CategoryState::GUESSED ) {
+		return true;
+	}
+
+	return false;
 }

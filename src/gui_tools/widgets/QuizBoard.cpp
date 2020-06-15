@@ -17,6 +17,7 @@
 #include "gui_tools/widgets/QuizEntry.hpp"
 #include "gui_tools/widgets/QuizCategory.hpp"
 
+#include "gui_tools/GuiUtil/QExtensions/QPushButtonExtender.hpp"
 
 
 MusicQuiz::QuizBoard::QuizBoard(const std::vector<MusicQuiz::QuizCategory*>& categories, const std::vector<QString>& rowCategories,
@@ -80,6 +81,9 @@ void MusicQuiz::QuizBoard::createLayout()
 	size_t maxNumberOfEntries = 0;
 	for ( size_t i = 0; i < _categories.size(); ++i ) {
 		categorylayout->addWidget(_categories[i]);
+		if ( _settings.guessTheCategory ) {
+			connect(_categories[i], SIGNAL(guessed(size_t)), this, SLOT(handleAnswer(size_t)));
+		}
 
 		/** Connect Buttons */
 		const size_t categorySize = _categories[i]->size();
@@ -152,43 +156,56 @@ void MusicQuiz::QuizBoard::handleAnswer(const size_t points)
 		return;
 	}
 
-	MusicQuiz::QuizEntry* button = dynamic_cast<MusicQuiz::QuizEntry*>(sender());
-	if ( button == nullptr ) {
+	if ( _teams.empty() ) {
 		return;
 	}
 
-	if ( !_teams.empty() ) {
-		/** Select which team guessed the entry */
-		QMessageBox msgBox(QMessageBox::Question, "Select Team", "Select Team", QMessageBox::NoButton, nullptr, Qt::WindowStaysOnTopHint);
-		std::vector< QAbstractButton* > teamButtons;
-		for ( size_t i = 0; i < _teams.size(); ++i ) {
-			teamButtons.push_back(msgBox.addButton(_teams[i]->getName(), QMessageBox::YesRole));
-		}
-		QAbstractButton* exitButton = msgBox.addButton("No One", QMessageBox::NoRole);
-		msgBox.setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint | Qt::WindowStaysOnTopHint);
-		msgBox.exec();
+	/** Select which team guessed the entry / category */
+	QMessageBox msgBox(QMessageBox::Question, "Select Team", "Select Team", QMessageBox::NoButton, nullptr, Qt::WindowStaysOnTopHint);
+	std::vector< QAbstractButton* > teamButtons;
+	for ( size_t i = 0; i < _teams.size(); ++i ) {
+		teamButtons.push_back(msgBox.addButton(_teams[i]->getName(), QMessageBox::YesRole));
+	}
+	QAbstractButton* exitButton = msgBox.addButton("No One", QMessageBox::NoRole);
+	msgBox.setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint | Qt::WindowStaysOnTopHint);
+	msgBox.exec();
 
-		MusicQuiz::QuizTeam* team = nullptr;
-		for ( size_t i = 0; i < teamButtons.size(); ++i ) {
-			if ( msgBox.clickedButton() == teamButtons[i] ) {
-				team = _teams[i];
-			}
+	MusicQuiz::QuizTeam* team = nullptr;
+	for ( size_t i = 0; i < teamButtons.size(); ++i ) {
+		if ( msgBox.clickedButton() == teamButtons[i] ) {
+			team = _teams[i];
 		}
+	}
 
-		if ( team != nullptr ) {
-			/** Add Points to the team */
-			team->addPoints(points);
+	/** Get Color & Add Points */
+	QColor buttonColor(0, 0, 255);
+	if ( team != nullptr ) {
+		/** Add Points to the team */
+		team->addPoints(points);
 
-			/** Set button color */
-			if ( _settings.hiddenTeamScore == false ) {
-				button->setColor(team->getColor());
-			}
-		} else {
-			/** Not guessed set button color to grey */
-			if ( _settings.hiddenTeamScore == false ) {
-				button->setColor(QColor(128, 128, 128));
-			}
+		/** Set button color */
+		if ( _settings.hiddenTeamScore == false ) {
+			buttonColor = team->getColor();
 		}
+	} else {
+		/** Not guessed set button color to grey */
+		if ( _settings.hiddenTeamScore == false ) {
+			buttonColor = QColor(128, 128, 128);
+		}
+	}
+
+	/** Set Button Color */
+	MusicQuiz::QuizEntry* entryButton = dynamic_cast<MusicQuiz::QuizEntry*>(sender());
+	if ( entryButton != nullptr ) {
+		entryButton->setColor(buttonColor);
+		return;
+	} 
+	
+	MusicQuiz::QuizCategory* categoryLabel = dynamic_cast<MusicQuiz::QuizCategory*>(sender());
+	if ( _settings.guessTheCategory && categoryLabel != nullptr ) {
+		categoryLabel->setCategoryColor(buttonColor); 
+		handleGameComplete();
+		return;
 	}
 }
 
@@ -197,11 +214,19 @@ void MusicQuiz::QuizBoard::handleGameComplete()
 	/** Check if game has ended */
 	bool isGameComplete = true;
 	for ( size_t i = 0; i < _categories.size(); ++i ) {
+		if ( _settings.guessTheCategory ) {
+			if ( !_categories[i]->hasCateogryBeenGuessed() ) {
+				isGameComplete = false;
+				break;
+			}
+		}
+
 		for ( size_t j = 0; j < _categories[i]->size(); ++j ) {
 			if ( (*_categories[i])[j]->getEntryState() != QuizEntry::EntryState::PLAYED ) {
 				isGameComplete = false;
 				break;
 			}
+
 		}
 	}
 

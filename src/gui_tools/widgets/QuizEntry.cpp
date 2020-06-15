@@ -1,5 +1,6 @@
 #include "QuizEntry.hpp"
 
+#include <sstream>
 #include <stdexcept>
 #include <functional>
 

@@ -54,13 +54,26 @@ namespace MusicQuiz {
 			return _entries[index];
 		};
 	public slots:
-
 		/**
 		 * @brief Enables guess the category.
 		 *
 		 * @param[in] enabled Enabled if true.
 		 */
 		void enableGuessTheCategory(size_t points);
+
+		/**
+		 * @brief Sets the color of the category label.
+		 *
+		 * @param[in] color The color to set.
+		 */
+		void setCategoryColor(const QColor& color);
+
+		/**
+		 * @brief Gets if the category has been guessed.
+		 *
+		 * @return True if the category has been guessed.
+		 */
+		bool hasCateogryBeenGuessed();
 
 	private slots:
 		/**
