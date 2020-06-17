@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <functional>
 
+#include <QPainter>
 #include <QMouseEvent>
 #include <QSizePolicy>
 
@@ -32,6 +33,9 @@ MusicQuiz::QuizEntry::QuizEntry(const QString& audioFile, const QString& answer,
 
 	/** Set Entry Type */
 	_type = EntryType::Song;
+
+	/** Set Start Width */
+	_startWidth = width();
 }
 
 MusicQuiz::QuizEntry::QuizEntry(const QString& audioFile, const QString& videoFile, const QString& answer, size_t points, size_t startTime, size_t videoStartTime, size_t answerStartTime,
@@ -209,12 +213,11 @@ void MusicQuiz::QuizEntry::rightClickEvent()
 			_videoPlayer->pause();
 			_videoPlayer->show();
 		}
-
-		if ( !_hiddenAnswer ) {
-			setText(QString::fromLocal8Bit(_answer.toStdString().c_str()));
-		}
+		_fontSize = 40;
+		setText("$" + QString::fromLocal8Bit(std::to_string(_points).c_str()));
 		break;
 	case QuizEntry::EntryState::PLAYED: // Back to idle
+		_fontSize = 40;
 		_entryAnswered = false;
 		_state = EntryState::IDLE;
 		setText("$" + QString::fromLocal8Bit(std::to_string(_points).c_str()));
@@ -256,6 +259,21 @@ void MusicQuiz::QuizEntry::applyColor(const QColor& color)
 	} else {
 		ss << "color : Yellow;";
 	}
+
+	/** Text Size */
+	size_t textWidth = fontMetrics().boundingRect(text()).width();
+	if ( textWidth > _startWidth - 100 && _state != QuizEntry::EntryState::PLAYED ) {
+		size_t fontSize = 40;
+		while ( textWidth > width() - 40 && fontSize > 10 ) {
+			setStyleSheet("font-size: " + QString::number(fontSize) + "px;");
+			textWidth = fontMetrics().boundingRect(text()).width();
+			--fontSize;
+		}
+		_fontSize = fontSize;
+	}
+
+	ss << "font-size: " << _fontSize << "px;";
+
 	setStyleSheet(QString::fromStdString(ss.str()));
 }
 

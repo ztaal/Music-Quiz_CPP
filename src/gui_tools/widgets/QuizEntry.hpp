@@ -6,11 +6,13 @@
 #include <QString>
 #include <QObject>
 #include <QWidget>
+#include <QPainter>
 #include <QPushButton>
 
 #include "media/AudioPlayer.hpp"
 #include "media/VideoPlayer.hpp"
 
+#include "common/Log.hpp"
 class QMouseEvent;
 
 
@@ -151,6 +153,8 @@ namespace MusicQuiz {
 
 		/** Variables */
 		size_t _points = 0;
+		size_t _fontSize = 40;
+		size_t _startWidth = 0;
 
 		size_t _startTime = 0;
 		size_t _videoStartTime = 0;
