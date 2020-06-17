@@ -236,9 +236,11 @@ void MusicQuiz::QuizSelector::selectionClicked()
 		for ( size_t i = 0; i < rowCategories.size(); ++i ) {
 			ss << i + 1 << ". " << rowCategories[i] << "\n\n";
 		}
+		_rowCategoryText->setText(QString::fromStdString(ss.str()));
+	} else {
+		_rowCategoryText->clear();
 	}
 
-	_rowCategoryText->setText(QString::fromStdString(ss.str()));
 }
 
 void MusicQuiz::QuizSelector::quizSelected()
