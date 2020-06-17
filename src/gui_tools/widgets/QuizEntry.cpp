@@ -251,7 +251,7 @@ void MusicQuiz::QuizEntry::applyColor(const QColor& color)
 	ss << "border: 3px solid rgb(" << borderColor.red() << ", " << borderColor.green() << ", " << borderColor.blue() << ");";
 
 	/** Text Color */
-	if ( _state == QuizEntry::EntryState::PLAYED ) {
+	if ( _state == QuizEntry::EntryState::PLAYED && color != QColor(128, 128, 128) ) {
 		ss << "color : rgb(" << 255 - color.red() << ", " << 255 - color.green() << ", " << 255 - color.blue() << ");";
 	} else {
 		ss << "color : Yellow;";
