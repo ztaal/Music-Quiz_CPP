@@ -82,7 +82,7 @@ MusicQuiz::QuizBoard* MusicQuiz::QuizFactory::createQuiz(const size_t idx, const
 	/** Get Number of Entries */
 	size_t numberOfEntries = 0;
 	for ( size_t i = 0; i < categories.size(); ++i ) {
-		numberOfEntries += categories[i]->size();
+		numberOfEntries += categories[i]->getSize();
 	}
 
 	std::vector<size_t> entriesIndicies(numberOfEntries);
@@ -130,7 +130,7 @@ MusicQuiz::QuizBoard* MusicQuiz::QuizFactory::createQuiz(const size_t idx, const
 		if ( settings.guessTheCategory ) {
 			categories[i]->enableGuessTheCategory(settings.pointsPerCategory);
 		}
-		for ( size_t j = 0; j < categories[i]->size(); ++j ) {
+		for ( size_t j = 0; j < categories[i]->getSize(); ++j ) {
 			MusicQuiz::QuizEntry* quizEntry = (*categories[i])[j];
 			if ( quizEntry != nullptr ) {
 				/** Double Points */

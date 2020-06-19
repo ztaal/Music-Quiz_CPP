@@ -154,7 +154,7 @@ namespace MusicQuiz {
 		/** Variables */
 		size_t _points = 0;
 		size_t _fontSize = 40;
-		size_t _startWidth = 0;
+		bool _textSizeSet = false;
 
 		size_t _startTime = 0;
 		size_t _videoStartTime = 0;

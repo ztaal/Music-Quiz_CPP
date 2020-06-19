@@ -35,7 +35,7 @@ MusicQuiz::QuizEntry::QuizEntry(const QString& audioFile, const QString& answer,
 	_type = EntryType::Song;
 
 	/** Set Start Width */
-	_startWidth = width();
+	//_startWidth = width();
 }
 
 MusicQuiz::QuizEntry::QuizEntry(const QString& audioFile, const QString& videoFile, const QString& answer, size_t points, size_t startTime, size_t videoStartTime, size_t answerStartTime,
@@ -149,6 +149,7 @@ void MusicQuiz::QuizEntry::leftClickEvent()
 		}
 		break;
 	case EntryState::PAUSED: // Play Answer
+		_textSizeSet = false;
 		_state = EntryState::PLAYING_ANSWER;
 		if ( _type == EntryType::Song ) {
 			_audioPlayer->play(_audioFile, _answerStartTime);
@@ -262,16 +263,17 @@ void MusicQuiz::QuizEntry::applyColor(const QColor& color)
 
 	/** Text Size */
 	size_t textWidth = fontMetrics().boundingRect(text()).width();
-	if ( textWidth > _startWidth - 100 && _state != QuizEntry::EntryState::PLAYED ) {
+	if ( _state != QuizEntry::EntryState::PLAYED && !_textSizeSet ) {
 		size_t fontSize = 40;
 		while ( textWidth > width() - 40 && fontSize > 10 ) {
 			setStyleSheet("font-size: " + QString::number(fontSize) + "px;");
 			textWidth = fontMetrics().boundingRect(text()).width();
 			--fontSize;
 		}
+
+		_textSizeSet = true;
 		_fontSize = fontSize;
 	}
-
 	ss << "font-size: " << _fontSize << "px;";
 
 	setStyleSheet(QString::fromStdString(ss.str()));

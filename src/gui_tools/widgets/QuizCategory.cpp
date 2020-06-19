@@ -61,7 +61,7 @@ void MusicQuiz::QuizCategory::enableGuessTheCategory(const size_t points)
 	}
 }
 
-size_t MusicQuiz::QuizCategory::size()
+size_t MusicQuiz::QuizCategory::getSize()
 {
 	return _entries.size();
 }

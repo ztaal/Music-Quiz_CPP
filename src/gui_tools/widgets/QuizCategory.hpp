@@ -46,7 +46,7 @@ namespace MusicQuiz {
 		 *
 		 * @return The size of the category.
 		 */
-		size_t size();
+		size_t getSize();
 
 		/** Overload [] operator */
 		MusicQuiz::QuizEntry*& operator[](int index)

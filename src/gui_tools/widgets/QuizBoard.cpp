@@ -44,7 +44,7 @@ MusicQuiz::QuizBoard::QuizBoard(const std::vector<MusicQuiz::QuizCategory*>& cat
 	/** Set Row Categories if they match the number of entries in the categories */
 	bool sameNumberOfEntries = true;
 	for ( size_t i = 0; i < _categories.size(); ++i ) {
-		if ( rowCategories.size() != _categories[i]->size() ) {
+		if ( rowCategories.size() != _categories[i]->getSize() ) {
 			sameNumberOfEntries = false;
 			break;
 		}
@@ -86,7 +86,7 @@ void MusicQuiz::QuizBoard::createLayout()
 		}
 
 		/** Connect Buttons */
-		const size_t categorySize = _categories[i]->size();
+		const size_t categorySize = _categories[i]->getSize();
 		for ( size_t j = 0; j < categorySize; ++j ) {
 			MusicQuiz::QuizEntry* quizEntry = (*_categories[i])[j];
 			if ( quizEntry != nullptr ) {
@@ -221,7 +221,7 @@ void MusicQuiz::QuizBoard::handleGameComplete()
 			}
 		}
 
-		for ( size_t j = 0; j < _categories[i]->size(); ++j ) {
+		for ( size_t j = 0; j < _categories[i]->getSize(); ++j ) {
 			if ( (*_categories[i])[j]->getEntryState() != QuizEntry::EntryState::PLAYED ) {
 				isGameComplete = false;
 				break;
