@@ -510,8 +510,14 @@ void MusicQuiz::EntryCreator::browseSong()
 		return;
 	}
 
+	/** Get Allowed Audio Formats */
+	QString allowedAudioFormats = "";
+	for ( size_t i = 0; i < _validAudioFormats.size(); ++i ) {
+		allowedAudioFormats += "*" + _validAudioFormats[i] + "; ";
+	}
+
 	/** Open File Dialog */
-	const QString filePath = QFileDialog::getOpenFileName(this, "Select Audio File", "./data/", "Audio File (*.mp3; *.wav);");
+	const QString filePath = QFileDialog::getOpenFileName(this, "Select Audio File", "./data/", "Audio File (" + allowedAudioFormats + ");");
 	if ( filePath.isEmpty() ) {
 		return;
 	}
@@ -527,8 +533,14 @@ void MusicQuiz::EntryCreator::browseVideo()
 		return;
 	}
 
+	/** Get Allowed Video Formats */
+	QString allowedVideoFormats = "";
+	for ( size_t i = 0; i < _validVideoFormats.size(); ++i ) {
+		allowedVideoFormats += "*" + _validVideoFormats[i] + "; ";
+	}
+
 	/** Open File Dialog */
-	const QString filePath = QFileDialog::getOpenFileName(this, "Select Video File", "./data/", "Video File (*.mp4);");
+	const QString filePath = QFileDialog::getOpenFileName(this, "Select Video File", "./data/", "Video File (" + allowedVideoFormats + ");");
 	if ( filePath.isEmpty() ) {
 		return;
 	}
@@ -544,8 +556,14 @@ void MusicQuiz::EntryCreator::browseVideoSong()
 		return;
 	}
 
+	/** Get Allowed Audio Formats */
+	QString allowedAudioFormats = "";
+	for ( size_t i = 0; i < _validAudioFormats.size(); ++i ) {
+		allowedAudioFormats += "*" + _validAudioFormats[i] + "; ";
+	}
+
 	/** Open File Dialog */
-	const QString filePath = QFileDialog::getOpenFileName(this, "Select Audio File", "./data/", "Audio File (*.mp3; *.wav);");
+	const QString filePath = QFileDialog::getOpenFileName(this, "Select Audio File", "./data/", "Audio File (" + allowedAudioFormats + ");");
 	if ( filePath.isEmpty() ) {
 		return;
 	}
@@ -645,7 +663,15 @@ void MusicQuiz::EntryCreator::checkVideoFiles()
 bool MusicQuiz::EntryCreator::isSongFileValid(const QString& fileName)
 {
 	/** Check if file has a valid format */
-	if ( !fileName.contains(".mp3") && !fileName.contains(".wav") ) {
+	bool validFormat = false;
+	for ( size_t i = 0; i < _validAudioFormats.size(); ++i ) {
+		if ( fileName.toLower().contains(_validAudioFormats[i]) ) {
+			validFormat = true;
+			break;
+		}
+	}
+		
+	if ( !validFormat ) {
 		return false;
 	}
 
@@ -660,7 +686,15 @@ bool MusicQuiz::EntryCreator::isSongFileValid(const QString& fileName)
 bool MusicQuiz::EntryCreator::isVideoFileValid(const QString& fileName)
 {
 	/** Check if file has a valid format */
-	if ( !fileName.contains(".mp4") ) {
+	bool validFormat = false;
+	for ( size_t i = 0; i < _validVideoFormats.size(); ++i ) {
+		if ( fileName.toLower().contains(_validVideoFormats[i]) ) {
+			validFormat = true;
+			break;
+		}
+	}
+
+	if ( !validFormat ) {
 		return false;
 	}
 

@@ -332,12 +332,13 @@ void MusicQuiz::QuizFactory::saveQuiz(const MusicQuiz::QuizCreator::QuizData& da
 					/** Media File */
 					const std::string songFile = entry->getSongFile().toStdString();
 					if ( !songFile.empty() ) {
-						const std::string songPath = quizPath + "/media/" + categoryName + "/" + entryName + ".mp3";
+						const std::string audioFileExtension = boost::filesystem::path(songFile).extension().string();
+						const std::string songPath = quizPath + "/media/" + categoryName + "/" + entryName + audioFileExtension;
 						boost::property_tree::ptree& media_tree = entry_tree.add("Media", "");
 						media_tree.put("SongFile", songPath);
 
 						/** Copy Media File */
-						boost::filesystem::copy_file(songFile, mediaDirectoryPath + "/" + categoryName + "/" + entryName + ".mp3", boost::filesystem::copy_option::overwrite_if_exists);
+						boost::filesystem::copy_file(songFile, mediaDirectoryPath + "/" + categoryName + "/" + entryName + audioFileExtension, boost::filesystem::copy_option::overwrite_if_exists);
 					}
 				} else if ( type == MusicQuiz::EntryCreator::EntryType::Video ) { // Video
 					/** Entry Video Start Time */
@@ -354,15 +355,17 @@ void MusicQuiz::QuizFactory::saveQuiz(const MusicQuiz::QuizCreator::QuizData& da
 					const std::string songFile = entry->getVideoSongFile().toStdString();
 
 					if ( !videoFile.empty() && !songFile.empty() ) {
-						const std::string videoPath = quizPath + "/media/" + categoryName + "/" + entryName + ".mp4";
-						const std::string songPath = quizPath + "/media/" + categoryName + "/" + entryName + ".mp3";
+						const std::string videoFileExtension = boost::filesystem::path(videoFile).extension().string();
+						const std::string audioFileExtension = boost::filesystem::path(songFile).extension().string();
+						const std::string videoPath = quizPath + "/media/" + categoryName + "/" + entryName + videoFileExtension;
+						const std::string songPath = quizPath + "/media/" + categoryName + "/" + entryName + audioFileExtension;
 						boost::property_tree::ptree& media_tree = entry_tree.add("Media", "");
 						media_tree.put("VideoFile", videoPath);
 						media_tree.put("SongFile", songPath);
 
 						/** Copy Media File */
-						boost::filesystem::copy_file(videoFile, mediaDirectoryPath + "/" + categoryName + "/" + entryName + ".mp4", boost::filesystem::copy_option::overwrite_if_exists);
-						boost::filesystem::copy_file(songFile, mediaDirectoryPath + "/" + categoryName + "/" + entryName + ".mp3", boost::filesystem::copy_option::overwrite_if_exists);
+						boost::filesystem::copy_file(videoFile, mediaDirectoryPath + "/" + categoryName + "/" + entryName + videoFileExtension, boost::filesystem::copy_option::overwrite_if_exists);
+						boost::filesystem::copy_file(songFile, mediaDirectoryPath + "/" + categoryName + "/" + entryName + audioFileExtension, boost::filesystem::copy_option::overwrite_if_exists);
 					}
 				}
 			}

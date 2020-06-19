@@ -365,5 +365,8 @@ namespace MusicQuiz {
 
 		std::shared_ptr< media::AudioPlayer > _audioPlayer = nullptr;
 		media::VideoPlayer* _videoPlayer = nullptr;
+
+		const std::vector< QString > _validAudioFormats = { ".mp3", ".mp4", ".wav" };
+		const std::vector< QString > _validVideoFormats = { ".mp4"};
 	};
 }
