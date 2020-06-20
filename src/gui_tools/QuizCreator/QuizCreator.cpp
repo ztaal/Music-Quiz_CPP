@@ -480,6 +480,13 @@ void MusicQuiz::QuizCreator::saveQuiz()
 	/** Stop Song */
 	_audioPlayer->stop();
 
+	/** Stop Video */
+	for ( size_t i = 0; i < _categories.size(); ++i ) {
+		for ( size_t j = 0; j < _categories[i]->getEntries().size(); ++j ) {
+			_categories[i]->getEntries()[j]->stop();
+		}
+	}
+
 	/** Get Quiz Data */
 	QuizData quizData;
 

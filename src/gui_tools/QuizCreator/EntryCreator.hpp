@@ -206,6 +206,11 @@ namespace MusicQuiz {
 		 */
 		const size_t getVideoAnswerStartTime();
 
+		/**
+		 * @brief Stops the audio and video playing.
+		 */
+		void stop();
+
 	private slots:
 		/**
 		 * @brief Opens a dialog to browse for a song file.
@@ -241,11 +246,6 @@ namespace MusicQuiz {
 		 * @brief Pauses the audio and video playing.
 		 */
 		void pause();
-
-		/**
-		 * @brief Stops the audio and video playing.
-		 */
-		void stop();
 
 		/**
 		 * @brief Plays the video file from the start position defined in the start QTimeEdit.

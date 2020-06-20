@@ -464,7 +464,7 @@ void MusicQuiz::EntryCreator::playVideo()
 		}
 
 		/** Get Start and End Time */
-		const size_t videoStartTime = toMSec(_songStartTimeEdit->time());
+		const size_t videoStartTime = toMSec(_videoStartTimeEdit->time());
 		const size_t songStartTime = toMSec(_videoSongStartTimeEdit->time());
 
 		/** Play Video and Song */

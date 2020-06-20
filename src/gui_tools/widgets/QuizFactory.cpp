@@ -349,15 +349,15 @@ void MusicQuiz::QuizFactory::saveQuiz(const MusicQuiz::QuizCreator::QuizData& da
 					if ( !videoFile.empty() && !songFile.empty() ) {
 						const std::string videoFileExtension = boost::filesystem::path(videoFile).extension().string();
 						const std::string audioFileExtension = boost::filesystem::path(songFile).extension().string();
-						const std::string videoPath = quizPath + "/media/" + categoryName + "/" + entryName + videoFileExtension;
-						const std::string songPath = quizPath + "/media/" + categoryName + "/" + entryName + audioFileExtension;
+						const std::string videoPath = quizPath + "/media/" + categoryName + "/" + entryName + "_video" + videoFileExtension;
+						const std::string songPath = quizPath + "/media/" + categoryName + "/" + entryName + "_song" + audioFileExtension;
 						boost::property_tree::ptree& media_tree = entry_tree.add("Media", "");
 						media_tree.put("VideoFile", videoPath);
 						media_tree.put("SongFile", songPath);
 
 						/** Copy Media File */
-						boost::filesystem::copy_file(videoFile, mediaDirectoryPath + "/" + categoryName + "/" + entryName + videoFileExtension, boost::filesystem::copy_option::overwrite_if_exists);
-						boost::filesystem::copy_file(songFile, mediaDirectoryPath + "/" + categoryName + "/" + entryName + audioFileExtension, boost::filesystem::copy_option::overwrite_if_exists);
+						boost::filesystem::copy_file(videoFile, mediaDirectoryPath + "/" + categoryName + "/" + entryName + "_video" + videoFileExtension, boost::filesystem::copy_option::overwrite_if_exists);
+						boost::filesystem::copy_file(songFile, mediaDirectoryPath + "/" + categoryName + "/" + entryName + "_song" + audioFileExtension, boost::filesystem::copy_option::overwrite_if_exists);
 					}
 				}
 			}
