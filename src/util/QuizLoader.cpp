@@ -162,13 +162,13 @@ std::vector<MusicQuiz::QuizCategory*> MusicQuiz::util::QuizLoader::loadQuizCateg
 								/** Settings */
 								const QString answer = QString::fromStdString(it->second.get<std::string>("Answer"));
 								const size_t points = it->second.get<size_t>("Points");
-								const size_t startTime = it->second.get<size_t>("StartTime");
 								const size_t answerStartTime = it->second.get<size_t>("AnswerStartTime");
 
 								/** Media Type */
 								const std::string type = it->second.get<std::string>("<xmlattr>.type");
 								if ( type == "song" ) { // Song
 									QString songFile = QString::fromStdString(full_path.string() + "/" + it->second.get<std::string>("Media.SongFile"));
+									const size_t audioStartTime = it->second.get<size_t>("StartTime");
 									std::replace(songFile.begin(), songFile.end(), '\\', '/');
 
 									/** Check if file exsists */
@@ -177,13 +177,14 @@ std::vector<MusicQuiz::QuizCategory*> MusicQuiz::util::QuizLoader::loadQuizCateg
 									}
 
 									/** Push Back Song Entry */
-									categorieEntries.push_back(new MusicQuiz::QuizEntry(songFile, answer, points, startTime, answerStartTime, audioPlayer));
+									categorieEntries.push_back(new MusicQuiz::QuizEntry(songFile, answer, points, audioStartTime, answerStartTime, audioPlayer));
 								} else if ( type == "video" ) { // Video
 									QString songFile = QString::fromStdString(full_path.string() + "/" + it->second.get<std::string>("Media.SongFile"));
 									QString videoFile = QString::fromStdString(full_path.string() + "/" + it->second.get<std::string>("Media.VideoFile"));
 									std::replace(songFile.begin(), songFile.end(), '\\', '/');
 									std::replace(videoFile.begin(), videoFile.end(), '\\', '/');
-									const size_t videoStartTime = it->second.get<size_t>("VideoSongStartTime");
+									const size_t videoStartTime = it->second.get<size_t>("StartTime");
+									const size_t videoSongStartTime = it->second.get<size_t>("VideoSongStartTime");
 
 									/** Check if files exsists */
 									if ( !boost::filesystem::exists(songFile.toStdString()) ) {
@@ -195,7 +196,7 @@ std::vector<MusicQuiz::QuizCategory*> MusicQuiz::util::QuizLoader::loadQuizCateg
 									}
 
 									/** Push Back Video Entry */
-									categorieEntries.push_back(new MusicQuiz::QuizEntry(songFile, videoFile, answer, points, startTime, videoStartTime, answerStartTime, audioPlayer, videoPlayer));
+									categorieEntries.push_back(new MusicQuiz::QuizEntry(songFile, videoFile, answer, points, videoSongStartTime, videoStartTime, answerStartTime, audioPlayer, videoPlayer));
 								}
 							}
 						}

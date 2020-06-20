@@ -3,6 +3,7 @@
 #include <stdexcept>
 
 #include <QVBoxLayout>
+#include <QMediaContent>
 
 #include "common/Log.hpp"
 
@@ -117,6 +118,7 @@ void media::VideoPlayer::stop()
 {
 	/** Stop Video */
 	_player->stop();
+	_player->setMedia(QMediaContent());
 
 	/** Set State */
 	_state = VideoPlayState::IDLE;

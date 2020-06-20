@@ -7,6 +7,7 @@
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QRadioButton>
+#include <QMediaContent>
 
 #include <boost/filesystem.hpp>
 

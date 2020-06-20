@@ -38,9 +38,9 @@ MusicQuiz::QuizEntry::QuizEntry(const QString& audioFile, const QString& answer,
 	//_startWidth = width();
 }
 
-MusicQuiz::QuizEntry::QuizEntry(const QString& audioFile, const QString& videoFile, const QString& answer, size_t points, size_t startTime, size_t videoStartTime, size_t answerStartTime,
+MusicQuiz::QuizEntry::QuizEntry(const QString& audioFile, const QString& videoFile, const QString& answer, size_t points, size_t songStartTime, size_t videoStartTime, size_t answerStartTime,
 	const media::AudioPlayer::Ptr& audioPlayer, const media::VideoPlayer::Ptr& videoPlayer, QWidget* parent) :
-	QPushButton(parent), _audioFile(audioFile), _videoFile(videoFile), _answer(answer), _points(points), _startTime(startTime), _videoStartTime(videoStartTime),
+	QPushButton(parent), _audioFile(audioFile), _videoFile(videoFile), _answer(answer), _points(points), _startTime(songStartTime), _videoStartTime(videoStartTime),
 	_answerStartTime(answerStartTime), _audioPlayer(audioPlayer), _videoPlayer(videoPlayer)
 {
 	/** Sanity Check */

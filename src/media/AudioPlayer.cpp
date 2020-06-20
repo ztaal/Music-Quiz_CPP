@@ -3,6 +3,7 @@
 #include <stdexcept>
 
 #include <QVBoxLayout>
+#include <QMediaContent>
 
 #include "common/Log.hpp"
 
@@ -96,6 +97,7 @@ void media::AudioPlayer::stop()
 {
 	/** Stop Video */
 	_player->stop();
+	_player->setMedia(QMediaContent());
 
 	/** Set State */
 	_state = AudioPlayState::IDLE;

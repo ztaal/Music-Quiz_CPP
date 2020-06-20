@@ -42,14 +42,14 @@ namespace MusicQuiz {
 		 * @param[in] videoFile The audio file to play.
 		 * @param[in] answer The entry anwser.
 		 * @param[in] points The number of points obtained by guessing the entry.
-		 * @param[in] startTime The start time of the media in [ms].
+		 * @param[in] songStartTime The start time of the media in [ms].
 		 * @param[in] videoStartTime The start time of the media in [ms].
 		 * @param[in] answerStartTime The answer media start time in [ms].
 		 * @param[in] audioPlayer The audio player.
 		 * @param[in] videoPlayer The video player.
 		 * @param[in] parent The parent widget.
 		 */
-		explicit QuizEntry(const QString& audioFile, const QString& videoFile, const QString& answer, size_t points, size_t startTime, size_t videoStartTime, size_t answerStartTime,
+		explicit QuizEntry(const QString& audioFile, const QString& videoFile, const QString& answer, size_t points, size_t songStartTime, size_t videoStartTime, size_t answerStartTime,
 			const std::shared_ptr< media::AudioPlayer >& audioPlayer, const std::shared_ptr< media::VideoPlayer >& videoPlayer, QWidget* parent = nullptr);
 
 		/**
