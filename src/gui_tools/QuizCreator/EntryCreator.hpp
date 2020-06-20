@@ -67,20 +67,6 @@ namespace MusicQuiz {
 		const QString getName() const;
 
 		/**
-		 * @brief Sets the entry answer.
-		 *
-		 * @param[in] answer The answer.
-		 */
-		void setAnswer(const QString& answer);
-
-		/**
-		 * @brief Gets the entry answer.
-		 *
-		 * @return The answer.
-		 */
-		const QString getAnswer() const;
-
-		/**
 		 * @brief Sets the points.
 		 *
 		 * @param[in] points The points.
@@ -344,7 +330,6 @@ namespace MusicQuiz {
 		EntryType _entryType = EntryType::Song;
 
 		QSpinBox* _pointsSpinbox = nullptr;
-		QLineEdit* _answerLineEdit = nullptr;
 
 		QLineEdit* _songFileLineEdit = nullptr;
 		QLineEdit* _videoFileLineEdit = nullptr;

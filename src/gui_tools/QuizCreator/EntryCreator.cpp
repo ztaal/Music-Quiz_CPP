@@ -33,19 +33,8 @@ void MusicQuiz::EntryCreator::createLayout()
 	_entryNameLabel->setObjectName("quizCreatorLabel");
 	mainlayout->addWidget(_entryNameLabel, ++row, 0, 1, 2, Qt::AlignCenter);
 
-	/** Answer */
-	QLabel* label = new QLabel("Answer:");
-	label->setObjectName("quizCreatorLabel");
-	mainlayout->addWidget(label, ++row, 0);
-
-	_answerLineEdit = new QLineEdit;
-	_answerLineEdit->setAlignment(Qt::AlignCenter);
-	_answerLineEdit->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-	_answerLineEdit->setObjectName("quizCreatorLineEdit");
-	mainlayout->addWidget(_answerLineEdit, row, 1);
-
 	/** Points */
-	label = new QLabel("Points:");
+	QLabel* label = new QLabel("Points:");
 	label->setObjectName("quizCreatorLabel");
 	mainlayout->addWidget(label, ++row, 0);
 
@@ -802,27 +791,6 @@ void MusicQuiz::EntryCreator::setName(const QString& name)
 const QString MusicQuiz::EntryCreator::getName() const
 {
 	return _entryName;
-}
-
-void MusicQuiz::EntryCreator::setAnswer(const QString& answer)
-{
-	/** Sanity Check */
-	if ( _answerLineEdit == nullptr ) {
-		return;
-	}
-
-	/** Set Answer */
-	_answerLineEdit->setText(answer);
-}
-
-const QString MusicQuiz::EntryCreator::getAnswer() const
-{
-	/** Sanity Check */
-	if ( _answerLineEdit == nullptr ) {
-		return "";
-	}
-
-	return _answerLineEdit->text();
 }
 
 void MusicQuiz::EntryCreator::pointsChanged(int points)

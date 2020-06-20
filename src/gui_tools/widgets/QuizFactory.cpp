@@ -288,6 +288,7 @@ void MusicQuiz::QuizFactory::saveQuiz(const MusicQuiz::QuizCreator::QuizData& da
 					deleteDirectory(mediaDirectoryPath);
 					return;
 				}
+				entry_tree.put("Answer", entryName);
 
 				/** Check if two entries have the same name */
 				for ( size_t k = 0; k < numberOfEntries; ++k ) {
@@ -308,15 +309,6 @@ void MusicQuiz::QuizFactory::saveQuiz(const MusicQuiz::QuizCreator::QuizData& da
 				} else if ( type == MusicQuiz::EntryCreator::EntryType::Video ) {
 					entry_tree.put("<xmlattr>.type", "video");
 				}
-
-				/** Entry Answer */
-				const std::string entryAnswer = entry->getAnswer().toStdString();
-				if ( entryAnswer.empty() ) {
-					QMessageBox::warning(parent, "Failed to Save Quiz", "Failed to save quiz. " + QString::fromStdString(categoryName) + ": Answers have to be set for all entries.");
-					deleteDirectory(mediaDirectoryPath);
-					return;
-				}
-				entry_tree.put("Answer", entryAnswer);
 
 				/** Entry Points */
 				entry_tree.put("Points", entry->getPoints());
@@ -404,7 +396,7 @@ void MusicQuiz::QuizFactory::saveQuiz(const MusicQuiz::QuizCreator::QuizData& da
 				cheatSheet << "\n\n-----  " << categories[i]->getName().toStdString() << "  -----";
 				std::vector< MusicQuiz::EntryCreator* > categoryEntries = data.quizCategories[i]->getEntries();
 				for ( size_t j = 0; j < categoryEntries.size(); ++j ) {
-					cheatSheet << "\n#" << j + 1 << " - " << categoryEntries[j]->getPoints() << " - " << categoryEntries[j]->getAnswer().toStdString();
+					cheatSheet << "\n#" << j + 1 << " - " << categoryEntries[j]->getPoints() << " - " << categoryEntries[j]->getName().toStdString();
 				}
 			}
 			cheatSheet.flush();
@@ -500,7 +492,6 @@ MusicQuiz::QuizCreator::QuizData MusicQuiz::QuizFactory::loadQuiz(const std::str
 
 									/** Quiz Entry */
 									MusicQuiz::EntryCreator* entry = new MusicQuiz::EntryCreator(entryName, points, audioPlayer, category);
-									entry->setAnswer(QString::fromStdString(it->second.get<std::string>("Answer")));
 
 									/** Media Type */
 									const std::string type = it->second.get<std::string>("<xmlattr>.type");
