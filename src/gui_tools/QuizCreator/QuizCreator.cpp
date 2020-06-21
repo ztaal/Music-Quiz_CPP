@@ -88,6 +88,9 @@ void MusicQuiz::QuizCreator::createLayout()
 	setupTabLayout->addWidget(label, ++row, 0, 1, 2, Qt::AlignLeft);
 
 	_quizNameLineEdit = new QLineEdit;
+	QRegExp re("^[a-zA-Z0-9\\_\\.\\,\\-\\s\\'\\+\\^\\(\\)]{1,50}");
+	QRegExpValidator* validator = new QRegExpValidator(re);
+	_quizNameLineEdit->setValidator(validator);
 	_quizNameLineEdit->setObjectName("quizCreatorLineEdit");
 	setupTabLayout->addWidget(_quizNameLineEdit, ++row, 0, 1, 2);
 
@@ -97,6 +100,7 @@ void MusicQuiz::QuizCreator::createLayout()
 	setupTabLayout->addWidget(label, ++row, 0, 1, 2, Qt::AlignLeft);
 
 	_quizAuthorLineEdit = new QLineEdit;
+	_quizAuthorLineEdit->setValidator(validator);
 	_quizAuthorLineEdit->setObjectName("quizCreatorLineEdit");
 	setupTabLayout->addWidget(_quizAuthorLineEdit, ++row, 0, 1, 2);
 
@@ -213,6 +217,9 @@ void MusicQuiz::QuizCreator::addCategory()
 	/** Add Line Edit */
 	const QString categoryNameStr = "Category " + QString::number(categoryCount + 1);
 	QLineEdit* categoryName = new QLineEdit(categoryNameStr);
+	QRegExp re("^[a-zA-Z0-9\\_\\.\\,\\-\\s\\'\\+\\^\\(\\)]{1,50}");
+	QRegExpValidator* validator = new QRegExpValidator(re);
+	categoryName->setValidator(validator);
 	categoryName->setObjectName("quizCreatorCategoryLineEdit");
 	categoryName->setProperty("index", categoryCount);
 	connect(categoryName, SIGNAL(textChanged(const QString&)), this, SLOT(updateCategoryTabName(const QString&)));
@@ -265,6 +272,9 @@ void MusicQuiz::QuizCreator::addRowCategory()
 
 	/** Add Line Edit */
 	QLineEdit* rowCategoryName = new QLineEdit("Row Category " + QString::number(rowCategoryCount + 1));
+	QRegExp re("^[a-zA-Z0-9\\_\\.\\,\\-\\s\\'\\+\\^\\(\\)]{1,50}");
+	QRegExpValidator* validator = new QRegExpValidator(re);
+	rowCategoryName->setValidator(validator);
 	rowCategoryName->setObjectName("quizCreatorCategoryLineEdit");
 	_rowCategoriesTable->setCellWidget(rowCategoryCount, 0, rowCategoryName);
 

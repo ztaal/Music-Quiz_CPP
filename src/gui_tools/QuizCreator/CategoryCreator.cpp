@@ -1,11 +1,13 @@
 #include "CategoryCreator.hpp"
 
 #include <QLabel>
+#include <QRegExp>
 #include <QString>
 #include <QGridLayout>
 #include <QPushButton>
 #include <QHeaderView>
 #include <QMessageBox>
+#include <QRegExpValidator>
 #include <QTableWidgetItem>
 
 #include "gui_tools/QuizCreator/EntryCreator.hpp"
@@ -87,6 +89,9 @@ void MusicQuiz::CategoryCreator::addEntry()
 	/** Add Line Edit */
 	const QString entryNameStr = "Entry " + QString::number(entryCount + 1);
 	QLineEdit* entryName = new QLineEdit(entryNameStr);
+	QRegExp re("^[a-zA-Z0-9\\_\\.\\,\\-\\s\\'\\+\\^\\(\\)]{1,50}");
+	QRegExpValidator* validator = new QRegExpValidator(re);
+	entryName->setValidator(validator);
 	entryName->setObjectName("quizCreatorCategoryLineEdit");
 	entryName->setProperty("index", entryCount);
 	connect(entryName, SIGNAL(textChanged(const QString&)), this, SLOT(updateEntryTabName(const QString&)));
@@ -281,6 +286,9 @@ void MusicQuiz::CategoryCreator::setEntries(const std::vector< MusicQuiz::EntryC
 
 		/** Add Line Edit */
 		QLineEdit* entryName = new QLineEdit(_entries[i]->getName());
+		QRegExp re("^[a-zA-Z0-9\\_\\.\\,\\-\\s\\'\\+\\^\\(\\)]{1,50}");
+		QRegExpValidator* validator = new QRegExpValidator(re);
+		entryName->setValidator(validator);
 		entryName->setObjectName("quizCreatorCategoryLineEdit");
 		entryName->setProperty("index", entryCount);
 		connect(entryName, SIGNAL(textChanged(const QString&)), this, SLOT(updateEntryTabName(const QString&)));
