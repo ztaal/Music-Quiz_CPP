@@ -9,6 +9,7 @@
 #include <QHBoxLayout>
 #include <QGridLayout>
 #include <QMessageBox>
+#include <QDesktopWidget>
 
 #include "common/Log.hpp"
 
@@ -162,14 +163,24 @@ void MusicQuiz::QuizBoard::handleAnswer(const size_t points)
 
 	/** Select which team guessed the entry / category */
 	QMessageBox msgBox(QMessageBox::Question, "Select Team", "Select Team", QMessageBox::NoButton, nullptr, Qt::WindowStaysOnTopHint);
+	msgBox.setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint | Qt::WindowStaysOnTopHint);
+	
+	/** Add Buttons for Each Team */
 	std::vector< QAbstractButton* > teamButtons;
 	for ( size_t i = 0; i < _teams.size(); ++i ) {
 		teamButtons.push_back(msgBox.addButton(_teams[i]->getName(), QMessageBox::YesRole));
 	}
 	QAbstractButton* exitButton = msgBox.addButton("No One", QMessageBox::YesRole);
-	msgBox.setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint | Qt::WindowStaysOnTopHint);
+
+	/** Move Box to the bottom of the screen */
+	QSize size = msgBox.sizeHint();
+	QRect screenRect = QDesktopWidget().screen()->rect();
+	msgBox.move(QPoint(screenRect.width() / 2 - size.width() / 2, screenRect.height() - (size.height() * 2)));
+	
+	/** Box Message Box */
 	msgBox.exec();
 
+	/** Get Selected Team */
 	MusicQuiz::QuizTeam* team = nullptr;
 	for ( size_t i = 0; i < teamButtons.size(); ++i ) {
 		if ( msgBox.clickedButton() == teamButtons[i] ) {
