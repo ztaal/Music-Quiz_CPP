@@ -3,6 +3,7 @@
 #include <QTime>
 #include <QLabel>
 #include <QString>
+#include <QScrollArea>
 #include <QFileDialog>
 #include <QPushButton>
 #include <QHBoxLayout>
@@ -21,6 +22,12 @@ MusicQuiz::EntryCreator::EntryCreator(const QString& name, const size_t points, 
 
 void MusicQuiz::EntryCreator::createLayout()
 {
+	/** Scroll Area */
+	QGridLayout* scrollLayout = new QGridLayout;
+	QScrollArea* scrollArea = new QScrollArea;
+	scrollArea->setWidgetResizable(true);
+	QWidget* scrollWidget = new QWidget;
+
 	/** Layout */
 	QGridLayout* mainlayout = new QGridLayout;
 	mainlayout->setHorizontalSpacing(10);
@@ -85,7 +92,10 @@ void MusicQuiz::EntryCreator::createLayout()
 	mainlayout->addItem(new QSpacerItem(0, 0, QSizePolicy::Ignored, QSizePolicy::Expanding), ++row, 0, 1, 2);
 
 	/** Set Layout */
-	setLayout(mainlayout);
+	scrollWidget->setLayout(mainlayout);
+	scrollArea->setWidget(scrollWidget);
+	scrollLayout->addWidget(scrollArea);
+	setLayout(scrollLayout);
 }
 
 QGridLayout* MusicQuiz::EntryCreator::createSongFileLayout()
