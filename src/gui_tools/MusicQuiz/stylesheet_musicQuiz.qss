@@ -650,3 +650,13 @@ QSlider::sub-page:horizontal#settingsSlider:disabled {
 QSlider::add-page:horizontal#settingsSlider:disabled {
     background				: Grey;
 }
+
+
+
+/****************************************/
+/*****			QScrollArea			*****/
+/****************************************/
+
+QScrollArea {
+    background-color		: rgba(0, 0, 0, 0);
+}

@@ -21,5 +21,6 @@
         <file>imgs/checkbox_unchecked_yellow_disabled.png</file>
         <file>imgs/question_mark_yellow.png</file>
         <file>imgs/question_mark_yellow_disabled.png</file>
+        <file>stylesheet_musicQuiz.qss</file>
     </qresource>
 </RCC>
