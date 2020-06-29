@@ -1,0 +1,652 @@
+/****************************************/
+/*****			 QDialog			*****/
+/****************************************/
+
+QDialog#QuizBoard
+{
+	color				: Yellow;
+	background-color	: rgb(0, 0, 100);
+}
+
+QDialog#QuizSelector
+{
+	color				: Yellow;
+	background-color	: rgb(25, 25, 255);
+}
+
+QDialog#settingsDialog
+{
+	color				: Yellow;
+	background-color	: rgb(25, 25, 255);
+}
+
+QDialog#TeamSelector
+{
+	color				: Yellow;
+	background-color	: rgb(25, 25, 255);
+}
+
+QDialog#QuizIntroScreen
+{
+	color				: Yellow;
+	background-color	: rgb(25, 25, 255);
+}
+
+QDialog#QuizWinningScreen
+{
+	color				: Yellow;
+	background-color	: rgb(25, 25, 255);
+}
+
+
+
+/****************************************/
+/*****		    QPushButton			*****/
+/****************************************/
+
+QPushButton[objectName^="QuizEntry"]
+{
+	color				: Yellow;
+	font-size			: 40px;
+
+	background-color	: rgb(0, 0, 255);
+
+	border-color		: rgb(0, 0, 255);
+	border-radius		: 0px;
+	border-width		: 1px;
+	border-style		: solid;
+	margin				: 0px;
+	padding				: 0px;
+
+	min-height			: 100px;
+	min-width			: 200px;
+}
+
+QPushButton[objectName^="TeamEntry"]
+{
+	font-size			: 40px;
+	font-weight			: bold;
+
+	min-height			: 100px;
+	min-width			: 200px;
+}
+
+QPushButton[objectName^="_dayliDouble"]
+{
+	border-color		: rgb(255, 215, 0);
+}
+
+QPushButton#QuizEntry_categoryLabel
+{
+	font-size			: 40px;
+	font-weight			: bold;
+}
+
+QPushButton#QuizEntry_rowCategoryLabel
+{
+	font-size			: 40px;
+	font-weight			: bold;
+
+	min-width			: 200px;
+	min-height			: 100px;
+}
+
+QPushButton#menuButton
+{
+	color				: Yellow;
+	background-color	: rgb(115, 115, 115);
+	font-size			: 30px;
+
+	min-height			: 75px;
+	min-width			: 200px;
+}
+
+QPushButton#settingsButton
+{
+	color				: Yellow;
+	background-color	: rgb(115, 115, 115);
+	font-size			: 28px;
+
+	min-height			: 50px;
+	min-width			: 100px;
+}
+
+QPushButton#addButton
+{
+	background-color	: rgb(115, 115, 115);
+
+	min-height			: 95px;
+	min-width			: 95px;
+}
+
+QPushButton#removeBtn
+{
+	background-color	: rgba(0, 0, 0, 0);
+
+	min-height			: 50px;
+	min-width			: 50px;
+
+	image				: url(:/imgs/remove_icon.png);
+}
+
+QPushButton#quizCreatorRemoveBtn
+{
+	background-color	: rgba(0, 0, 0, 0);
+
+	min-height			: 22px;
+	min-width			: 22px;
+
+	image				: url(:/imgs/remove_icon_black.png);
+}
+
+QPushButton#quizCreatorEditBtn
+{
+	background-color	: rgba(0, 0, 0, 0);
+
+	min-height			: 25px;
+	min-width			: 25px;
+
+	image				: url(:/imgs/edit_icon_black.png);
+}
+
+QPushButton#quizCreatorAddBtn
+{
+	background-color	: rgba(0, 0, 0, 0);
+
+	min-height			: 18px;
+	min-width			: 18px;
+
+	image				: url(:/imgs/add_icon_black.png);
+}
+
+QPushButton#quizCreatorBrowseBtn
+{
+	min-height			: 40px;
+	min-width			: 40px;
+
+	image				: url(:/imgs/browse_file_icon.png);
+}
+
+QPushButton#quizCreatorPlayBtn
+{
+	min-height			: 40px;
+	min-width			: 40px;
+
+	image				: url(:/imgs/play_icon.png);
+}
+
+QPushButton#quizCreatorPauseBtn
+{
+	min-height			: 40px;
+	min-width			: 40px;
+
+	image				: url(:/imgs/pause_icon.png);
+}
+
+QPushButton#quizCreatorStopBtn
+{
+	font-size			: 10px;
+
+	min-height			: 40px;
+	min-width			: 40px;
+
+	image				: url(:/imgs/stop_icon.png);
+}
+
+QPushButton#quizCreatorBtn
+{
+	font-size			: 22px;
+	min-height			: 40px;
+}
+
+QPushButton#settingsInfo
+{
+	background-color	: rgba(0, 0, 0, 0);
+
+	min-height			: 25px;
+	min-width			: 25px;
+	max-height			: 25px;
+	max-width			: 25px;
+
+	image				: url(:/imgs/question_mark_yellow.png);
+}
+
+QPushButton#settingsInfo:disabled
+{
+	image				: url(:/imgs/question_mark_yellow_disabled.png);
+}
+
+
+/****************************************/
+/*****		    QLabel  			*****/
+/****************************************/
+
+QLabel#descriptionLabel
+{
+	font-size			: 45px;
+	font-weight			: bold;
+	color				: Yellow;
+}
+
+QLabel#categoryLabel
+{
+	font-size			: 35px;
+	font-weight			: bold;
+	color				: Yellow;
+}
+
+QLabel#infoLabel
+{
+	font-size			: 35px;
+	font-weight			: bold;
+	color				: Yellow;
+}
+
+QLabel#teamInfoLabel
+{
+	font-size			: 45px;
+	font-weight			: bold;
+	color				: Yellow;
+}
+
+QLabel#settingsLabel
+{
+	font-size			: 22px;
+	color				: Yellow;
+}
+
+QLabel#settingsLabel:disabled
+{
+	color				: rgb(100, 100, 0);
+}
+
+QLabel#authorLabel
+{
+	font-size			: 25px;
+	color				: Yellow;
+}
+
+QLabel#quizIntroLabel
+{
+	font-size			: 175px;
+	font-weight			: bold;
+	color				: Yellow;
+}
+
+QLabel#quizIntroNameLabel
+{
+	font-size			: 70px;
+	color				: Yellow;
+}
+
+QLabel#quizIntroAuthorLabel
+{
+	font-size			: 30px;
+	color				: Yellow;
+}
+
+QLabel#winningScreenTextLabel
+{
+	font-size			: 100px;
+	color				: Yellow;
+}
+
+QLabel#quizCreatorLabel
+{
+	font-size			: 25px;
+}
+
+
+
+/****************************************/
+/*****		    QListWidget			*****/
+/****************************************/
+
+QListWidget
+{
+	font-size						: 22px;
+	background-color				: rgb(5, 30, 190);
+	selection-background-color		: rgb(150, 150, 150);	
+	border-color					: rgb(128, 128, 128);
+	border-radius					: 0px;
+	border-width					: 2px;
+	border-style					: solid;
+}
+
+QListWidget::Item
+{
+	color							: Yellow;
+	border							: 1px solid rgb(128, 128, 128)
+}
+
+QListWidget::Item::Selected
+{
+	border							: 5px solid Yellow
+}
+
+
+/****************************************/
+/*****		    QTextEdit			*****/
+/****************************************/
+
+QTextEdit#descriptionTextLabel
+{
+	color							: Yellow;
+	font-size						: 30px;
+	background-color				: rgba(0, 0, 0, 0);
+	selection-background-color		: rgba(0, 0, 0, 0);
+	border							: none;
+}
+
+QTextEdit#quizCreatorTextEdit
+{
+	font-size						: 20px;
+	max-height						: 80px;
+	padding-left					: 10px;
+}
+
+
+
+/****************************************/
+/*****		    QLineEdit  			*****/
+/****************************************/
+
+QLineEdit:disabled
+{
+	background-color				: rgb(120, 120, 120);
+}
+
+QLineEdit#authorText
+{
+	font-size						: 25px;
+	background-color				: rgba(0, 0, 0, 0);
+	selection-background-color		: rgba(0, 0, 0, 0);
+	border							: none;
+}
+
+QLineEdit#_teamLineEdit
+{
+	font-size						: 35px;
+	min-height						: 100px;
+	border							: 2px solid rgb(128, 128, 128)
+}
+
+QLineEdit#settingsLineEdit
+{
+	color							: Yellow;
+	border							: none;
+	font-size						: 22px;
+	background-color				: rgba(0, 0, 0, 0);
+}
+
+QLineEdit#settingsLineEdit:disabled
+{
+	color							: rgb(100, 100, 0);
+}
+
+QLineEdit#quizCreatorLineEdit
+{
+	font-size						: 20px;
+	min-height						: 40px;
+	padding-left					: 10px;
+}
+
+QLineEdit#quizCreatorCategoryLineEdit
+{
+	font-size						: 18px;
+	border							: none;
+	padding-left					: 10px;
+}
+
+
+
+/****************************************/
+/*****		    QCheckBox  			*****/
+/****************************************/
+
+QCheckBox#infoCheckbox
+{
+	font-size	: 30px;
+	color		: Yellow;
+}
+
+QCheckBox::indicator#infoCheckbox {
+	width		: 50px;
+	height		: 50px;
+}
+
+QCheckBox::indicator:checked#infoCheckbox {
+	image		: url(:/imgs/checkbox_checked_yellow.png);
+}
+
+QCheckBox::indicator:unchecked#infoCheckbox {
+	image		: url(:/imgs/checkbox_unchecked_yellow.png);
+}
+
+QCheckBox#quizCreatorCheckbox
+{
+	font-size	: 18px;
+}
+
+QCheckBox::indicator#quizCreatorCheckbox {
+	width		: 25px;
+	height		: 25px;
+}
+
+QCheckBox::indicator:checked#quizCreatorCheckbox {
+	image		: url(:/imgs/checkbox_checked_black.png);
+}
+
+QCheckBox::indicator:unchecked#quizCreatorCheckbox {
+	image		: url(:/imgs/checkbox_unchecked_black.png);
+}
+
+
+QCheckBox#settingsCheckbox
+{
+	font-size	: 22px;
+	color		: Yellow;
+}
+
+QCheckBox#settingsCheckbox:disabled
+{
+	color		: rgb(100, 100, 0);
+}
+
+QCheckBox::indicator#settingsCheckbox {
+	width		: 30px;
+	height		: 30px;
+}
+
+QCheckBox::indicator:checked#settingsCheckbox {
+	image		: url(:/imgs/checkbox_checked_yellow.png);
+}
+
+QCheckBox::indicator:unchecked#settingsCheckbox {
+	image		: url(:/imgs/checkbox_unchecked_yellow.png);
+}
+
+QCheckBox::indicator:checked#settingsCheckbox:disabled {
+	image		: url(:/imgs/checkbox_checked_yellow_disabled.png);
+}
+
+QCheckBox::indicator:unchecked#settingsCheckbox:disabled {
+	image		: url(:/imgs/checkbox_unchecked_yellow_disabled.png);
+}
+
+
+/****************************************/
+/*****		    QTableWidget		*****/
+/****************************************/
+
+QTableWidget#teamTable
+{
+	font-size						: 32px;
+	font-weight						: bold;
+	background-color				: rgb(5, 30, 190);
+	border-color					: rgb(128, 128, 128);
+	border-radius					: 0px;
+	border-width					: 2px;
+	border-style					: solid;
+}
+
+QTableWidget#quizCreatorTable
+{
+	min-height						: 120px;
+	selection-background-color		: rgba(0, 0, 0, 0);
+}
+
+QHeaderView::section {
+	background-color				: white;	
+}
+
+
+
+/****************************************/
+/*****		    QMessageBox			*****/
+/****************************************/
+
+QMessageBox
+{
+	font-size						: 25px;
+}
+
+
+
+/****************************************/
+/*****		    QSpinBox			*****/
+/****************************************/
+
+QSpinBox#quizCreatorSpinbox
+{
+	font-size						: 20px;
+	min-height						: 40px;
+}
+
+
+
+/****************************************/
+/*****		    QTimeEdit			*****/
+/****************************************/
+
+QTimeEdit#quizCreatorTimeEdit
+{
+	font-size						: 20px;
+	min-height						: 40px;
+}
+
+
+
+/****************************************/
+/*****		    QRadioButton		*****/
+/****************************************/
+
+QRadioButton#quizCreatorRadioButton
+{
+	font-size						: 20px;
+	min-height						: 40px;
+}
+
+QRadioButton#quizCreatorRadioButton::indicator
+{
+	min-height						: 30px;
+	min-width						: 30px;
+}
+
+QRadioButton#quizCreatorRadioButton::indicator::checked
+{
+	image		: url(:/imgs/checkbox_checked_black.png);
+}
+
+QRadioButton#quizCreatorRadioButton::indicator::unchecked
+{
+	image		: url(:/imgs/checkbox_unchecked_black.png);
+}
+
+
+
+/****************************************/
+/*****		    QTabBar				*****/
+/****************************************/
+
+QTabBar::tab
+{
+	font-size						: 16px;
+	min-height						: 35px;
+	min-width						: 120px;
+}
+
+
+QTabBar#_verticalTabBar::tab
+{
+	min-height						: 35px;
+	min-width						: 35px;
+}
+
+
+
+/****************************************/
+/*****		    QVideoWidget		*****/
+/****************************************/
+
+QVideoWidget
+{
+	background-color		: black;
+	border					: 1px solid black;
+}
+
+
+
+/****************************************/
+/*****			 QFrame				*****/
+/****************************************/
+
+QFrame#settingsLine
+{
+	border					: 1px solid Yellow;
+	background-color		: Yellow;
+}
+
+
+
+/****************************************/
+/*****			 QSlider			*****/
+/****************************************/
+
+QSlider::handle:horizontal#settingsSlider
+{
+	background-color		: Yellow;
+}
+
+QSlider::groove:horizontal#settingsSlider {
+    height					: 7px;
+    margin					: 2px 0;
+    border					: 1px solid #999999;
+    background				 qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #B1B1B1, stop:1 #c4c4c4);
+}
+
+QSlider::handle:horizontal#settingsSlider {
+    width					: 28px;
+    margin					: -7px 0;
+    border-radius			: 4px;
+    border					: 1px solid #5c5c5c;
+    background				: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #b4b4b4, stop:1 #8f8f8f);
+}
+
+QSlider::sub-page:horizontal#settingsSlider {
+    height					: 7px;
+    background				: rgb(230, 230, 0);
+}
+
+QSlider::add-page:horizontal#settingsSlider {
+    height					: 7px;
+    background				: Lightgrey;
+}
+
+QSlider::sub-page:horizontal#settingsSlider:disabled {
+    background				: Grey;
+}
+
+QSlider::add-page:horizontal#settingsSlider:disabled {
+    background				: Grey;
+}
