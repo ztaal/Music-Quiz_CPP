@@ -695,18 +695,13 @@ void MusicQuiz::QuizCreator::previewQuiz()
 		return;
 	}
 
-	/** Create Dummy Teams */
-	MusicQuiz::QuizTeam* dummyTeamOne = new QuizTeam("Team 1", QColor(255, 0, 0));
-	MusicQuiz::QuizTeam* dummyTeamTwo = new QuizTeam("Team 2", QColor(0, 255, 0));
-	const std::vector< MusicQuiz::QuizTeam* > dummyTeams = { dummyTeamOne, dummyTeamTwo };
-
 	/** Dummy Settings */
 	MusicQuiz::QuizSettings settings;
 	settings.guessTheCategory = _hiddenCategoriesCheckbox->isChecked();
 
 	/** Create Quiz Preview */
 	try {
-		_previewQuizBoard = MusicQuiz::QuizFactory::createQuiz(quizPath, settings, _audioPlayer, _videoPlayer, dummyTeams, true, this);
+		_previewQuizBoard = MusicQuiz::QuizFactory::createQuiz(quizPath, settings, _audioPlayer, _videoPlayer, {}, true, this);
 		if ( _previewQuizBoard == nullptr ) {
 			QMessageBox::warning(this, "Info", "Failed to preview quiz.");
 			return;
