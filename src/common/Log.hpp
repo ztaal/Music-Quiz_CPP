@@ -30,26 +30,26 @@ constexpr char FOLDER_SEPERATOR('/');
 	const std::string log_file_path = std::string(__FILE__); \
 	const size_t  log_idx = log_file_path.find_last_of(FOLDER_SEPERATOR, log_file_path.length());  \
 	std::stringstream log_common_stream; \
-	log_common_stream << log_file_path.substr(log_idx + 1, std::string::npos) << ":" << __LINE__ << ": " << a << "\n"; \
+	log_common_stream << log_file_path.substr(log_idx + 1, std::string::npos) << "::" << __func__ << ":" << __LINE__ << ": " << a << "\n"; \
 	std::cout << log_common_stream.str() << std::flush;}
 
 #define LOG_INFO(a) {\
 	const std::string log_file_path = std::string(__FILE__); \
 	const size_t  log_idx = log_file_path.find_last_of(FOLDER_SEPERATOR, log_file_path.length());  \
 	std::stringstream log_common_stream; \
-	log_common_stream << log_file_path.substr(log_idx + 1, std::string::npos) << ":" << __LINE__ << ": " << a << "\n"; \
+	log_common_stream << log_file_path.substr(log_idx + 1, std::string::npos) << "::" << __func__ << ":" << __LINE__ << ": " << a << "\n"; \
 	std::cout << log_common_stream.str() << std::flush;}
 
 #define LOG_WARN(a) {\
 	const std::string log_file_path = std::string(__FILE__); \
 	const size_t  log_idx = log_file_path.find_last_of(FOLDER_SEPERATOR, log_file_path.length());  \
 	std::stringstream log_common_stream; \
-	log_common_stream << log_file_path.substr(log_idx + 1, std::string::npos) << ":" << __LINE__ << ": " << a << "\n"; \
+	log_common_stream << log_file_path.substr(log_idx + 1, std::string::npos) << "::" << __func__ << ":" << __LINE__ << ": " << a << "\n"; \
 	std::cout << log_common_stream.str() << std::flush;}
 
 #define LOG_ERROR(a) {\
 	const std::string log_file_path = std::string(__FILE__); \
 	const size_t  log_idx = log_file_path.find_last_of(FOLDER_SEPERATOR, log_file_path.length());  \
 	std::stringstream log_common_stream; \
-	log_common_stream << log_file_path.substr(log_idx + 1, std::string::npos) << ":" << __LINE__ << ": " << a << "\n"; \
+	log_common_stream << log_file_path.substr(log_idx + 1, std::string::npos) << "::" << __func__ << ":" << __LINE__ << ": " << a << "\n"; \
 	std::cout << log_common_stream.str() << std::flush;}
