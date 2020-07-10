@@ -21,39 +21,15 @@ media::VideoPlayer::VideoPlayer(QWidget* parent) :
 	_player = new QMediaPlayer(this);
 	_player->setVideoOutput(_videoWidget);
 	_player->setVolume(100);
+
+	connect(_player, &QMediaPlayer::mediaStatusChanged, this, &media::VideoPlayer::handleMediaStatus);
 }
 
 media::VideoPlayer::~VideoPlayer()
 {
 	/** Stop Video */
 	_player->stop();
-}
-
-void media::VideoPlayer::play(const QString& videoFile, bool muted)
-{
-	/** Sanity Check */
-	if ( videoFile.isEmpty() ) {
-		throw std::runtime_error("Video File Name is empty.");
-	}
-
-	/** Stop audio if any is playing and close file */
-	stop();
-
-	/** Set Video File */
-	_player->setMedia(QUrl::fromLocalFile(videoFile));
-
-	/** Set Volume */
-	if ( muted ) {
-		_player->setVolume(0);
-	} else {
-		_player->setVolume(100);
-	}
-
-	/** Play Video */
-	_player->play();
-
-	/** Set State */
-	_state = VideoPlayState::PLAYING;
+	delete _player;
 }
 
 void media::VideoPlayer::play(const QString& videoFile, const size_t startTime, bool muted)
@@ -80,10 +56,12 @@ void media::VideoPlayer::play(const QString& videoFile, const size_t startTime, 
 	_player->setPosition(startTime);
 
 	/** Play Video */
-	_player->play();
+	_player->pause();
 
 	/** Set State */
-	_state = VideoPlayState::PLAYING;
+	_state = VideoPlayState::PAUSED;
+
+	//The playback will be started in handleMediaStatus when file has been loaded.
 }
 
 void media::VideoPlayer::pause()
@@ -122,6 +100,19 @@ void media::VideoPlayer::stop()
 
 	/** Set State */
 	_state = VideoPlayState::IDLE;
+}
+
+void media::VideoPlayer::handleMediaStatus(QMediaPlayer::MediaStatus status)
+{
+	/** Check State */
+	if ( _state != VideoPlayState::PAUSED ) {
+		return;
+	}
+
+	if(status == QMediaPlayer::MediaStatus::BufferedMedia || status == QMediaPlayer::MediaStatus::LoadedMedia)
+	{
+		this->resume();
+	}
 }
 
 void media::VideoPlayer::resize(const QSize& size)
