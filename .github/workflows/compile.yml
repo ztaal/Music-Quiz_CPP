@@ -13,7 +13,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v2
     - name: cmake
-      run: cmake .
+      run: cmake . -DBoost_ARCHITECTURE=-x64 -DBOOST_ROOT=$BOOST_ROOT_1_72_0
     - name: make
-      run: make
+      run: make 
