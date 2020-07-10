@@ -248,6 +248,14 @@ void MusicQuiz::TeamSelector::addTeam()
 	}
 }
 
+void MusicQuiz::TeamSelector::setTeamNumbers()
+{
+	for ( int i = 0; i < _teamTable->rowCount(); ++i ) {
+		const QString teamNumber = " Team " + QString::number(i + 1);
+		_teamTable->item(i, 0)->setData(Qt::DisplayRole, teamNumber);
+	}
+}
+
 void MusicQuiz::TeamSelector::removeTeam()
 {
 	/** Sanity Check */
@@ -282,8 +290,8 @@ void MusicQuiz::TeamSelector::removeTeam()
 	_teamTable->removeRow(selectedRow);
 
 	/** Delete button */
-	button = nullptr;
 	delete button;
+	button = nullptr;
 
 	/** Enable Line Edit and slider if count is below the maximum number of teams */
 	if ( !_teamNameLineEdit->isEnabled() ) {
@@ -294,6 +302,7 @@ void MusicQuiz::TeamSelector::removeTeam()
 		_hueSlider->setEnabled(true);
 		_hueSlider->setValue(_hueSlider->minimum());
 	}
+	setTeamNumbers();
 }
 
 void MusicQuiz::TeamSelector::teamColorChanged(QColor color)
