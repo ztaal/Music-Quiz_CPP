@@ -122,7 +122,6 @@ QWidget* MusicQuiz::QuizSettingsDialog::getDailyDoubleLayout(const MusicQuiz::Qu
 	mainlayout->setVerticalSpacing(10);
 	mainlayout->setHorizontalSpacing(0);
 	mainlayout->setContentsMargins(0, 10, 0, 10);
-	int row = 0;
 
 	/** Enable Checkbox */
 	QHBoxLayout* checkBoxLayout = new QHBoxLayout;
@@ -196,7 +195,6 @@ QWidget* MusicQuiz::QuizSettingsDialog::getDailyTripleLayout(const MusicQuiz::Qu
 	mainlayout->setVerticalSpacing(10);
 	mainlayout->setHorizontalSpacing(0);
 	mainlayout->setContentsMargins(0, 10, 0, 10);
-	int row = 0;
 
 	/** Enable Checkbox */
 	QHBoxLayout* checkBoxLayout = new QHBoxLayout;
@@ -398,15 +396,15 @@ void MusicQuiz::QuizSettingsDialog::setLayoutEnabled(QLayout* layout, bool enabl
 	}
 
 	/** Enable / Disable layout and its children */
-	for ( size_t i = 0; i < layout->count(); ++i ) {
+	for ( int i = 0; i < layout->count(); ++i ) {
 		QWidget* subWidget = layout->itemAt(i)->widget();
 		if ( subWidget != nullptr ) {
 			subWidget->setEnabled(enabled);
 		} else {
 			QLayout* subLayout = layout->itemAt(i)->layout();
 			if ( subLayout != nullptr ) {
-				for ( size_t i = 0; i < subLayout->count(); ++i ) {
-					QWidget* subSubWidget = subLayout->itemAt(i)->widget();
+				for ( int j = 0; j < subLayout->count(); ++j ) {
+					QWidget* subSubWidget = subLayout->itemAt(j)->widget();
 					if ( subSubWidget != nullptr ) {
 						subSubWidget->setEnabled(enabled);
 					}

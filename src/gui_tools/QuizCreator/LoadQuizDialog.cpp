@@ -90,7 +90,7 @@ void MusicQuiz::LoadQuizDialog::updateTable()
 	_quizList = MusicQuiz::util::QuizLoader::getListOfQuizzes();
 
 	/** Update Table */
-	for ( size_t i = 0; i < _quizList.size(); ++i ) {
+	for ( unsigned int i = 0; i < _quizList.size(); ++i ) {
 		/** Add Row */
 		const int row = _quizTable->rowCount();
 		_quizTable->insertRow(row);

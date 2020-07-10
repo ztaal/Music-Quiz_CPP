@@ -209,7 +209,7 @@ void MusicQuiz::QuizCreator::addCategory()
 	}
 
 	/** Get Number of Categories */
-	const size_t categoryCount = _categoriesTable->rowCount();
+	const unsigned int categoryCount = _categoriesTable->rowCount();
 
 	/** Insert New Category */
 	_categoriesTable->insertRow(categoryCount);
@@ -265,7 +265,7 @@ void MusicQuiz::QuizCreator::addRowCategory()
 	}
 
 	/** Get Number of Categories */
-	const size_t rowCategoryCount = _rowCategoriesTable->rowCount();
+	const unsigned int rowCategoryCount = _rowCategoriesTable->rowCount();
 
 	/** Insert New Category */
 	_rowCategoriesTable->insertRow(rowCategoryCount);
@@ -551,9 +551,9 @@ void MusicQuiz::QuizCreator::loadQuiz(const std::string& quizName)
 
 	/** Load Quiz */
 	LOG_INFO("Loading quiz '" << quizName << "'");
-	QuizData data;
+	QuizData quizData;
 	try {
-		data = MusicQuiz::QuizFactory::loadQuiz(quizName, _audioPlayer, _videoPlayer, this);
+		quizData = MusicQuiz::QuizFactory::loadQuiz(quizName, _audioPlayer, _videoPlayer, this);
 	} catch ( const std::exception& err ) {
 		QMessageBox::warning(this, "Info", "Failed to load quiz. " + QString::fromStdString(err.what()));
 		return;
@@ -585,31 +585,31 @@ void MusicQuiz::QuizCreator::loadQuiz(const std::string& quizName)
 
 	/** Set Name */
 	if ( _quizNameLineEdit != nullptr ) {
-		_quizNameLineEdit->setText(data.quizName);
+		_quizNameLineEdit->setText(quizData.quizName);
 	}
 
 	/** Set Author */
 	if ( _quizAuthorLineEdit != nullptr ) {
-		_quizAuthorLineEdit->setText(data.quizAuthor);
+		_quizAuthorLineEdit->setText(quizData.quizAuthor);
 	}
 
 	/** Set Description */
 	if ( _quizDescriptionTextEdit != nullptr ) {
-		_quizDescriptionTextEdit->setText(data.quizDescription);
+		_quizDescriptionTextEdit->setText(quizData.quizDescription);
 	}
 
 	/** Add Categories to Table */
-	_categories = data.quizCategories;
+	_categories = quizData.quizCategories;
 	if ( _categoriesTable != nullptr ) {
-		for ( size_t i = 0; i < data.quizCategories.size(); ++i ) {
+		for ( size_t i = 0; i < quizData.quizCategories.size(); ++i ) {
 			/** Get Number of Entries */
-			const size_t categoryCount = _categoriesTable->rowCount();
+			const unsigned int categoryCount = _categoriesTable->rowCount();
 
 			/** Insert New Entry */
 			_categoriesTable->insertRow(categoryCount);
 
 			/** Add Line Edit */
-			QLineEdit* categoryName = new QLineEdit(data.quizCategories[i]->getName());
+			QLineEdit* categoryName = new QLineEdit(quizData.quizCategories[i]->getName());
 			categoryName->setObjectName("quizCreatorCategoryLineEdit");
 			categoryName->setProperty("index", categoryCount);
 			connect(categoryName, SIGNAL(textChanged(const QString&)), this, SLOT(updateCategoryTabName(const QString&)));
@@ -642,21 +642,21 @@ void MusicQuiz::QuizCreator::loadQuiz(const std::string& quizName)
 			_categoriesTable->setCellWidget(categoryCount, 2, layoutWidget);
 
 			/** Add Tab */
-			_tabWidget->addTab(_categories[i], data.quizCategories[i]->getName());
+			_tabWidget->addTab(_categories[i], quizData.quizCategories[i]->getName());
 		}
 	}
 
 	/** Add Row Categories */
 	if ( _rowCategoriesTable != nullptr ) {
-		for ( size_t i = 0; i < data.quizRowCategories.size(); ++i ) {
+		for ( size_t i = 0; i < quizData.quizRowCategories.size(); ++i ) {
 			/** Get Number of Row Categories */
-			const size_t rowCategoryCount = _rowCategoriesTable->rowCount();
+			const unsigned int rowCategoryCount = _rowCategoriesTable->rowCount();
 
 			/** Insert New Category */
 			_rowCategoriesTable->insertRow(rowCategoryCount);
 
 			/** Add Line Edit */
-			QLineEdit* rowCategoryName = new QLineEdit(data.quizRowCategories[i]);
+			QLineEdit* rowCategoryName = new QLineEdit(quizData.quizRowCategories[i]);
 			rowCategoryName->setObjectName("quizCreatorCategoryLineEdit");
 			_rowCategoriesTable->setCellWidget(rowCategoryCount, 0, rowCategoryName);
 
@@ -677,7 +677,7 @@ void MusicQuiz::QuizCreator::loadQuiz(const std::string& quizName)
 
 	/** Hidden Categories */
 	if ( _hiddenCategoriesCheckbox != nullptr ) {
-		_hiddenCategoriesCheckbox->setChecked(data.guessTheCategory);
+		_hiddenCategoriesCheckbox->setChecked(quizData.guessTheCategory);
 	}
 }
 

@@ -46,7 +46,6 @@ void MusicQuiz::TeamSelector::createLayout()
 	/** Layout */
 	QGridLayout* mainlayout = new QGridLayout;
 	QGridLayout* selectionLayout = new QGridLayout;
-	QGridLayout* tableLayout = new QGridLayout;
 	mainlayout->setHorizontalSpacing(20);
 	mainlayout->setVerticalSpacing(20);
 	selectionLayout->setHorizontalSpacing(20);
@@ -240,7 +239,7 @@ void MusicQuiz::TeamSelector::addTeam()
 	_teamNameLineEdit->setText("");
 
 	/** Disable Line Edit and slider if maximum number of teams is reached */
-	if ( row + 1 >= _maximumsNumberOfTeams ) {
+	if ( row + 1 >= static_cast<int>(_maximumsNumberOfTeams) ) {
 		_hueSlider->setEnabled(false);
 		_hueSlider->setValue(_hueSlider->maximum());
 

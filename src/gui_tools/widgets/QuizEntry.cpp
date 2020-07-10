@@ -12,7 +12,7 @@
 
 
 MusicQuiz::QuizEntry::QuizEntry(const QString& audioFile, const QString& answer, const size_t points, const size_t startTime, const size_t answerStartTime, const media::AudioPlayer::Ptr& audioPlayer, QWidget* parent) :
-	QPushButton(parent), _audioFile(audioFile), _answer(answer), _points(points), _startTime(startTime), _answerStartTime(answerStartTime), _audioPlayer(audioPlayer)
+	QPushButton(parent), _points(points), _startTime(startTime), _answerStartTime(answerStartTime), _answer(answer), _audioFile(audioFile), _audioPlayer(audioPlayer)
 {
 	/** Sanity Check */
 	if ( _audioPlayer == nullptr ) {
@@ -40,8 +40,9 @@ MusicQuiz::QuizEntry::QuizEntry(const QString& audioFile, const QString& answer,
 
 MusicQuiz::QuizEntry::QuizEntry(const QString& audioFile, const QString& videoFile, const QString& answer, size_t points, size_t songStartTime, size_t videoStartTime, size_t answerStartTime,
 	const media::AudioPlayer::Ptr& audioPlayer, const media::VideoPlayer::Ptr& videoPlayer, QWidget* parent) :
-	QPushButton(parent), _audioFile(audioFile), _videoFile(videoFile), _answer(answer), _points(points), _startTime(songStartTime), _videoStartTime(videoStartTime),
-	_answerStartTime(answerStartTime), _audioPlayer(audioPlayer), _videoPlayer(videoPlayer)
+	QPushButton(parent), _points(points), _startTime(songStartTime), _videoStartTime(videoStartTime), 
+	_answerStartTime(answerStartTime), _answer(answer), _audioFile(audioFile), 
+	_videoFile(videoFile), _audioPlayer(audioPlayer), _videoPlayer(videoPlayer)
 {
 	/** Sanity Check */
 	if ( _audioPlayer == nullptr ) {
@@ -262,10 +263,10 @@ void MusicQuiz::QuizEntry::applyColor(const QColor& color)
 	}
 
 	/** Text Size */
-	size_t textWidth = fontMetrics().boundingRect(text()).width();
+	int textWidth = fontMetrics().boundingRect(text()).width();
 	if ( _state != QuizEntry::EntryState::PLAYED && !_textSizeSet ) {
 		size_t fontSize = 40;
-		while ( textWidth > width() - 40 && fontSize > 10 ) {
+		while ( textWidth > width() - 40 && fontSize > 10U ) {
 			setStyleSheet("font-size: " + QString::number(fontSize) + "px;");
 			textWidth = fontMetrics().boundingRect(text()).width();
 			--fontSize;
