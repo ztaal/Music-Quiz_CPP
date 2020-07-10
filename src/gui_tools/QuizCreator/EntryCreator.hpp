@@ -78,7 +78,7 @@ namespace MusicQuiz {
 		 *
 		 * @return The points.
 		 */
-		const size_t getPoints() const;
+		size_t getPoints() const;
 
 		/**
 		 * @brief Sets the entry type [Song, Video].
@@ -92,7 +92,7 @@ namespace MusicQuiz {
 		 *
 		 * @return The entry type.
 		 */
-		const EntryType getType() const;
+		EntryType getType() const;
 
 		/**
 		 * @brief Sets the song file.
@@ -148,7 +148,7 @@ namespace MusicQuiz {
 		 *
 		 * @return The song start time.
 		 */
-		const size_t getSongStartTime();
+		size_t getSongStartTime();
 
 		/**
 		 * @brief Sets the answer start time.
@@ -162,7 +162,7 @@ namespace MusicQuiz {
 		 *
 		 * @return The answer start time.
 		 */
-		const size_t getAnswerStartTime();
+		size_t getAnswerStartTime();
 
 		/**
 		 * @brief Sets the video start time.
@@ -176,7 +176,7 @@ namespace MusicQuiz {
 		 *
 		 * @return The video start time.
 		 */
-		const size_t getVideoStartTime();
+		size_t getVideoStartTime();
 
 		/**
 		 * @brief Sets the video song start time.
@@ -190,7 +190,7 @@ namespace MusicQuiz {
 		 *
 		 * @return The video song start time.
 		 */
-		const size_t getVideoSongStartTime();
+		size_t getVideoSongStartTime();
 
 		/**
 		 * @brief Sets the video answer start time.
@@ -204,7 +204,7 @@ namespace MusicQuiz {
 		 *
 		 * @return The video answer start time.
 		 */
-		const size_t getVideoAnswerStartTime();
+		size_t getVideoAnswerStartTime();
 
 		/**
 		 * @brief Stops the audio and video playing.

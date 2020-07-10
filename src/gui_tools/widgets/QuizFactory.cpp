@@ -366,7 +366,7 @@ void MusicQuiz::QuizFactory::saveQuiz(const MusicQuiz::QuizCreator::QuizData& da
 		/** Row Categories */
 		const size_t numberOfRowCategories = data.quizRowCategories.size();
 		for ( size_t i = 0; i < numberOfRowCategories; ++i ) {
-			boost::property_tree::ptree& category_tree = main_tree.add("QuizRowCategories.RowCategory", data.quizRowCategories[i].toStdString());
+			main_tree.add("QuizRowCategories.RowCategory", data.quizRowCategories[i].toStdString());
 		}
 
 		/** Delete Previous Folder */

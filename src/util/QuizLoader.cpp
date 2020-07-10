@@ -204,8 +204,8 @@ std::vector<MusicQuiz::QuizCategory*> MusicQuiz::util::QuizLoader::loadQuizCateg
 						categories.push_back(new MusicQuiz::QuizCategory(categoryName, categorieEntries));
 					}
 				}
-			} catch ( const std::exception& err ) {
-				LOG_ERROR("Failed to load category. " << err.what());
+			} catch ( const std::exception& error ) {
+				LOG_ERROR("Failed to load category. " << error.what());
 			} catch ( ... ) {
 				LOG_ERROR("Failed to load category.");
 			}
@@ -225,7 +225,7 @@ std::vector<QString> MusicQuiz::util::QuizLoader::loadQuizRowCategories(const si
 	}
 
 	/** Sanity Check */
-	if ( idx < 0 || idx >= quizList.size() ) {
+	if ( idx >= quizList.size() ) {
 		throw std::runtime_error("No quiz index requested does not exists.");
 	}
 

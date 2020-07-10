@@ -10,7 +10,8 @@
 
 
 MusicQuiz::QuizTeam::QuizTeam(const QString& name, const QColor& color, QWidget* parent) :
-	QPushButton(parent), _name(name), _color(color)
+	QPushButton(parent), _name(name), _score(0), _color(color), _newPoints(0),
+	_scoreCntRate(1), _scoreTimerDelayMs(25), _hideScore(false)
 {
 	/** Sanity Check */
 	if ( _name.isEmpty() ) {
@@ -58,13 +59,13 @@ void MusicQuiz::QuizTeam::addPoints(size_t points)
 	/** Update Score */
 	if ( !_hideScore ) {
 		_newPoints += points;
-		_scoreCntRate = _newPoints / _scoreTimerDelay;
+		_scoreCntRate = _newPoints / _scoreTimerDelayMs;
 	} else {
 		_score += points;
 	}
 
 	if ( !_scoreCntTimer.isActive() ) {
-		_scoreCntTimer.start(_scoreTimerDelay);
+		_scoreCntTimer.start(_scoreTimerDelayMs);
 	}
 }
 

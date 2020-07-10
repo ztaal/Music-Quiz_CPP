@@ -118,13 +118,13 @@ namespace MusicQuiz {
 
 		/** Update Timer */
 		QTimer _updateTimer;
-		const size_t _updateTimerDelay = 25; // ms
+		const size_t _updateTimerDelayMs = 25;
 
 		/** State Variables */
-		std::atomic<bool> _quizSelected = false;
-		std::atomic<bool> _teamSelected = false;
-		std::atomic<bool> _introScreenDone = false;
-		std::atomic<bool> _gameCompleted = false;
+		std::atomic<bool> _quizSelected;
+		std::atomic<bool> _teamSelected;
+		std::atomic<bool> _introScreenDone;
+		std::atomic<bool> _gameCompleted;
 		QuizState _quizState = QuizState::SELECT_QUIZ;
 
 		/** Quiz Settings */

@@ -203,8 +203,8 @@ void MusicQuiz::QuizSelector::selectionClicked()
 	}
 
 	/** Current Index */
-	size_t currentIndex = _quizSelectionList->currentRow();
-	if ( currentIndex < 0 || currentIndex >= _quizPreviews.size() ) {
+	int currentIndex = _quizSelectionList->currentRow();
+	if ( currentIndex < 0 || static_cast<size_t>(currentIndex) >= _quizPreviews.size() ) {
 		LOG_ERROR("Can not update QuizSelection index out of range.")
 			return;
 	}
@@ -257,8 +257,8 @@ void MusicQuiz::QuizSelector::quizSelected()
 	}
 
 	/** Current Index */
-	size_t currentIndex = _quizSelectionList->currentRow();
-	if ( currentIndex < 0 || currentIndex >= _quizPreviews.size() ) {
+	int currentIndex = _quizSelectionList->currentRow();
+	if ( currentIndex < 0 || static_cast<size_t>(currentIndex) >= _quizPreviews.size() ) {
 		LOG_ERROR("Can not select quiz index out of range.")
 			return;
 	}

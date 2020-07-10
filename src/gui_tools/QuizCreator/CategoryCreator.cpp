@@ -81,7 +81,7 @@ void MusicQuiz::CategoryCreator::addEntry()
 	}
 
 	/** Get Number of Entries */
-	const size_t entryCount = _entriesTable->rowCount();
+	const unsigned int entryCount = _entriesTable->rowCount();
 
 	/** Insert New Entry */
 	_entriesTable->insertRow(entryCount);
@@ -279,7 +279,7 @@ void MusicQuiz::CategoryCreator::setEntries(const std::vector< MusicQuiz::EntryC
 	/** Add Entries to Table */
 	for ( size_t i = 0; i < _entries.size(); ++i ) {
 		/** Get Number of Entries */
-		const size_t entryCount = _entriesTable->rowCount();
+		const unsigned int entryCount = _entriesTable->rowCount();
 
 		/** Insert New Entry */
 		_entriesTable->insertRow(entryCount);

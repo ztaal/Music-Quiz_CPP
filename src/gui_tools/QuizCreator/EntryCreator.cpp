@@ -14,7 +14,7 @@
 
 
 MusicQuiz::EntryCreator::EntryCreator(const QString& name, const size_t points, const media::AudioPlayer::Ptr& audioPlayer, QWidget* parent) :
-	QWidget(parent), _entryName(name), _points(points), _audioPlayer(audioPlayer)
+	QWidget(parent), _points(points), _entryName(name), _audioPlayer(audioPlayer)
 {
 	/** Create Layout */
 	createLayout();
@@ -820,7 +820,7 @@ void MusicQuiz::EntryCreator::setPoints(const size_t points)
 	_pointsSpinbox->setValue(points);
 }
 
-const size_t MusicQuiz::EntryCreator::getPoints() const
+size_t MusicQuiz::EntryCreator::getPoints() const
 {
 	return _points;
 }
@@ -843,7 +843,7 @@ void MusicQuiz::EntryCreator::setType(const EntryType& type)
 	}
 }
 
-const MusicQuiz::EntryCreator::EntryType MusicQuiz::EntryCreator::getType() const
+MusicQuiz::EntryCreator::EntryType MusicQuiz::EntryCreator::getType() const
 {
 	return _entryType;
 }
@@ -937,7 +937,7 @@ void MusicQuiz::EntryCreator::setSongStartTime(const size_t time)
 	_songStartTimeEdit->setTime(fromMSec(time));
 }
 
-const size_t MusicQuiz::EntryCreator::getSongStartTime()
+size_t MusicQuiz::EntryCreator::getSongStartTime()
 {
 	/** Sanity Check */
 	if ( _songStartTimeEdit == nullptr ) {
@@ -958,7 +958,7 @@ void MusicQuiz::EntryCreator::setAnswerStartTime(const size_t time)
 	_answerStartTimeEdit->setTime(fromMSec(time));
 }
 
-const size_t MusicQuiz::EntryCreator::getAnswerStartTime()
+size_t MusicQuiz::EntryCreator::getAnswerStartTime()
 {
 	/** Sanity Check */
 	if ( _answerStartTimeEdit == nullptr ) {
@@ -979,7 +979,7 @@ void MusicQuiz::EntryCreator::setVideoStartTime(const size_t time)
 	_videoStartTimeEdit->setTime(fromMSec(time));
 }
 
-const size_t MusicQuiz::EntryCreator::getVideoStartTime()
+size_t MusicQuiz::EntryCreator::getVideoStartTime()
 {
 	/** Sanity Check */
 	if ( _videoStartTimeEdit == nullptr ) {
@@ -1000,7 +1000,7 @@ void MusicQuiz::EntryCreator::setVideoSongStartTime(const size_t time)
 	_videoSongStartTimeEdit->setTime(fromMSec(time));
 }
 
-const size_t MusicQuiz::EntryCreator::getVideoSongStartTime()
+size_t MusicQuiz::EntryCreator::getVideoSongStartTime()
 {
 	/** Sanity Check */
 	if ( _videoSongStartTimeEdit == nullptr ) {
@@ -1021,7 +1021,7 @@ void MusicQuiz::EntryCreator::setVideoAnswerStartTime(const size_t time)
 	_videoAnswerStartTimeEdit->setTime(fromMSec(time));
 }
 
-const size_t MusicQuiz::EntryCreator::getVideoAnswerStartTime()
+size_t MusicQuiz::EntryCreator::getVideoAnswerStartTime()
 {
 	/** Sanity Check */
 	if ( _videoAnswerStartTimeEdit == nullptr ) {
