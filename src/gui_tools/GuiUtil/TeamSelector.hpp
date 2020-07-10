@@ -101,6 +101,11 @@ namespace MusicQuiz {
 		 */
 		void createLayout();
 
+		/**
+		 * @brief Sets the team number of all teams
+		 */
+		void setTeamNumbers();
+
 		/** Variables */
 		bool _quizClosed = false;
 		const size_t _maximumsNumberOfTeams = 6;
