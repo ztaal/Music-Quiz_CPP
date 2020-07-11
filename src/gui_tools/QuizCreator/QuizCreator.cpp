@@ -10,9 +10,10 @@
 #include <QHeaderView>
 #include <QMessageBox>
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QTableWidgetItem>
 #include <QAbstractItemView>
+#include <QGuiApplication>
+#include <QScreen>
 
 #include <boost/filesystem.hpp>
 #include <boost/property_tree/ptree.hpp>
@@ -58,7 +59,7 @@ MusicQuiz::QuizCreator::QuizCreator(QWidget* parent) :
 	_videoPlayer->setWindowFlags(windowFlags() | Qt::Window | Qt::WindowMaximizeButtonHint | Qt::WindowMinimizeButtonHint | Qt::WindowStaysOnTopHint);
 
 	/** Set Video Player Size */
-	const QRect screenRec = QApplication::desktop()->screenGeometry();
+	const QRect screenRec = QGuiApplication::primaryScreen()->geometry();
 	_videoPlayer->setMinimumSize(QSize(screenRec.width() / 4, screenRec.height() / 4));
 	_videoPlayer->resize(QSize(screenRec.width() / 4, screenRec.height() / 4));
 
@@ -553,7 +554,7 @@ void MusicQuiz::QuizCreator::loadQuiz(const std::string& quizName)
 	LOG_INFO("Loading quiz '" << quizName << "'");
 	QuizData quizData;
 	try {
-		quizData = MusicQuiz::QuizFactory::loadQuiz(quizName, _audioPlayer, _videoPlayer, this);
+		quizData = MusicQuiz::QuizFactory::loadQuiz(quizName, _audioPlayer, this);
 	} catch ( const std::exception& err ) {
 		QMessageBox::warning(this, "Info", "Failed to load quiz. " + QString::fromStdString(err.what()));
 		return;
@@ -757,7 +758,7 @@ void MusicQuiz::QuizCreator::quitCreator()
 	}
 }
 
-void MusicQuiz::QuizCreator::categoryOrderChanged(const int, const int oldIdx, const int newIdx)
+void MusicQuiz::QuizCreator::categoryOrderChanged(const int, __attribute__((unused)) const int oldIdx, __attribute__((unused)) const int newIdx)
 {
 	/** Sanity Check */
 	if ( _categoriesTable == nullptr || _tabWidget == nullptr ) {

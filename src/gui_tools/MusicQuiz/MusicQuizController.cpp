@@ -7,7 +7,6 @@
 #include <QRect>
 #include <QMessageBox>
 #include <QApplication>
-#include <QDesktopWidget>
 
 #include "common/Log.hpp"
 #include "gui_tools/widgets/QuizFactory.hpp"
@@ -30,7 +29,7 @@ MusicQuiz::MusicQuizController::MusicQuizController(QWidget* parent) :
 	_videoPlayer->setWindowFlags(windowFlags() | Qt::Window | Qt::FramelessWindowHint | Qt::WindowMaximizeButtonHint | Qt::WindowMinimizeButtonHint | Qt::WindowStaysOnTopHint);
 
 	/** Set Video Player Size */
-	const QRect screenRec = QApplication::desktop()->screenGeometry();
+	const QRect screenRec = QGuiApplication::primaryScreen()->geometry();
 	_videoPlayer->setMinimumSize(QSize(screenRec.width(), screenRec.height()));
 	_videoPlayer->resize(QSize(screenRec.width(), screenRec.height()));
 
