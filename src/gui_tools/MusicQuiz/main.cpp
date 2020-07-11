@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
 	QMessageBox msgBox(QMessageBox::Question, "Select Program", "Select Program", QMessageBox::NoButton, nullptr, Qt::WindowStaysOnTopHint);
 	QAbstractButton* musicQuizButton = msgBox.addButton("Music Quiz", QMessageBox::YesRole);
 	QAbstractButton* quizCreatorButton = msgBox.addButton("Quiz Creator", QMessageBox::YesRole);
-	QAbstractButton* exitButton = msgBox.addButton("Exit", QMessageBox::NoRole);
+	msgBox.addButton("Exit", QMessageBox::NoRole);
 	msgBox.setStyleSheet(qss.readAll());
 	qss.close();
 

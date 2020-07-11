@@ -144,7 +144,7 @@ void MusicQuiz::TeamSelector::teamSelected()
 	std::vector<MusicQuiz::QuizTeam*> teams;
 	for ( int i = 0; i < _teamTable->rowCount(); ++i ) {
 		const QString teamName = _teamTable->item(i, 1)->text();
-		const QColor teamColor = _teamTable->item(i, 1)->backgroundColor();
+		const QColor teamColor = _teamTable->item(i, 1)->background().color();
 		MusicQuiz::QuizTeam* teamEntry = new MusicQuiz::QuizTeam(teamName, teamColor);
 
 		teams.push_back(teamEntry);
@@ -199,15 +199,15 @@ void MusicQuiz::TeamSelector::addTeam()
 	const QString teamNumber = " Team " + QString::number(row + 1);
 	entry->setData(Qt::DisplayRole, teamNumber);
 	entry->setTextAlignment(Qt::AlignCenter);
-	entry->setTextColor(QColor(255, 255, 0));
+	entry->setForeground(QBrush(QColor(255, 255, 0)));
 	_teamTable->setItem(row, 0, entry);
 
 	/** Add Entry */
 	entry = new QTableWidgetItem;
 	entry->setData(Qt::DisplayRole, teamName);
-	entry->setBackgroundColor(_currentColor);
+	entry->setBackground(QBrush(_currentColor));
 	entry->setTextAlignment(Qt::AlignCenter);
-	entry->setTextColor(textColor);
+	entry->setForeground(QBrush(textColor));
 	entry->setFlags(entry->flags() ^ Qt::ItemIsEditable); // make item read only
 	_teamTable->setItem(row, 1, entry);
 

@@ -415,7 +415,7 @@ void MusicQuiz::QuizFactory::saveQuiz(const MusicQuiz::QuizCreator::QuizData& da
 }
 
 MusicQuiz::QuizCreator::QuizData MusicQuiz::QuizFactory::loadQuiz(const std::string& quizName, const media::AudioPlayer::Ptr& audioPlayer,
-	const media::VideoPlayer::Ptr& videoPlayer, QWidget* parent)
+	QWidget* parent)
 {
 	/** Get List of Quizzes */
 	std::vector<std::string> quizList = MusicQuiz::util::QuizLoader::getListOfQuizzes();

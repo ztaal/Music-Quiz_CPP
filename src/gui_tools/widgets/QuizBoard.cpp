@@ -9,7 +9,8 @@
 #include <QHBoxLayout>
 #include <QGridLayout>
 #include <QMessageBox>
-#include <QDesktopWidget>
+#include <QWindow>
+#include <QScreen>
 
 #include "common/Log.hpp"
 
@@ -170,11 +171,11 @@ void MusicQuiz::QuizBoard::handleAnswer(const size_t points)
 	for ( size_t i = 0; i < _teams.size(); ++i ) {
 		teamButtons.push_back(msgBox.addButton(_teams[i]->getName(), QMessageBox::YesRole));
 	}
-	QAbstractButton* exitButton = msgBox.addButton("No One", QMessageBox::YesRole);
+	msgBox.addButton("No One", QMessageBox::YesRole);
 
 	/** Move Box to the bottom of the screen */
 	QSize size = msgBox.sizeHint();
-	QRect screenRect = QDesktopWidget().screen()->rect();
+	QRect screenRect = this->window()->windowHandle()->screen()->geometry();
 	msgBox.move(QPoint(screenRect.width() / 2 - size.width() / 2, screenRect.height() - (size.height() * 2)));
 	
 	/** Box Message Box */

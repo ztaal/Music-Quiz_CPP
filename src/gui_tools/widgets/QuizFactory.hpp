@@ -86,7 +86,7 @@ namespace MusicQuiz {
 		 * @return The quiz data.
 		 */
 		static MusicQuiz::QuizCreator::QuizData loadQuiz(const std::string& quizName, const std::shared_ptr< media::AudioPlayer >& audioPlayer,
-			const std::shared_ptr< media::VideoPlayer >& videoPlayer, QWidget* parent = nullptr);
+			QWidget* parent = nullptr);
 
 		/**
 		 * @brief Deletes a directory.
