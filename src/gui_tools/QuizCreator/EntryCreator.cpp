@@ -1,5 +1,7 @@
 #include "EntryCreator.hpp"
 
+#include <filesystem>
+
 #include <QTime>
 #include <QLabel>
 #include <QString>
@@ -10,11 +12,12 @@
 #include <QRadioButton>
 #include <QMediaContent>
 
-#include <boost/filesystem.hpp>
+#include "common/Configuration.hpp"
 
+using namespace std;
 
-MusicQuiz::EntryCreator::EntryCreator(const QString& name, const size_t points, const media::AudioPlayer::Ptr& audioPlayer, QWidget* parent) :
-	QWidget(parent), _points(points), _entryName(name), _audioPlayer(audioPlayer)
+MusicQuiz::EntryCreator::EntryCreator(const QString& name, const int points, const media::AudioPlayer::Ptr& audioPlayer, const common::Configuration& config, QWidget* parent) :
+	QWidget(parent), _points(points), _entryName(name), _audioPlayer(audioPlayer), _config(config)
 {
 	/** Create Layout */
 	createLayout();
@@ -34,7 +37,7 @@ void MusicQuiz::EntryCreator::createLayout()
 	mainlayout->setVerticalSpacing(10);
 	mainlayout->setColumnStretch(0, 1);
 	mainlayout->setColumnStretch(1, 3);
-	size_t row = 0;
+	int row = 0;
 
 	/** Entry Name */
 	_entryNameLabel = new QLabel(_entryName);
@@ -107,7 +110,7 @@ QGridLayout* MusicQuiz::EntryCreator::createSongFileLayout()
 	songSettingsLayout->setHorizontalSpacing(5);
 	songSettingsLayout->setVerticalSpacing(10);
 	mainlayout->setVerticalSpacing(10);
-	size_t row = 0;
+	int row = 0;
 
 	/** Song - File */
 	QLabel* label = new QLabel("Song File:");
@@ -210,7 +213,7 @@ QGridLayout* MusicQuiz::EntryCreator::createVideoFileLayout()
 	videoSettingsLayout->setHorizontalSpacing(5);
 	videoSettingsLayout->setVerticalSpacing(10);
 	mainlayout->setVerticalSpacing(10);
-	size_t row = 0;
+	int row = 0;
 
 	/** Video - File */
 	QLabel* label = new QLabel("Video File:");
@@ -517,7 +520,7 @@ void MusicQuiz::EntryCreator::browseSong()
 	}
 
 	/** Open File Dialog */
-	const QString filePath = QFileDialog::getOpenFileName(this, "Select Audio File", "./data/", "Audio File (" + allowedAudioFormats + ");");
+	const QString filePath = QFileDialog::getOpenFileName(this, "Select Audio File", _config.getQuizDataPath().c_str(), "Audio File (" + allowedAudioFormats + ");");
 	if ( filePath.isEmpty() ) {
 		return;
 	}
@@ -540,7 +543,7 @@ void MusicQuiz::EntryCreator::browseVideo()
 	}
 
 	/** Open File Dialog */
-	const QString filePath = QFileDialog::getOpenFileName(this, "Select Video File", "./data/", "Video File (" + allowedVideoFormats + ");");
+	const QString filePath = QFileDialog::getOpenFileName(this, "Select Video File", _config.getQuizDataPath().c_str(), "Video File (" + allowedVideoFormats + ");");
 	if ( filePath.isEmpty() ) {
 		return;
 	}
@@ -563,7 +566,7 @@ void MusicQuiz::EntryCreator::browseVideoSong()
 	}
 
 	/** Open File Dialog */
-	const QString filePath = QFileDialog::getOpenFileName(this, "Select Audio File", "./data/", "Audio File (" + allowedAudioFormats + ");");
+	const QString filePath = QFileDialog::getOpenFileName(this, "Select Audio File", _config.getQuizDataPath().c_str(), "Audio File (" + allowedAudioFormats + ");");
 	if ( filePath.isEmpty() ) {
 		return;
 	}
@@ -676,7 +679,7 @@ bool MusicQuiz::EntryCreator::isSongFileValid(const QString& fileName)
 	}
 
 	/** Check if file exists */
-	if ( !boost::filesystem::exists(fileName.toStdString()) ) {
+	if ( !filesystem::exists(fileName.toStdString()) ) {
 		return false;
 	}
 
@@ -699,7 +702,7 @@ bool MusicQuiz::EntryCreator::isVideoFileValid(const QString& fileName)
 	}
 
 	/** Check if file exists */
-	if ( !boost::filesystem::exists(fileName.toStdString()) ) {
+	if ( !filesystem::exists(fileName.toStdString()) ) {
 		return false;
 	}
 
@@ -722,7 +725,7 @@ QTime MusicQuiz::EntryCreator::fromMSec(size_t time)
 	time = time - 1000 * minute;
 
 	/** Return */
-	return QTime(hour, minute);
+	return QTime(static_cast<int>(hour), static_cast<int>(minute));
 }
 
 void MusicQuiz::EntryCreator::setEntryType(int index)
@@ -765,8 +768,8 @@ void MusicQuiz::EntryCreator::setEntryType(int index)
 			width = this->width();
 			height = int(this->width() * 0.75);
 		}
-		_videoPlayer->setMinimumSize(QSize(width * 0.5, height * 0.5));
-		_videoPlayer->resize(QSize(width * 0.5, height * 0.5));
+		_videoPlayer->setMinimumSize(QSize(width / 2, height / 2));
+		_videoPlayer->resize(QSize(width / 2, height / 2));
 
 		/** Disable Song Settings */
 		_songSettings->setEnabled(false);
@@ -809,7 +812,7 @@ void MusicQuiz::EntryCreator::pointsChanged(int points)
 	_points = points;
 }
 
-void MusicQuiz::EntryCreator::setPoints(const size_t points)
+void MusicQuiz::EntryCreator::setPoints(const int points)
 {
 	/** Sanity Check */
 	if ( _pointsSpinbox == nullptr ) {

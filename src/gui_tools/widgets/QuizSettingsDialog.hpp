@@ -151,7 +151,7 @@ namespace MusicQuiz {
 		QSlider* _dailyDoublePercentage = nullptr;
 		QGridLayout* _dailyDoubleLayout = nullptr;
 		QLineEdit* _dailyDoublePercentageLineEdit = nullptr;
-		const size_t _minDoublePercentage = 5, _maxDoublePercentage = 75;
+		const int _minDoublePercentage = 5, _maxDoublePercentage = 75;
 
 		/** Daily Triple */
 		QCheckBox* _dailyTriple = nullptr;
@@ -159,6 +159,6 @@ namespace MusicQuiz {
 		QSlider* _dailyTriplePercentage = nullptr;
 		QGridLayout* _dailyTripleLayout = nullptr;
 		QLineEdit* _dailyTriplePercentageLineEdit = nullptr;
-		const size_t _minTriplePercentage = 5, _maxTriplePercentage = 25;
+		const int _minTriplePercentage = 5, _maxTriplePercentage = 25;
 	};
 }

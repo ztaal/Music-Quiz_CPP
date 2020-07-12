@@ -10,8 +10,8 @@
 #include <QRadioButton>
 
 
-MusicQuiz::LoadQuizDialog::LoadQuizDialog(QWidget* parent) :
-	QDialog(parent)
+MusicQuiz::LoadQuizDialog::LoadQuizDialog(const common::Configuration& config, QWidget* parent) :
+	QDialog(parent), _config(config)
 {
 	/** Set Parameters */
 	setModal(true);
@@ -23,8 +23,8 @@ MusicQuiz::LoadQuizDialog::LoadQuizDialog(QWidget* parent) :
 	makeWidgetLayout();
 
 	/** Set Size */
-	const size_t width = 350;
-	const size_t height = 400;
+	const int width = 350;
+	const int height = 400;
 	if ( parent == nullptr ) {
 		resize(width, height);
 	} else {
@@ -87,7 +87,7 @@ void MusicQuiz::LoadQuizDialog::updateTable()
 	_quizTable->setRowCount(0);
 
 	/** Get List of weldfiles */
-	_quizList = MusicQuiz::util::QuizLoader::getListOfQuizzes();
+	_quizList = MusicQuiz::util::QuizLoader::getListOfQuizzes(_config);
 
 	/** Update Table */
 	for ( unsigned int i = 0; i < _quizList.size(); ++i ) {

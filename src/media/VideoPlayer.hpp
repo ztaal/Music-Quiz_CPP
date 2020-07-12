@@ -51,18 +51,10 @@ namespace media {
 		 * @brief Plays a video.
 		 *
 		 * @param[in] videoFile The name of the video file to play.
-		 * @param[in] muted True if the audio should be muted.
-		 */
-		void play(const QString& videoFile, bool muted = false);
-
-		/**
-		 * @brief Plays a video.
-		 *
-		 * @param[in] videoFile The name of the video file to play.
 		 * @param[in] startTime The time at which to start playing the video file from.
 		 * @param[in] muted True if the audio should be muted.
 		 */
-		void play(const QString& videoFile, size_t startTime, bool muted = false);
+		void play(const QString& videoFile, size_t startTime = 0, bool muted = false);
 
 		/**
 		 * @brief Pauses the video that is currently playing.
@@ -92,6 +84,13 @@ namespace media {
 		 * @param[in] mouseEventCallback The callback function.
 		 */
 		void setMouseEventCallbackFunction(const std::function< void(QMouseEvent*) > mouseEventCallback);
+
+	private slots:
+		/**
+		 * @brief Handles mediastatus changes
+		 */
+		void handleMediaStatus(QMediaPlayer::MediaStatus status);
+
 	protected:
 		/**
 		 * @brief Override the mouse release event.

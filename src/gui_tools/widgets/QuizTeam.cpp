@@ -59,7 +59,8 @@ void MusicQuiz::QuizTeam::addPoints(size_t points)
 	/** Update Score */
 	if ( !_hideScore ) {
 		_newPoints += points;
-		_scoreCntRate = _newPoints / _scoreTimerDelayMs;
+		LOG_INFO(_scoreTimerDelayMs.count());
+		_scoreCntRate = _newPoints / _scoreTimerDelayMs.count();
 	} else {
 		_score += points;
 	}
