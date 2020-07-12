@@ -59,13 +59,13 @@ namespace MusicQuiz {
 		void createLayout();
 
 		/** Variables */
-		size_t _textSize = 1;
-		size_t _hueCounter = 0;
+		int _textSize = 1;
+		int _hueCounter = 0;
 		QColor _textColor = QColor(255, 255, 0);
 
 		QTimer _timer;
 		QTimer _sizeTimer;
-		const size_t _winnerDisplayTime = 150000; // in ms
+		const std::chrono::milliseconds _winnerDisplayTime;
 
 		std::vector< QLabel* > _andLabels;
 		std::vector< QLabel* > _winnersLabels;

@@ -57,7 +57,7 @@ MusicQuiz::QuizBoard* MusicQuiz::QuizFactory::createQuiz(const size_t idx, const
 	const media::VideoPlayer::Ptr& videoPlayer, const std::vector<MusicQuiz::QuizTeam*>& teams, bool preview, QWidget* parent)
 {
 	/** Seed Rand */
-	srand(time(NULL));
+	srand(static_cast<unsigned int>(time(NULL)));
 
 	/** Create Quiz Board */
 	MusicQuiz::QuizBoard* quizBoard = nullptr;
@@ -91,7 +91,7 @@ MusicQuiz::QuizBoard* MusicQuiz::QuizFactory::createQuiz(const size_t idx, const
 	}
 
 	/** Get Daily Double Entries */
-	size_t dailyDoubleCount = std::floor(double(numberOfEntries * settings.dailyDoublePercentage) / 100.0);
+	size_t dailyDoubleCount = static_cast<size_t>(std::floor(double(numberOfEntries * settings.dailyDoublePercentage) / 100.0));
 	std::vector<size_t> dailyDoubleSelectedElements;
 	if ( settings.dailyDouble && !teams.empty() ) {
 		/** Ensure that there is atleas one element if the setting is enabled */
@@ -108,7 +108,7 @@ MusicQuiz::QuizBoard* MusicQuiz::QuizFactory::createQuiz(const size_t idx, const
 	}
 
 	/** Get Daily Triple Entries */
-	size_t dailyTripleCount = std::floor(double(numberOfEntries * settings.dailyTriplePercentage) / 100.0);
+	size_t dailyTripleCount = static_cast<size_t>(std::floor(double(numberOfEntries * settings.dailyTriplePercentage) / 100.0));
 	std::vector<size_t> dailyTripleSelectedElements;
 	if ( settings.dailyTriple && !teams.empty() ) {
 		/** Ensure that there is atleas one element if the setting is enabled */
@@ -488,7 +488,7 @@ MusicQuiz::QuizCreator::QuizData MusicQuiz::QuizFactory::loadQuiz(const std::str
 
 									/** Settings */
 									const QString entryName = QString::fromStdString(it->second.get<std::string>("<xmlattr>.name"));
-									const size_t points = it->second.get<size_t>("Points");
+									const int points = it->second.get<int>("Points");
 
 									/** Quiz Entry */
 									MusicQuiz::EntryCreator* entry = new MusicQuiz::EntryCreator(entryName, points, audioPlayer, category);

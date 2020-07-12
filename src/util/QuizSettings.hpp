@@ -8,12 +8,12 @@ namespace MusicQuiz {
 		/** Daily Double */
 		bool dailyDouble = false;
 		bool dailyDoubleHidden = true;
-		size_t dailyDoublePercentage = 15;
+		int dailyDoublePercentage = 15;
 
 		/** Daily Trible */
 		bool dailyTriple = false;
 		bool dailyTripleHidden = true;
-		size_t dailyTriplePercentage = 5;
+		int dailyTriplePercentage = 5;
 
 		/** Teams */
 		bool hiddenTeamScore = false;

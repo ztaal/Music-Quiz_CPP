@@ -18,8 +18,8 @@
 
 
 MusicQuiz::MusicQuizController::MusicQuizController(QWidget* parent) :
-	QWidget(parent), _quizSelected(false), _teamSelected(false), _introScreenDone(false),
-	_gameCompleted(false)
+	QWidget(parent), _updateTimerDelayMs(25), _quizSelected(false), _teamSelected(false), 
+	_introScreenDone(false), _gameCompleted(false)
 {
 	/** Create Audio Player */
 	_audioPlayer = std::make_shared<media::AudioPlayer>();

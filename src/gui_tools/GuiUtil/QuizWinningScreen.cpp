@@ -9,7 +9,7 @@
 
 
 MusicQuiz::QuizWinningScreen::QuizWinningScreen(const std::vector<MusicQuiz::QuizTeam*>& winningTeams, QWidget* parent) :
-	QDialog(parent), _winningTeams(winningTeams)
+	QDialog(parent), _winnerDisplayTime(15000), _winningTeams(winningTeams)
 {
 	/** Sanity Check */
 	if ( _winningTeams.empty() ) {
@@ -76,7 +76,7 @@ void MusicQuiz::QuizWinningScreen::createLayout()
 	bottomLayout->addWidget(label, 0, 0, Qt::AlignCenter);
 	_winnersLabels.push_back(label);
 
-	for ( size_t i = 0; i < _winningTeams.size() - 1; ++i ) {
+	for ( int i = 0; i < static_cast<int>(_winningTeams.size()) - 1; ++i ) {
 		/** & Label */
 		label = new QLabel("&");
 		bottomLayout->addWidget(label, 0, i * 2 + 1, Qt::AlignCenter);

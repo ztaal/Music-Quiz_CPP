@@ -128,7 +128,7 @@ void MusicQuiz::QuizBoard::createLayout()
 		tmpLayout->addItem(rowCategorylayout, 0, 0);
 		tmpLayout->addItem(categorylayout, 0, 1);
 		tmpLayout->setColumnStretch(0, 1);
-		tmpLayout->setColumnStretch(1, _categories.size() * 2);
+		tmpLayout->setColumnStretch(1, static_cast<int>(_categories.size() * 2));
 		mainlayout->addItem(tmpLayout, 0, 0);
 	} else {
 		mainlayout->addItem(categorylayout, 0, 0);
@@ -143,7 +143,7 @@ void MusicQuiz::QuizBoard::createLayout()
 
 	/** Set Row Stretch */
 	if ( !_teams.empty() ) {
-		mainlayout->setRowStretch(0, (maxNumberOfEntries + 1) * 1.5);
+		mainlayout->setRowStretch(0, static_cast<int>(static_cast<double>(maxNumberOfEntries + 1) * 1.5));
 		mainlayout->setRowStretch(1, 1);
 	}
 

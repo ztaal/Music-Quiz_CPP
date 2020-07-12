@@ -23,8 +23,8 @@ MusicQuiz::LoadQuizDialog::LoadQuizDialog(QWidget* parent) :
 	makeWidgetLayout();
 
 	/** Set Size */
-	const size_t width = 350;
-	const size_t height = 400;
+	const int width = 350;
+	const int height = 400;
 	if ( parent == nullptr ) {
 		resize(width, height);
 	} else {
