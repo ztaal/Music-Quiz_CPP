@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-
+#include <chrono>
 #include <QTimer>
 #include <QObject>
 #include <QWidget>
@@ -54,6 +54,6 @@ namespace MusicQuiz {
 		QString _quizAuthor = "";
 
 		QTimer _timer;
-		const size_t _introDisplayTime = 4000; // in ms
+		const std::chrono::milliseconds _introDisplayTime;
 	};
 }

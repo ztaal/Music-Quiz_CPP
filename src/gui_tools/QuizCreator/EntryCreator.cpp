@@ -13,7 +13,7 @@
 #include <boost/filesystem.hpp>
 
 
-MusicQuiz::EntryCreator::EntryCreator(const QString& name, const size_t points, const media::AudioPlayer::Ptr& audioPlayer, QWidget* parent) :
+MusicQuiz::EntryCreator::EntryCreator(const QString& name, const int points, const media::AudioPlayer::Ptr& audioPlayer, QWidget* parent) :
 	QWidget(parent), _points(points), _entryName(name), _audioPlayer(audioPlayer)
 {
 	/** Create Layout */
@@ -34,7 +34,7 @@ void MusicQuiz::EntryCreator::createLayout()
 	mainlayout->setVerticalSpacing(10);
 	mainlayout->setColumnStretch(0, 1);
 	mainlayout->setColumnStretch(1, 3);
-	size_t row = 0;
+	int row = 0;
 
 	/** Entry Name */
 	_entryNameLabel = new QLabel(_entryName);
@@ -107,7 +107,7 @@ QGridLayout* MusicQuiz::EntryCreator::createSongFileLayout()
 	songSettingsLayout->setHorizontalSpacing(5);
 	songSettingsLayout->setVerticalSpacing(10);
 	mainlayout->setVerticalSpacing(10);
-	size_t row = 0;
+	int row = 0;
 
 	/** Song - File */
 	QLabel* label = new QLabel("Song File:");
@@ -210,7 +210,7 @@ QGridLayout* MusicQuiz::EntryCreator::createVideoFileLayout()
 	videoSettingsLayout->setHorizontalSpacing(5);
 	videoSettingsLayout->setVerticalSpacing(10);
 	mainlayout->setVerticalSpacing(10);
-	size_t row = 0;
+	int row = 0;
 
 	/** Video - File */
 	QLabel* label = new QLabel("Video File:");
@@ -722,7 +722,7 @@ QTime MusicQuiz::EntryCreator::fromMSec(size_t time)
 	time = time - 1000 * minute;
 
 	/** Return */
-	return QTime(hour, minute);
+	return QTime(static_cast<int>(hour), static_cast<int>(minute));
 }
 
 void MusicQuiz::EntryCreator::setEntryType(int index)
@@ -765,8 +765,8 @@ void MusicQuiz::EntryCreator::setEntryType(int index)
 			width = this->width();
 			height = int(this->width() * 0.75);
 		}
-		_videoPlayer->setMinimumSize(QSize(width * 0.5, height * 0.5));
-		_videoPlayer->resize(QSize(width * 0.5, height * 0.5));
+		_videoPlayer->setMinimumSize(QSize(width / 2, height / 2));
+		_videoPlayer->resize(QSize(width / 2, height / 2));
 
 		/** Disable Song Settings */
 		_songSettings->setEnabled(false);
@@ -809,7 +809,7 @@ void MusicQuiz::EntryCreator::pointsChanged(int points)
 	_points = points;
 }
 
-void MusicQuiz::EntryCreator::setPoints(const size_t points)
+void MusicQuiz::EntryCreator::setPoints(const int points)
 {
 	/** Sanity Check */
 	if ( _pointsSpinbox == nullptr ) {

@@ -91,7 +91,7 @@ void ColorPicker::QHueSlider::setColorHue(qreal colorHue)
 		colorHue = 1 - colorHue;
 	}
 
-	setValue(minimum() + colorHue * (maximum() - minimum()));
+	setValue(static_cast<int>(minimum() + colorHue * (maximum() - minimum())));
 	emit colorHueChanged(colorHue);
 	emit colorChanged(color());
 }

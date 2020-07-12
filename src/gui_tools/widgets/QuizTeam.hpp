@@ -2,6 +2,7 @@
 
 #include <atomic>
 #include <thread>
+#include <chrono>
 
 #include <QColor>
 #include <QTimer>
@@ -89,7 +90,7 @@ namespace MusicQuiz {
 		std::atomic<size_t> _newPoints;
 		std::atomic<size_t> _scoreCntRate;
 		
-		const size_t _scoreTimerDelayMs;
+		const std::chrono::milliseconds _scoreTimerDelayMs;
 
 		bool _hideScore;
 	};

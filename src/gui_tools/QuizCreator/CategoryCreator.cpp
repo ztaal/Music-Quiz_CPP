@@ -35,7 +35,7 @@ void MusicQuiz::CategoryCreator::createLayout()
 	QGridLayout* setupTabLayout = new QGridLayout;
 	setupTab->setLayout(setupTabLayout);
 	_tabWidget->addTab(setupTab, "Setup");
-	size_t row = 0;
+	int row = 0;
 
 	/** Setup Tab - Category Name */
 	_categoryNameLabel = new QLabel(_categoryName);
@@ -124,7 +124,7 @@ void MusicQuiz::CategoryCreator::addEntry()
 	_entriesTable->setCellWidget(entryCount, 2, layoutWidget);
 
 	/** Add Tab */
-	const size_t points = (entryCount + 1) * 100;
+	const int points = (entryCount + 1) * 100;
 	MusicQuiz::EntryCreator* entry = new MusicQuiz::EntryCreator(entryNameStr, points, _audioPlayer, this);
 	_entries.push_back(entry);
 	_tabWidget->addTab(entry, entryNameStr);
@@ -333,7 +333,7 @@ const std::vector< MusicQuiz::EntryCreator* > MusicQuiz::CategoryCreator::getEnt
 void MusicQuiz::CategoryCreator::clearEntries()
 {
 	/** Delete Entries */
-	for ( int i = _entries.size() - 1; i >= 0; --i ) {
+	for ( size_t i = 0; i < _entries.size(); ++i ) {
 		_entries[i] = nullptr;
 		delete _entries[i];
 	}

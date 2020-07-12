@@ -53,7 +53,7 @@ void MusicQuiz::TeamSelector::createLayout()
 	mainlayout->setColumnStretch(0, 1);
 	mainlayout->setColumnStretch(1, 1);
 	mainlayout->setColumnStretch(2, 1);
-	size_t row = 0;
+	int row = 0;
 
 	/** Team Table */
 	_teamTable = new QTableWidget(0, 3);
@@ -227,9 +227,9 @@ void MusicQuiz::TeamSelector::addTeam()
 	/** Choose a random color for the team */
 	std::random_device dev;
 	std::mt19937 rng(dev());
-	const size_t currentValue = _hueSlider->value();
-	size_t newColorValue = currentValue;
-	std::uniform_int_distribution<std::mt19937::result_type> dist(_hueSlider->minimum(), _hueSlider->maximum());
+	const int currentValue = _hueSlider->value();
+	int newColorValue = currentValue;
+	std::uniform_int_distribution<int> dist(_hueSlider->minimum(), _hueSlider->maximum());
 	while ( std::fabs(currentValue - newColorValue) < (_hueSlider->maximum() - _hueSlider->minimum()) / 8 ) { // Ensure that the value is far enough away from previous color.
 		newColorValue = dist(rng);
 	}
