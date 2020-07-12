@@ -49,7 +49,7 @@ namespace MusicQuiz {
 		size_t getSize();
 
 		/** Overload [] operator */
-		MusicQuiz::QuizEntry*& operator[](int index)
+		MusicQuiz::QuizEntry*& operator[](size_t index)
 		{
 			return _entries[index];
 		};

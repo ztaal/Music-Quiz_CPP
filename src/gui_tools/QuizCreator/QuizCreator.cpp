@@ -43,8 +43,8 @@ MusicQuiz::QuizCreator::QuizCreator(QWidget* parent) :
 	setObjectName("QuizCreator");
 
 	/** Set Size */
-	const size_t width = 1000;
-	const size_t height = 800;
+	const int width = 1000;
+	const int height = 800;
 	if ( parent == nullptr ) {
 		resize(width, height);
 	} else {
@@ -81,7 +81,7 @@ void MusicQuiz::QuizCreator::createLayout()
 	QGridLayout* setupTabLayout = new QGridLayout;
 	setupTab->setLayout(setupTabLayout);
 	_tabWidget->addTab(setupTab, "Setup");
-	size_t row = 0;
+	int row = 0;
 
 	/** Setup Tab - Quiz Name */
 	QLabel* label = new QLabel("Quiz Name:");
@@ -398,10 +398,10 @@ void MusicQuiz::QuizCreator::removeRowCategory()
 	}
 
 	/** Get Number of Row Categories */
-	const size_t rowCategoryCount = _rowCategoriesTable->rowCount();
+	const int rowCategoryCount = _rowCategoriesTable->rowCount();
 
 	/** Get Index */
-	const size_t index = button->property("index").toInt();
+	const int index = button->property("index").toInt();
 	if ( index >= rowCategoryCount ) {
 		return;
 	}
@@ -470,11 +470,11 @@ const std::vector< QString > MusicQuiz::QuizCreator::getRowCategories() const
 	}
 
 	/** Get Number of Row Categories */
-	const size_t rowCategoryCount = _rowCategoriesTable->rowCount();
+	const int rowCategoryCount = _rowCategoriesTable->rowCount();
 
 	/** Get Row Category Name */
 	std::vector< QString > rowCategories;
-	for ( size_t i = 0; i < rowCategoryCount; ++i ) {
+	for ( int i = 0; i < rowCategoryCount; ++i ) {
 		QLineEdit* lineEdit = qobject_cast<QLineEdit*>(_rowCategoriesTable->cellWidget(i, 0));
 		if ( lineEdit == nullptr ) {
 			continue;
@@ -564,12 +564,13 @@ void MusicQuiz::QuizCreator::loadQuiz(const std::string& quizName)
 	}
 
 	/** Remove Tabs */
-	for ( size_t i = _tabWidget->count() - 1; i > 0; --i ) {
-		_tabWidget->removeTab(i);
+	while(_tabWidget->count() > 1)
+	{
+		_tabWidget->removeTab(1);
 	}
 
 	/** Clear Categories */
-	for ( int i = _categories.size() - 1; i >= 0; --i ) {
+	for ( size_t i = 0; i < _categories.size(); ++i ) {
 		_categories[i]->clearEntries();
 		_categories[i] = nullptr;
 		delete _categories[i];

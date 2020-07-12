@@ -38,7 +38,7 @@ namespace MusicQuiz {
 		 * @param[in] audioPlayer The audio player.
 		 * @param[in] parent The parent widget.
 		 */
-		explicit EntryCreator(const QString& name, size_t points, const std::shared_ptr< media::AudioPlayer >& audioPlayer, QWidget* parent = nullptr);
+		explicit EntryCreator(const QString& name, int points, const std::shared_ptr< media::AudioPlayer >& audioPlayer, QWidget* parent = nullptr);
 
 		/**
 		 * @brief Default destructor
@@ -71,7 +71,7 @@ namespace MusicQuiz {
 		 *
 		 * @param[in] points The points.
 		 */
-		void setPoints(size_t points);
+		void setPoints(int points);
 
 		/**
 		 * @brief Gets the points.
@@ -321,7 +321,7 @@ namespace MusicQuiz {
 		QTime fromMSec(size_t time);
 
 		/** Variables */
-		size_t _points = 0;
+		int _points = 0;
 
 		QString _entryName;
 		QLabel* _entryNameLabel = nullptr;

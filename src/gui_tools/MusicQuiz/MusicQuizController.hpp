@@ -118,7 +118,7 @@ namespace MusicQuiz {
 
 		/** Update Timer */
 		QTimer _updateTimer;
-		const size_t _updateTimerDelayMs = 25;
+		const std::chrono::milliseconds _updateTimerDelayMs;
 
 		/** State Variables */
 		std::atomic<bool> _quizSelected;

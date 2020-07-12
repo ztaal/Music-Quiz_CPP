@@ -25,8 +25,8 @@ MusicQuiz::QuizSettingsDialog::QuizSettingsDialog(const MusicQuiz::QuizSettings&
 	setWindowTitle("Settings");
 
 	/** Set Size */
-	const size_t width = 400;
-	const size_t height = 425;
+	const int width = 400;
+	const int height = 425;
 	if ( parent == nullptr ) {
 		resize(width, height);
 	} else {
