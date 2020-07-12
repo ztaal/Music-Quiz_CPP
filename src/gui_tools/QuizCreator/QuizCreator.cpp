@@ -758,7 +758,7 @@ void MusicQuiz::QuizCreator::quitCreator()
 	}
 }
 
-void MusicQuiz::QuizCreator::categoryOrderChanged(const int, __attribute__((unused)) const int oldIdx, __attribute__((unused)) const int newIdx)
+void MusicQuiz::QuizCreator::categoryOrderChanged(const int, const int, const int)
 {
 	/** Sanity Check */
 	if ( _categoriesTable == nullptr || _tabWidget == nullptr ) {
