@@ -10,14 +10,14 @@ SET(ROOT ${CMAKE_CURRENT_SOURCE_DIR})
 
 SET(CMAKE_AUTOMOC ON)
 
-### add extra definitions. c++14
-set(CMAKE_CXX_STANDARD 14)
+### add extra definitions. c++17
+set(CMAKE_CXX_STANDARD 17)
 if( MSVC )
-	# Using c++14.
+	# Using c++17.
 	# -permissive- Forces C++ standards in the code.
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++14 /permissive- ")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17 /permissive- ")
 else()
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wshadow -Wold-style-cast -Wnon-virtual-dtor -Wcast-align -Woverloaded-virtual -std=c++14 -g")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wshadow -Wold-style-cast -Wnon-virtual-dtor -Wcast-align -Woverloaded-virtual -g")
 endif()
 
 ### Set build type
