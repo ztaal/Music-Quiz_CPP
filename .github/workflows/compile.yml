@@ -11,6 +11,18 @@ defaults:
     shell: bash
 
 jobs:
+
+  tag:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: 
+        - 12
+    steps: 
+    - uses: phish108/autotag-action@1.1.25
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN}}
+        
   build:
     runs-on: ${{ matrix.os }}-latest
     strategy:
