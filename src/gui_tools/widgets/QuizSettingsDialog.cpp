@@ -1,7 +1,7 @@
 #include "QuizSettingsDialog.hpp"
 
 #include <stdexcept>
-
+#include <chrono>
 #include <QString>
 #include <QLabel>
 #include <QWidget>
@@ -16,7 +16,7 @@
 
 
 MusicQuiz::QuizSettingsDialog::QuizSettingsDialog(const MusicQuiz::QuizSettings& settings, QWidget* parent) :
-	QDialog(parent)
+	QDialog(parent), _listUpdateTimer(this)
 {
 	/** Set Window Flags */
 	setWindowFlags(windowFlags() | Qt::WindowMaximizeButtonHint | Qt::WindowMinimizeButtonHint);
@@ -25,8 +25,8 @@ MusicQuiz::QuizSettingsDialog::QuizSettingsDialog(const MusicQuiz::QuizSettings&
 	setWindowTitle("Settings");
 
 	/** Set Size */
-	const size_t width = 400;
-	const size_t height = 425;
+	const int width = 400;
+	const int height = 425;
 	if ( parent == nullptr ) {
 		resize(width, height);
 	} else {
@@ -94,6 +94,20 @@ void MusicQuiz::QuizSettingsDialog::createLayout(const MusicQuiz::QuizSettings& 
 	if ( dailyTriple != nullptr ) {
 		mainlayout->addWidget(dailyTriple);
 	}
+
+#if BUILD_LIGHT_CONTROL
+	/** Line */
+	line = new QFrame;
+	line->setObjectName("settingsLine");
+	line->setFrameShape(QFrame::HLine);
+	mainlayout->addWidget(line);
+
+	/** LightInterface */
+	QWidget* lightInterface = getLightInterfaceLayout(settings);
+	if ( lightInterface != nullptr ) {
+		mainlayout->addWidget(lightInterface);
+	}
+#endif
 
 	/** Save Button */
 	QHBoxLayout* buttonLayout = new QHBoxLayout;
@@ -186,6 +200,59 @@ QWidget* MusicQuiz::QuizSettingsDialog::getDailyDoubleLayout(const MusicQuiz::Qu
 	widget->setLayout(mainlayout);
 	return widget;
 }
+
+#if BUILD_LIGHT_CONTROL
+QWidget* MusicQuiz::QuizSettingsDialog::getLightInterfaceLayout(const MusicQuiz::QuizSettings& settings)
+{
+	/** Layout */
+	QGridLayout* mainlayout = new QGridLayout;
+	mainlayout->setColumnStretch(1, 1);
+	mainlayout->setVerticalSpacing(10);
+	mainlayout->setHorizontalSpacing(0);
+	mainlayout->setContentsMargins(0, 10, 0, 10);
+
+	//Discovered devices dropdown
+	QHBoxLayout* discoveredLayout = new QHBoxLayout;
+	QLabel* label = new QLabel("Discovered Devices:");
+	label->setObjectName("settingsLabel");
+
+	discoveredLayout->setStretch(1, 1);
+	discoveredLayout->setContentsMargins(0, 10, 0, 10);
+
+	_discoveredList = new QComboBox();
+	_discoveredList->setSizeAdjustPolicy(QComboBox::AdjustToContents);
+	connect(_discoveredList, QOverload<int>::of(&QComboBox::activated), this, &MusicQuiz::QuizSettingsDialog::updateIP);
+
+	discoveredLayout->addWidget(label);
+	discoveredLayout->addWidget(_discoveredList);
+
+	mainlayout->addItem(discoveredLayout, 0, 0, 1, 2, Qt::AlignLeft);
+
+	//IP input
+	QHBoxLayout* ipLayout = new QHBoxLayout;
+	label = new QLabel("Device IP:");
+	label->setObjectName("settingsLabel");
+
+	ipLayout->setStretch(1, 1);
+	ipLayout->setContentsMargins(0, 10, 0, 10);
+
+	_ipInput = new QLineEdit(QString::fromStdString(settings.deviceIP));
+	ipLayout->addWidget(label);
+	ipLayout->addWidget(_ipInput);
+
+	mainlayout->addItem(ipLayout, 1, 0, 1, 2, Qt::AlignLeft);
+
+	mainlayout->addItem(new QSpacerItem(35, 0, QSizePolicy::Fixed, QSizePolicy::Fixed), 1, 0);
+
+	_listUpdateTimer.setInterval(std::chrono::milliseconds(500));
+	_listUpdateTimer.callOnTimeout(this, &MusicQuiz::QuizSettingsDialog::updateLightDevices);
+	_listUpdateTimer.start();
+	/** Return Layout Widget */
+	QWidget* widget = new QWidget;
+	widget->setLayout(mainlayout);
+	return widget;
+}
+#endif
 
 QWidget* MusicQuiz::QuizSettingsDialog::getDailyTripleLayout(const MusicQuiz::QuizSettings& settings)
 {
@@ -306,6 +373,7 @@ void MusicQuiz::QuizSettingsDialog::setDailyTriplePercentage(int value)
 
 void MusicQuiz::QuizSettingsDialog::saveSettings()
 {
+	/** Settings */
 	MusicQuiz::QuizSettings settings;
 
 	/** Hidden Anwsers */
@@ -324,6 +392,10 @@ void MusicQuiz::QuizSettingsDialog::saveSettings()
 	settings.dailyTripleHidden = _dailyTripleHidden->isChecked();
 	settings.dailyTriplePercentage = _dailyTriplePercentage->value();
 
+#if BUILD_LIGHT_CONTROL
+	settings.deviceIP = _ipInput->text().toStdString();
+#endif
+
 	/** Emit Signal with settings */
 	emit settingsUpdated(settings);
 
@@ -333,8 +405,7 @@ void MusicQuiz::QuizSettingsDialog::saveSettings()
 
 void MusicQuiz::QuizSettingsDialog::keyPressEvent(QKeyEvent* event)
 {
-	switch ( event->key() )
-	{
+	switch ( event->key() ) {
 	case Qt::Key_Escape:
 		emit quitSignal();
 		break;
@@ -413,3 +484,25 @@ void MusicQuiz::QuizSettingsDialog::setLayoutEnabled(QLayout* layout, bool enabl
 		}
 	}
 }
+
+#if BUILD_LIGHT_CONTROL
+void MusicQuiz::QuizSettingsDialog::updateLightDevices()
+{
+	std::map<std::string, std::string> devices = lightcontrolDiscover.getDevices();
+	if ( _discoveredList ) {
+		for ( auto& device : devices ) {
+			if ( _discoveredList->findText(QString::fromStdString(device.second)) == -1 ) {
+				_discoveredList->addItem(QString::fromStdString(device.second));
+			}
+		}
+	}
+}
+
+void MusicQuiz::QuizSettingsDialog::updateIP(int index)
+{
+	(void)index;
+	if ( _discoveredList && _ipInput ) {
+		_ipInput->setText(_discoveredList->currentText());
+	}
+}
+#endif

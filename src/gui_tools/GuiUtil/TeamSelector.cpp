@@ -53,7 +53,7 @@ void MusicQuiz::TeamSelector::createLayout()
 	mainlayout->setColumnStretch(0, 1);
 	mainlayout->setColumnStretch(1, 1);
 	mainlayout->setColumnStretch(2, 1);
-	size_t row = 0;
+	int row = 0;
 
 	/** Team Table */
 	_teamTable = new QTableWidget(0, 3);
@@ -169,7 +169,7 @@ void MusicQuiz::TeamSelector::addTeam()
 
 	QString teamName = _teamNameLineEdit->text();
 	if ( teamName == "" ) {
-		LOG_INFO("Can not add a team with a team name.");
+		LOG_INFO("Can not add a team without a team name.");
 		return;
 	}
 
@@ -194,13 +194,12 @@ void MusicQuiz::TeamSelector::addTeam()
 	/** Insert Row */
 	_teamTable->insertRow(row);
 
-	/** Add Team Number */
+	/** Add Team Number*/
 	QTableWidgetItem* entry = new QTableWidgetItem;
-	const QString teamNumber = " Team " + QString::number(row + 1);
-	entry->setData(Qt::DisplayRole, teamNumber);
 	entry->setTextAlignment(Qt::AlignCenter);
 	entry->setForeground(QBrush(QColor(255, 255, 0)));
 	_teamTable->setItem(row, 0, entry);
+	setTeamNumbers();
 
 	/** Add Entry */
 	entry = new QTableWidgetItem;
@@ -227,9 +226,9 @@ void MusicQuiz::TeamSelector::addTeam()
 	/** Choose a random color for the team */
 	std::random_device dev;
 	std::mt19937 rng(dev());
-	const size_t currentValue = _hueSlider->value();
-	size_t newColorValue = currentValue;
-	std::uniform_int_distribution<std::mt19937::result_type> dist(_hueSlider->minimum(), _hueSlider->maximum());
+	const int currentValue = _hueSlider->value();
+	int newColorValue = currentValue;
+	std::uniform_int_distribution<int> dist(_hueSlider->minimum(), _hueSlider->maximum());
 	while ( std::fabs(currentValue - newColorValue) < (_hueSlider->maximum() - _hueSlider->minimum()) / 8 ) { // Ensure that the value is far enough away from previous color.
 		newColorValue = dist(rng);
 	}
@@ -240,11 +239,7 @@ void MusicQuiz::TeamSelector::addTeam()
 
 	/** Disable Line Edit and slider if maximum number of teams is reached */
 	if ( row + 1 >= static_cast<int>(_maximumsNumberOfTeams) ) {
-		_hueSlider->setEnabled(false);
-		_hueSlider->setValue(_hueSlider->maximum());
-
-		_teamNameLineEdit->setEnabled(false);
-		teamColorChanged(QColor(150, 150, 150));
+		disallowMoreTeams();
 	}
 }
 
@@ -256,6 +251,16 @@ void MusicQuiz::TeamSelector::setTeamNumbers()
 	}
 }
 
+int MusicQuiz::TeamSelector::getTeamRow(const QVariant& teamName) 
+{
+	for ( int i = 0; i < _teamTable->rowCount(); ++i ) {
+		if ( teamName == _teamTable->item(i, 1)->text() ) {
+			return i;
+		}
+	}
+	return -1;
+}
+
 void MusicQuiz::TeamSelector::removeTeam()
 {
 	/** Sanity Check */
@@ -265,35 +270,28 @@ void MusicQuiz::TeamSelector::removeTeam()
 	}
 
 	QPushButton* button = qobject_cast<QPushButton*>(sender());
+
 	if ( button == nullptr ) {
 		LOG_ERROR("Failed to remove team. Sender was nullptr.");
 		return;
 	}
 
-	/** Get Selected Row */
-	int selectedRow = 0;
-	for ( int i = 0; i < _teamTable->rowCount(); ++i ) {
-		if ( button->property("teamName") == _teamTable->item(i, 1)->text() ) {
-			selectedRow = i;
-			break;
-		}
-	}
-
-	/** Get Row Count */
-	const int rows = _teamTable->rowCount();
-	if ( selectedRow > rows ) {
+	const int teamRow = getTeamRow(button->property("teamName"));
+	if ( teamRow < 0 ) {
 		LOG_ERROR("Failed to remove team. Selected row is out of range.");
 		return;
 	}
 
-	/** Remove Team */
-	_teamTable->removeRow(selectedRow);
+	_teamTable->removeRow(teamRow);
 
-	/** Delete button */
 	delete button;
-	button = nullptr;
 
-	/** Enable Line Edit and slider if count is below the maximum number of teams */
+	setTeamNumbers();
+	allowMoreTeams();
+}
+
+void MusicQuiz::TeamSelector::allowMoreTeams()
+{
 	if ( !_teamNameLineEdit->isEnabled() ) {
 		_teamNameLineEdit->setEnabled(true);
 	}
@@ -302,7 +300,15 @@ void MusicQuiz::TeamSelector::removeTeam()
 		_hueSlider->setEnabled(true);
 		_hueSlider->setValue(_hueSlider->minimum());
 	}
-	setTeamNumbers();
+}
+
+void MusicQuiz::TeamSelector::disallowMoreTeams()
+{
+	_hueSlider->setEnabled(false);
+	_hueSlider->setValue(_hueSlider->maximum());
+
+	_teamNameLineEdit->setEnabled(false);
+	teamColorChanged(QColor(150, 150, 150));
 }
 
 void MusicQuiz::TeamSelector::teamColorChanged(QColor color)
@@ -347,10 +353,13 @@ bool MusicQuiz::TeamSelector::closeWindow()
 
 void MusicQuiz::TeamSelector::keyPressEvent(QKeyEvent* event)
 {
-	switch ( event->key() )
-	{
+	switch ( event->key() ) {
 	case Qt::Key_Escape:
 		closeWindow();
+		break;
+	case Qt::Key_Enter:
+	case Qt::Key_Return:
+		addTeam();
 		break;
 	default:
 		QWidget::keyPressEvent(event);

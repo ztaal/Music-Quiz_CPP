@@ -21,6 +21,9 @@
 #include "gui_tools/widgets/QuizEntry.hpp"
 #include "gui_tools/widgets/QuizBoard.hpp"
 
+namespace common {
+	class Configuration;
+}
 
 namespace MusicQuiz {
 	class QuizFactory;
@@ -29,13 +32,11 @@ namespace MusicQuiz {
 	class QuizIntroScreen;
 	class QuizWinningScreen;
 
-	class MusicQuizController : public QWidget
-	{
+	class MusicQuizController : public QWidget {
 		Q_OBJECT
 
 	public:
-		enum QuizState
-		{
+		enum QuizState {
 			SELECT_QUIZ = 0,
 			SELECT_TEAM = 1,
 			QUIZ_INTRO_SCREEN = 2,
@@ -48,7 +49,7 @@ namespace MusicQuiz {
 		 *
 		 * @param[in] parent The parent widget.
 		 */
-		explicit MusicQuizController(QWidget* parent = nullptr);
+		explicit MusicQuizController(const common::Configuration& config, QWidget* parent = nullptr);
 
 		/**
 		 * @brief Destructor
@@ -104,8 +105,8 @@ namespace MusicQuiz {
 	private:
 
 		/** Variables */
-		const QString _themeSongFile = "./data/default/theme_song.mp3";
-		const QString _vicatorySongFile = "./data/default/victory_song.mp3";
+		const QString _themeSongFile;
+		const QString _victorySongFile;
 
 		MusicQuiz::QuizBoard* _quizBoard = nullptr;
 		std::vector< MusicQuiz::QuizTeam* > _teams;
@@ -118,7 +119,7 @@ namespace MusicQuiz {
 
 		/** Update Timer */
 		QTimer _updateTimer;
-		const size_t _updateTimerDelayMs = 25;
+		const std::chrono::milliseconds _updateTimerDelayMs;
 
 		/** State Variables */
 		std::atomic<bool> _quizSelected;
@@ -138,5 +139,8 @@ namespace MusicQuiz {
 
 		/** Video Player */
 		std::shared_ptr<media::VideoPlayer> _videoPlayer = nullptr;
+
+		const common::Configuration& _config;
+
 	};
 }

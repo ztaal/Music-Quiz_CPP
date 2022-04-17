@@ -1,0 +1,72 @@
+addons:
+  artifacts:
+    paths:
+    - artifacts
+env:
+  global:
+  - QT_VERSION=5.12.9
+
+language: cpp
+
+services:
+- docker
+
+git:
+  autocrlf: input
+
+archlinux:
+  script:
+    - "./travis/build_common.sh"
+    - "./travis/dependencies_arch.sh"
+    - "APPIMAGE_POSTFIX=ARCH GSTREAMER_PLUGINS_DIR=/usr/lib/gstreamer-1.0/ GSTREAMER_HELPERS_DIR=/usr/lib/gstreamer-1.0/ SHOULD_PACKAGE=1 ./travis/build_linux.sh"
+
+jobs:
+  include:
+    - stage: build
+      name: "Build Windows"
+      os: windows
+      script:
+        - "./travis/build_common.sh"
+        - "./travis/build_windows.sh"
+
+    - stage: build
+      name: "Build Arch Linux"
+      os: linux
+      script:
+        - curl -s https://raw.githubusercontent.com/mikkeloscar/arch-travis/master/arch-travis.sh | bash
+    
+    - stage: build
+      name: "Build Ubuntu Focal"
+      os: linux
+      dist: focal
+      sudo: required
+      script:
+        - "./travis/build_common.sh"
+        - "./travis/dependencies_ubuntu.sh"
+        - "APPIMAGE_POSTFIX=FOCAL SHOULD_PACKAGE=1 ./travis/build_linux.sh"
+    - stage: build
+      name: "Build Mac OS"
+      os: osx
+      osx_image: xcode12
+      script:
+        - "./travis/build_common.sh"
+        - "./travis/dependencies_mac.sh"
+        - "./travis/build_mac.sh"
+
+before_deploy:
+  if ! [[ $TRAVIS_TAG ]]; then
+    export TRAVIS_TAG="1.$TRAVIS_BUILD_NUMBER" &&
+    git config --local user.name "StefanRvO" &&
+    git config --local user.email "stefan@stefanrvo.dk" &&
+    git tag "$TRAVIS_TAG" "$TRAVIS_COMMIT";
+  fi
+  
+deploy:
+  provider: releases
+  api_key:
+    secure: jWh6M7GjPTCHygwVUAr2WTgV9AuJclZYZYvMMmGqpAUhi1U0FfB6PmRf2MeHjfPRRtvN/6YhCsRXhZ2KoZGGnVLtip4VyM+/B2AOcBmK0hlnIbFEyr7Ef/4CKjmyQxTfClqAx+lJdKJjyiGriJNZp34g3YR8tvwj8VM5au/V57vFpfFaLVgPiCepVqDvbQ5HRXN2DRs2Ci9zgDdCkKRq4uzWDo9A9YNxywz30Ixp65/WT9TKbf0pkfCISi053oo0tLeDZet96dIFfQUTOlxpkABhYyUwom1hLJM3xGtlCXa7ZwLa/hDEZP/K3h8R8vp3ytO4X66CKNmXLw9yHJw0/u32guQ0DezTjMUJMqsxldI8d3Q+uHZCx6ly4NG3s0WI/9Ak7uUaJG+p1mek2SsCFhQhF5IqgMRf/oXiOpou7qNISAAm56lIKMwS5sqvYgF9ZKaE1aZWhPnDn5SrjwMbXvRctgzOj9s3TySrI2Mst9gnNolUMmMkAQzZtQwkLVGIlVfBfInpslIu/gdAvLKlUAZjHq7wjIJxV1F5cioCPMuHHEJl/EgEn2iWiwgyE0Oj1S4ZNeI+TkSU2TVAF3PhkIG9t3PeX/ONDm5yUK8oSNNGGoUGee0BfXfcw3rmT6VQCMQ+MwnszU1zn+veKdpm0IdWxiltIpCmcPIIbmFY+Ak=
+  file: 
+    - "artifacts/MusicQuizGUI.exe"
+    - "artifacts/MusicQuizGUI_ARCH.AppImage"
+    - "artifacts/MusicQuizGUI_FOCAL.AppImage"
+  skip_cleanup: 'true'

@@ -12,8 +12,7 @@ namespace ColorPicker {
 	 * @brief A slider for selecting a hue value
 	 * @note Taken from https://gitlab.com/mattia.basaglia/Qt-Color-Widgets/-/tree/master/
 	 */
-	class QHueSlider : public QGradientSlider
-	{
+	class QHueSlider : public QGradientSlider {
 		Q_OBJECT
 			/** Saturation used in the rainbow gradient, as a [0-1] float  */
 			Q_PROPERTY(qreal colorSaturation READ colorSaturation WRITE setColorSaturation NOTIFY colorSaturationChanged)
@@ -120,8 +119,7 @@ namespace ColorPicker {
 	};
 
 
-	class QHueSlider::Private
-	{
+	class QHueSlider::Private {
 	private:
 		QHueSlider* _widget;
 
@@ -142,11 +140,12 @@ namespace ColorPicker {
 
 		void updateGradient()
 		{
-			static const double n_colors = 6;
+			static const int n_colors = 6;
 			QGradientStops colors;
 			colors.reserve(n_colors + 1);
 			for ( int i = 0; i <= n_colors; ++i ) {
-				colors.append(QGradientStop(i / n_colors, QColor::fromHsvF(i / n_colors, saturation, value)));
+				float gradientPart = static_cast<float>(i) / static_cast<float>(n_colors);
+				colors.append(QGradientStop(gradientPart, QColor::fromHsvF(gradientPart, saturation, value)));
 			}
 			_widget->setColors(colors);
 		}

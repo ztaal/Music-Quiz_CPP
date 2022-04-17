@@ -9,7 +9,7 @@
 
 
 MusicQuiz::QuizWinningScreen::QuizWinningScreen(const std::vector<MusicQuiz::QuizTeam*>& winningTeams, QWidget* parent) :
-	QDialog(parent), _winningTeams(winningTeams)
+	QDialog(parent), _winnerDisplayTime(267000), _winningTeams(winningTeams)
 {
 	/** Sanity Check */
 	if ( _winningTeams.empty() ) {
@@ -76,7 +76,7 @@ void MusicQuiz::QuizWinningScreen::createLayout()
 	bottomLayout->addWidget(label, 0, 0, Qt::AlignCenter);
 	_winnersLabels.push_back(label);
 
-	for ( size_t i = 0; i < _winningTeams.size() - 1; ++i ) {
+	for ( int i = 0; i < static_cast<int>(_winningTeams.size()) - 1; ++i ) {
 		/** & Label */
 		label = new QLabel("&");
 		bottomLayout->addWidget(label, 0, i * 2 + 1, Qt::AlignCenter);
@@ -122,8 +122,8 @@ void MusicQuiz::QuizWinningScreen::increaseTextSize()
 
 	/** Choose Random Color */
 	_textColor.setHsv(_hueCounter, _textColor.saturation(), _textColor.value());
-	_hueCounter += 2;
-	if ( _hueCounter > 200 && _hueCounter < 270 ) { // Skip Blue
+	_hueCounter += 1;
+	if ( _hueCounter > 210 && _hueCounter < 260 ) { // Skip Blue
 		_hueCounter = 270;
 	} else if ( _hueCounter >= 359 ) { // Loop Color
 		_hueCounter = 0;

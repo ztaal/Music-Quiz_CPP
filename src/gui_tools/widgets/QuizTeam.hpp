@@ -2,6 +2,7 @@
 
 #include <atomic>
 #include <thread>
+#include <chrono>
 
 #include <QColor>
 #include <QTimer>
@@ -12,8 +13,7 @@
 
 
 namespace MusicQuiz {
-	class QuizTeam : public QPushButton
-	{
+	class QuizTeam : public QPushButton {
 		Q_OBJECT
 	public:
 		/**
@@ -88,8 +88,8 @@ namespace MusicQuiz {
 		QTimer _scoreCntTimer;
 		std::atomic<size_t> _newPoints;
 		std::atomic<size_t> _scoreCntRate;
-		
-		const size_t _scoreTimerDelayMs;
+
+		const std::chrono::milliseconds _scoreTimerDelayMs;
 
 		bool _hideScore;
 	};

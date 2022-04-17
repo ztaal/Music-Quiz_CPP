@@ -3,29 +3,81 @@
 #include <QPushButton>
 #include <QApplication>
 #include <QAbstractButton>
+#include <QFileDialog>
 
 #include "common/Log.hpp"
+#include "common/Configuration.hpp"
 
 #include "MusicQuizController.hpp"
 #include "gui_tools/QuizCreator/QuizCreator.hpp"
 
+static void errorMessage(const std::string& title, const std::string& errorMsg);
+static int runQuizCreator(QApplication& app, const common::Configuration& config);
+static int runMusicQuiz(QApplication& app, const common::Configuration& config);
+static void selectQuizData(common::Configuration& config);
 
-#if defined(_WIN32) || defined(WIN32)
-#define WINDOWS_INTERFACE true
-#else
-#define WINDOWS_INTERFACE false
-#endif
-
-
-void errorMessage(const std::string& title, const std::string& errorMsg)
+static void errorMessage(const std::string& title, const std::string& errorMsg)
 {
 	QMessageBox::critical(nullptr, QString::fromLocal8Bit(title.c_str()), QString::fromLocal8Bit(errorMsg.c_str()), QMessageBox::Ok);
+}
+
+static int runMusicQuiz(QApplication& app, const common::Configuration& config)
+{
+	LOG_INFO("Music Quiz Selected.");
+
+	try {
+		MusicQuiz::MusicQuizController w(config);
+		app.exec();
+	} catch ( const std::exception& err ) {
+		LOG_ERROR("Failed to start Music Quiz. " << err.what());
+		errorMessage("Quiz Creator", "Quiz Creator Error. " + std::string(err.what()));
+		return 1;
+	} catch ( ... ) {
+		LOG_ERROR("Failed to start Music Quiz. Unknown Error.");
+		errorMessage("Quiz Creator", "Quiz Creator Error. Unknown Error.");
+		return 1;
+	}
+	return 0;
+}
+
+static int runQuizCreator(QApplication& app, const common::Configuration& config)
+{
+	LOG_INFO("Quiz Creator Selected.");
+
+	try {
+		MusicQuiz::QuizCreator w(config);
+		w.show();
+		app.exec();
+	} catch ( const std::exception& err ) {
+		LOG_ERROR("Failed to start Quiz Creator. " << err.what());
+		errorMessage("Quiz Creator", "Quiz Creator Error. " + std::string(err.what()));
+		return 1;
+	} catch ( ... ) {
+		LOG_ERROR("Failed to start Quiz Creator. Unknown Error.");
+		errorMessage("Quiz Creator", "Quiz Creator Error. Unknown Error.");
+		return 1;
+	}
+	return 0;
+}
+
+static void selectQuizData(common::Configuration& config)
+{
+	/** Open File Dialog */
+	const QString path = QFileDialog::getExistingDirectory(nullptr, "Select Quiz Data Folder", QString::fromStdString(config.getQuizDataPath()));
+	if ( path.isEmpty() ) {
+		return;
+	}
+
+	config.setQuizDataPath(path.toStdString());
+	LOG_INFO("Set quiz path to " + path.toStdString());
 }
 
 int main(int argc, char* argv[])
 {
 	/** Create QApplication */
 	QApplication app(argc, argv);
+
+	common::Configuration config;
 
 	/** Set Stylesheet */
 	QFile qss(QString::fromStdString(":/stylesheet_musicQuiz.qss"));
@@ -36,50 +88,47 @@ int main(int argc, char* argv[])
 	QMessageBox msgBox(QMessageBox::Question, "Select Program", "Select Program", QMessageBox::NoButton, nullptr, Qt::WindowStaysOnTopHint);
 	QAbstractButton* musicQuizButton = msgBox.addButton("Music Quiz", QMessageBox::YesRole);
 	QAbstractButton* quizCreatorButton = msgBox.addButton("Quiz Creator", QMessageBox::YesRole);
-	msgBox.addButton("Exit", QMessageBox::NoRole);
+	QAbstractButton* selectQuizDataButton = msgBox.addButton("", QMessageBox::YesRole);
+	QPixmap pixmap(":imgs/browse_file_icon.png");
+	QIcon icon(pixmap);
+	selectQuizDataButton->setIcon(icon);
+	QAbstractButton* exitButton = msgBox.addButton("Exit", QMessageBox::NoRole);
+
 	msgBox.setStyleSheet(qss.readAll());
 	qss.close();
 
-	msgBox.exec();
+	if ( !config.doQuizDataPathExist() ) {
+		/** Popup to tell the user to select a data folder */
+		QMessageBox::information(nullptr, "Select Data Directory", "No Data Directory Found!\n\nSelect a directory containing the quiz data. This is required to load existing- and save new quizzes.", QMessageBox::Ok);
 
-	/** Start Selected Program */
-	if ( msgBox.clickedButton() == musicQuizButton ) {
-		/** Start Music Quiz */
-		LOG_INFO("Music Quiz Selected.");
+		/** Popup to select the data folder */
+		selectQuizData(config);
 
-		try {
-			MusicQuiz::MusicQuizController w;
-			app.exec();
-		} catch ( const std::exception& err ) {
-			LOG_ERROR("Failed to start Music Quiz. " << err.what());
-			errorMessage("Quiz Creator", "Quiz Creator Error. " + std::string(err.what()));
-			return 1;
-		} catch ( ... ) {
-			LOG_ERROR("Failed to start Music Quiz. Unknown Error.");
-			errorMessage("Quiz Creator", "Quiz Creator Error. Unknown Error.");
-			return 1;
+		/** Check if data was set */
+		if ( !config.doQuizDataPathExist() ) {
+			QMessageBox::information(nullptr, "Information", "No directory selected! Closing application.", QMessageBox::Ok);
+
+			/** Close Program */
+			LOG_INFO("Closing program. No data directory selected.");
+			return 0;
 		}
-	} else if ( msgBox.clickedButton() == quizCreatorButton ) {
-		/** Start Quiz Creator */
-		LOG_INFO("Quiz Creator Selected.");
-
-		try {
-			MusicQuiz::QuizCreator w;
-			w.show();
-			app.exec();
-		} catch ( const std::exception& err ) {
-			LOG_ERROR("Failed to start Quiz Creator. " << err.what());
-			errorMessage("Quiz Creator", "Quiz Creator Error. " + std::string(err.what()));
-			return 1;
-		} catch ( ... ) {
-			LOG_ERROR("Failed to start Quiz Creator. Unknown Error.");
-			errorMessage("Quiz Creator", "Quiz Creator Error. Unknown Error.");
-			return 1;
-		}
-	} else {
-		/** Close Program */
-		LOG_INFO("Exit Program Selected.");
 	}
 
+
+	while ( true ) {
+		msgBox.exec();
+		/** Start Selected Program */
+		if ( msgBox.clickedButton() == musicQuizButton ) {
+			return runMusicQuiz(app, config);
+		} else if ( msgBox.clickedButton() == quizCreatorButton ) {
+			return runQuizCreator(app, config);
+		} else if ( msgBox.clickedButton() == selectQuizDataButton ) {
+			selectQuizData(config);
+		} else if ( msgBox.clickedButton() == exitButton ) {
+			/** Close Program */
+			LOG_INFO("Exit Program Selected.");
+			return 0;
+		}
+	}
 	return 0;
 }

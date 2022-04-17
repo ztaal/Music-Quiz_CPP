@@ -2,10 +2,11 @@
 
 #include <string>
 #include <memory>
+#include <filesystem>
 
 #include <QWidget>
 
-#include <boost/filesystem.hpp>
+#include <boost/property_tree/ptree.hpp>
 
 #include "util/QuizSettings.hpp"
 #include "media/AudioPlayer.hpp"
@@ -13,11 +14,15 @@
 #include "gui_tools/widgets/QuizTeam.hpp"
 #include "gui_tools/widgets/QuizBoard.hpp"
 #include "gui_tools/QuizCreator/QuizCreator.hpp"
+#include "gui_tools/QuizCreator/EntryCreator.hpp"
+#include "gui_tools/QuizCreator/QuizData.hpp"
 
+namespace common {
+	class Configuration;
+}
 
 namespace MusicQuiz {
-	class QuizFactory
-	{
+	class QuizFactory {
 	public:
 		/**
 		 * @brief Deleted constructor.
@@ -49,7 +54,7 @@ namespace MusicQuiz {
 		 * @return The quiz board.
 		 */
 		static MusicQuiz::QuizBoard* createQuiz(const std::string& quizName, const MusicQuiz::QuizSettings& settings, const std::shared_ptr< media::AudioPlayer >& audioPlayer,
-			const std::shared_ptr< media::VideoPlayer >& videoPlayer, const std::vector<MusicQuiz::QuizTeam*>& teams = {}, bool preview = false, QWidget* parent = nullptr);
+			const std::shared_ptr< media::VideoPlayer >& videoPlayer, const common::Configuration& config, const std::vector<MusicQuiz::QuizTeam*>& teams = {}, bool preview = false, QWidget* parent = nullptr);
 
 		/**
 		 * @brief Creates the music quiz.
@@ -65,35 +70,8 @@ namespace MusicQuiz {
 		 * @return The quiz board.
 		 */
 		static MusicQuiz::QuizBoard* createQuiz(const size_t idx, const MusicQuiz::QuizSettings& settings, const std::shared_ptr< media::AudioPlayer >& audioPlayer,
-			const std::shared_ptr< media::VideoPlayer >& videoPlayer, const std::vector<MusicQuiz::QuizTeam*>& teams = {}, bool preview = false, QWidget* parent = nullptr);
-
-		/**
-		 * @brief Saves the quiz.
-		 *
-		 * @param[in] quizData The quiz data.
-		 * @param[in] parent The quiz board parent.
-		 */
-		static void saveQuiz(const MusicQuiz::QuizCreator::QuizData& data, QWidget* parent = nullptr);
-
-		/**
-		 * @brief Loads a quiz.
-		 *
-		 * @param[in] quizName The quiz name to load.
-		 * @param[in] audioPlayer The audio player.
-		 * @param[in] videoPlayer The video player
-		 * @param[in] parent The quiz board parent.
-		 *
-		 * @return The quiz data.
-		 */
-		static MusicQuiz::QuizCreator::QuizData loadQuiz(const std::string& quizName, const std::shared_ptr< media::AudioPlayer >& audioPlayer,
-			QWidget* parent = nullptr);
-
-		/**
-		 * @brief Deletes a directory.
-		 *
-		 * @param[in] dir The directory to delete.
-		 */
-		static void deleteDirectory(const boost::filesystem::path& dir);
-	protected:
+			const std::shared_ptr< media::VideoPlayer >& videoPlayer, const common::Configuration& config, const std::vector<MusicQuiz::QuizTeam*>& teams = {}, bool preview = false, QWidget* parent = nullptr);
 	};
+
+
 }

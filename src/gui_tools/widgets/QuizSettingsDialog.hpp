@@ -12,13 +12,18 @@
 #include <QCheckBox>
 #include <QKeyEvent>
 #include <QGridLayout>
+#include <QComboBox>
+#include <QTimer>
 
 #include "util/QuizSettings.hpp"
 
+#if BUILD_LIGHT_CONTROL
+#include "lightcontrol/discover/LightControlDiscover.hpp"
+#endif
+
 
 namespace MusicQuiz {
-	class QuizSettingsDialog : public QDialog
-	{
+	class QuizSettingsDialog : public QDialog {
 		Q_OBJECT
 	public:
 		/**
@@ -94,6 +99,20 @@ namespace MusicQuiz {
 		 */
 		void informationMessageBox(const QString& info);
 
+#if BUILD_LIGHT_CONTROL
+		/**
+		 * @brief Update list of discovered light devices.
+		 *
+		 */
+		void updateLightDevices();
+
+		/**
+		 * @brief Update currently inputted IP.
+		 *
+		 */
+		void updateIP(int index);
+#endif
+
 		/**
 		 * @brief Display Information boxes for the different settings.
 		 */
@@ -133,6 +152,17 @@ namespace MusicQuiz {
 		 */
 		QWidget* getDailyTripleLayout(const MusicQuiz::QuizSettings& settings);
 
+#if BUILD_LIGHT_CONTROL
+		/**
+		 * @brief Creates the Light Device interface.
+		 *
+		 * @param[in] settings The currently set settings.
+		 *
+		 * @return The Light Device layout.
+		 */
+		QWidget* getLightInterfaceLayout(const MusicQuiz::QuizSettings& settings);
+#endif
+
 		/**
 		 * @brief Enable / disable a layout and its children.
 		 *
@@ -151,7 +181,7 @@ namespace MusicQuiz {
 		QSlider* _dailyDoublePercentage = nullptr;
 		QGridLayout* _dailyDoubleLayout = nullptr;
 		QLineEdit* _dailyDoublePercentageLineEdit = nullptr;
-		const size_t _minDoublePercentage = 5, _maxDoublePercentage = 75;
+		const int _minDoublePercentage = 5, _maxDoublePercentage = 75;
 
 		/** Daily Triple */
 		QCheckBox* _dailyTriple = nullptr;
@@ -159,6 +189,14 @@ namespace MusicQuiz {
 		QSlider* _dailyTriplePercentage = nullptr;
 		QGridLayout* _dailyTripleLayout = nullptr;
 		QLineEdit* _dailyTriplePercentageLineEdit = nullptr;
-		const size_t _minTriplePercentage = 5, _maxTriplePercentage = 25;
+		const int _minTriplePercentage = 5, _maxTriplePercentage = 25;
+
+		/**LightInterface */
+		QTimer _listUpdateTimer;
+#if BUILD_LIGHT_CONTROL
+		LightControl::LightControlDiscover lightcontrolDiscover;
+		QLineEdit* _ipInput = nullptr;
+		QComboBox* _discoveredList = nullptr;
+#endif
 	};
 }

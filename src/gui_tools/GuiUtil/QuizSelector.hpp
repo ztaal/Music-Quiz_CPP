@@ -15,12 +15,14 @@
 #include "util/QuizLoader.hpp"
 #include "util/QuizSettings.hpp"
 
+namespace common {
+	class Configuration;
+}
 
 namespace MusicQuiz {
 	class QuizSettingsDialog;
 
-	class QuizSelector : public QDialog
-	{
+	class QuizSelector : public QDialog {
 		Q_OBJECT
 	public:
 		/**
@@ -28,7 +30,7 @@ namespace MusicQuiz {
 		 *
 		 * @param[in] parent The parent widget.
 		 */
-		explicit QuizSelector(QWidget* parent = nullptr);
+		explicit QuizSelector(const common::Configuration& config, QWidget* parent = nullptr);
 
 		/**
 		 * @brief Destructor
@@ -114,10 +116,11 @@ namespace MusicQuiz {
 		QCheckBox* _includeSongsCheckbox = nullptr;
 		QCheckBox* _includeVideosCheckbox = nullptr;
 		QCheckBox* _guessTheCategoryCheckbox = nullptr;
-		
+
 		MusicQuiz::QuizSettings _settings;
 
 		std::vector<std::string> _quizList;
 		std::vector<MusicQuiz::util::QuizLoader::QuizPreview> _quizPreviews;
+		const common::Configuration& _config;
 	};
 }

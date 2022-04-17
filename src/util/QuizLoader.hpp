@@ -7,20 +7,20 @@
 
 #include <QString>
 
-#include <boost/filesystem.hpp>
-
 #include "media/AudioPlayer.hpp"
 #include "media/VideoPlayer.hpp"
 #include "gui_tools/widgets/QuizCategory.hpp"
 
+namespace common {
+	class Configuration;
+}
+
 
 namespace MusicQuiz {
 	namespace util {
-		class QuizLoader
-		{
+		class QuizLoader {
 		public:
-			struct QuizPreview
-			{
+			struct QuizPreview {
 				std::string quizName = "";
 				std::string quizAuthor = "";
 				bool includeSongs = false;
@@ -77,7 +77,7 @@ namespace MusicQuiz {
 			*
 			* @return The list of quizzes.
 			*/
-			static std::vector<std::string> getListOfQuizzes();
+			static std::vector<std::string> getListOfQuizzes(const common::Configuration& config);
 
 			/**
 			* @brief Returns a quiz preview.
@@ -86,7 +86,7 @@ namespace MusicQuiz {
 			*
 			* @return The quiz preview.
 			*/
-			static QuizPreview getQuizPreview(size_t idx);
+			static QuizPreview getQuizPreview(size_t idx, const common::Configuration& config);
 
 			/**
 			* @brief Returns a list of the categories.
@@ -97,16 +97,26 @@ namespace MusicQuiz {
 			* @return The quiz categories.
 			*/
 			static std::vector<MusicQuiz::QuizCategory*> loadQuizCategories(size_t idx, const std::shared_ptr< media::AudioPlayer >& audioPlayer,
-				const std::shared_ptr< media::VideoPlayer >& videoPlayer, std::string& err);
+				const std::shared_ptr< media::VideoPlayer >& videoPlayer, const common::Configuration& config, std::string& err);
 
 			/**
 			* @brief Returns a list of the row categories.
 			*
 			* @param[in] idx The index of the quiz to load the categories from.
+			* @param[in] config quiz config.
+
+			* @return The quiz row categories.
+			*/
+			static std::vector<QString> loadQuizRowCategories(size_t idx, const common::Configuration& config);
+
+			/**
+			* @brief Returns a list of the row categories.
+			*
+			* @param[in] xmlPath the path to load the quizfile from.
 			*
 			* @return The quiz row categories.
 			*/
-			static std::vector<QString> loadQuizRowCategories(size_t idx);
+			static std::vector<QString> loadQuizRowCategories(const std::string& xmlPath);
 
 
 		protected:

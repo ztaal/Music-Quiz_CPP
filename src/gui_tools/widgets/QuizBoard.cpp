@@ -21,6 +21,13 @@
 
 #include "gui_tools/GuiUtil/QExtensions/QPushButtonExtender.hpp"
 
+#if BUILD_LIGHT_CONTROL
+#include "LightDeviceConnectedWidget.hpp"
+#include "lightcontrol/client/messages/LightModeMessage.hpp"
+#include "lightcontrol/client/messages/OnBoardLEDStrength.hpp"
+#include "lightcontrol/client/messages/GlitterMessage.hpp"
+#endif
+
 
 MusicQuiz::QuizBoard::QuizBoard(const std::vector<MusicQuiz::QuizCategory*>& categories, const std::vector<QString>& rowCategories,
 	const std::vector<MusicQuiz::QuizTeam*>& teams, const MusicQuiz::QuizSettings& settings, bool preview, QWidget* parent) :
@@ -42,6 +49,13 @@ MusicQuiz::QuizBoard::QuizBoard(const std::vector<MusicQuiz::QuizCategory*>& cat
 	if ( _categories.empty() ) {
 		throw std::runtime_error("Cannot create quiz board without any categories.");
 	}
+
+	/** Create Light Controller */
+#if BUILD_LIGHT_CONTROL
+	_lightClient = std::make_shared<LightControl::LightControlClient>(_settings.deviceIP, 80);
+	_lightClient->addConnectedCallback(&MusicQuiz::QuizBoard::lightClientConnectedCallback);
+	_lightClient->start();
+#endif
 
 	/** Set Row Categories if they match the number of entries in the categories */
 	bool sameNumberOfEntries = true;
@@ -67,6 +81,14 @@ MusicQuiz::QuizBoard::QuizBoard(const std::vector<MusicQuiz::QuizCategory*>& cat
 		}
 	}
 }
+
+#if BUILD_LIGHT_CONTROL
+void MusicQuiz::QuizBoard::lightClientConnectedCallback(LightControl::LightControlClient* client)
+{
+	client->sendMessage(LightControl::OnBoardLEDStrength(0));
+	client->sendMessage(LightControl::LightModeMessage( LightControl::LightMode::OFF, 1.f, 0, 0, 0));
+}
+#endif
 
 void MusicQuiz::QuizBoard::createLayout()
 {
@@ -108,15 +130,19 @@ void MusicQuiz::QuizBoard::createLayout()
 		QVBoxLayout* rowCategorylayout = new QVBoxLayout;
 		rowCategorylayout->setSpacing(10);
 
-		/** Add Empty Box */
-		QPushButton* rowCategoryBtn = new QPushButton("", this);
-		rowCategoryBtn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-		rowCategoryBtn->setObjectName("QuizEntry_rowCategoryLabel");
-		rowCategorylayout->addWidget(rowCategoryBtn);
+		/** Add Light Device Status Box */
+#if BUILD_LIGHT_CONTROL
+		if ( _lightClient != nullptr ) {
+			LightDeviceConnectedWidget* connectedWidget = new LightDeviceConnectedWidget(_lightClient, this);
+			connectedWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+			connectedWidget->setObjectName("QuizEntry_rowCategoryLabel");
+			rowCategorylayout->addWidget(connectedWidget);
+		}
+#endif
 
 		/** Add Row Categories */
 		for ( size_t i = 0; i < _rowCategories.size(); ++i ) {
-			rowCategoryBtn = new QPushButton(_rowCategories[i], this);
+			QPushButton* rowCategoryBtn = new QPushButton(_rowCategories[i], this);
 			rowCategoryBtn->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 			rowCategoryBtn->setObjectName("QuizEntry_rowCategoryLabel");
 			rowCategorylayout->addWidget(rowCategoryBtn);
@@ -128,7 +154,7 @@ void MusicQuiz::QuizBoard::createLayout()
 		tmpLayout->addItem(rowCategorylayout, 0, 0);
 		tmpLayout->addItem(categorylayout, 0, 1);
 		tmpLayout->setColumnStretch(0, 1);
-		tmpLayout->setColumnStretch(1, _categories.size() * 2);
+		tmpLayout->setColumnStretch(1, static_cast<int>(_categories.size() * 2));
 		mainlayout->addItem(tmpLayout, 0, 0);
 	} else {
 		mainlayout->addItem(categorylayout, 0, 0);
@@ -143,7 +169,7 @@ void MusicQuiz::QuizBoard::createLayout()
 
 	/** Set Row Stretch */
 	if ( !_teams.empty() ) {
-		mainlayout->setRowStretch(0, (maxNumberOfEntries + 1) * 1.5);
+		mainlayout->setRowStretch(0, static_cast<int>(static_cast<double>(maxNumberOfEntries + 1) * 1.5));
 		mainlayout->setRowStretch(1, 1);
 	}
 
@@ -164,8 +190,8 @@ void MusicQuiz::QuizBoard::handleAnswer(const size_t points)
 
 	/** Select which team guessed the entry / category */
 	QMessageBox msgBox(QMessageBox::Question, "Select Team", "Select Team", QMessageBox::NoButton, nullptr, Qt::WindowStaysOnTopHint);
-	msgBox.setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint | Qt::WindowStaysOnTopHint);
-	
+	msgBox.setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint | Qt::WindowStaysOnTopHint | Qt::X11BypassWindowManagerHint);
+
 	/** Add Buttons for Each Team */
 	std::vector< QAbstractButton* > teamButtons;
 	for ( size_t i = 0; i < _teams.size(); ++i ) {
@@ -177,7 +203,7 @@ void MusicQuiz::QuizBoard::handleAnswer(const size_t points)
 	QSize size = msgBox.sizeHint();
 	QRect screenRect = this->window()->windowHandle()->screen()->geometry();
 	msgBox.move(QPoint(screenRect.width() / 2 - size.width() / 2, screenRect.height() - (size.height() * 2)));
-	
+
 	/** Box Message Box */
 	msgBox.exec();
 
@@ -206,16 +232,24 @@ void MusicQuiz::QuizBoard::handleAnswer(const size_t points)
 		}
 	}
 
+	/** Set color on light device */
+#if BUILD_LIGHT_CONTROL
+		_lightClient->sendMessage(LightControl::LightModeMessage(LightControl::LightMode::ON, 1.f,
+			static_cast<uint8_t>(buttonColor.red()),
+			static_cast<uint8_t>(buttonColor.green()),
+			static_cast<uint8_t>(buttonColor.blue())));
+#endif
+
 	/** Set Button Color */
 	MusicQuiz::QuizEntry* entryButton = dynamic_cast<MusicQuiz::QuizEntry*>(sender());
 	if ( entryButton != nullptr ) {
 		entryButton->setColor(buttonColor);
 		return;
-	} 
-	
+	}
+
 	MusicQuiz::QuizCategory* categoryLabel = dynamic_cast<MusicQuiz::QuizCategory*>(sender());
 	if ( _settings.guessTheCategory && categoryLabel != nullptr ) {
-		categoryLabel->setCategoryColor(buttonColor); 
+		categoryLabel->setCategoryColor(buttonColor);
 		handleGameComplete();
 		return;
 	}
@@ -251,6 +285,13 @@ void MusicQuiz::QuizBoard::handleGameComplete()
 				winningTeams.push_back(_teams[i]);
 			}
 		}
+
+#if BUILD_LIGHT_CONTROL
+		if ( _lightClient != nullptr ) {
+			_lightClient->sendMessage(LightControl::GlitterMessage(std::chrono::milliseconds(100), true, 50));
+			_lightClient->sendMessage(LightControl::LightModeMessage(LightControl::LightMode::GLITTER, 1.f, 0, 0, 0));
+		}
+#endif
 
 		emit gameComplete(winningTeams);
 	} else if ( isGameComplete || _quizStopped ) {
@@ -293,8 +334,7 @@ bool MusicQuiz::QuizBoard::closeWindow()
 
 void MusicQuiz::QuizBoard::keyPressEvent(QKeyEvent* event)
 {
-	switch ( event->key() )
-	{
+	switch ( event->key() ) {
 	case Qt::Key_Escape:
 		closeWindow();
 		break;

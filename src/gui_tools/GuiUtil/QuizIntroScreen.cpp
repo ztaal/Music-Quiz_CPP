@@ -8,7 +8,7 @@
 
 
 MusicQuiz::QuizIntroScreen::QuizIntroScreen(const QString& quizName, const QString& quizAuthor, QWidget* parent) :
-	QDialog(parent), _quizName(quizName), _quizAuthor(quizAuthor)
+	QDialog(parent), _quizName(quizName), _quizAuthor(quizAuthor), _introDisplayTime(4000)
 {
 	/** Set Window Flags */
 	setWindowFlags(windowFlags() | Qt::Window | Qt::FramelessWindowHint | Qt::WindowMaximizeButtonHint | Qt::WindowMinimizeButtonHint);

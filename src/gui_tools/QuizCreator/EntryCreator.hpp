@@ -15,14 +15,19 @@
 #include <QButtonGroup>
 #include <QTableWidget>
 
+#include <boost/property_tree/ptree.hpp>
+
 #include "media/AudioPlayer.hpp"
 #include "media/VideoPlayer.hpp"
+
+namespace common {
+	class Configuration;
+}
 
 
 namespace MusicQuiz {
 
-	class EntryCreator : public QWidget
-	{
+	class EntryCreator : public QWidget {
 		Q_OBJECT
 
 	public:
@@ -36,9 +41,21 @@ namespace MusicQuiz {
 		 * @param[in] name The entry name.
 		 * @param[in] points The points of the entry.
 		 * @param[in] audioPlayer The audio player.
+		 * @param[in] config configuration.
 		 * @param[in] parent The parent widget.
 		 */
-		explicit EntryCreator(const QString& name, size_t points, const std::shared_ptr< media::AudioPlayer >& audioPlayer, QWidget* parent = nullptr);
+		explicit EntryCreator(const QString& name, int points, const std::shared_ptr< media::AudioPlayer >& audioPlayer, const common::Configuration& config, QWidget* parent = nullptr);
+
+		/**
+		 * @brief Constructor from boost property tree
+		 *
+		 * @param[in] tree the tree which the entry should be loaded from.
+		 * @param[in] audioPlayer The audio player.
+		 * @param[in] config configuration.
+		 * @param[in] parent The parent widget.
+		 */
+
+		explicit EntryCreator(const boost::property_tree::ptree &tree, const media::AudioPlayer::Ptr& audioPlayer, const common::Configuration& config, QWidget* parent = nullptr);
 
 		/**
 		 * @brief Default destructor
@@ -71,7 +88,7 @@ namespace MusicQuiz {
 		 *
 		 * @param[in] points The points.
 		 */
-		void setPoints(size_t points);
+		void setPoints(int points);
 
 		/**
 		 * @brief Gets the points.
@@ -106,7 +123,7 @@ namespace MusicQuiz {
 		 *
 		 * @return The song file.
 		 */
-		const QString getSongFile();
+		const QString getSongFile() const;
 
 		/**
 		 * @brief Sets the video file.
@@ -120,7 +137,7 @@ namespace MusicQuiz {
 		 *
 		 * @return The video file.
 		 */
-		const QString getVideoFile();
+		const QString getVideoFile() const;
 
 		/**
 		 * @brief Sets the video song file.
@@ -134,7 +151,7 @@ namespace MusicQuiz {
 		 *
 		 * @return The video song file.
 		 */
-		const QString getVideoSongFile();
+		const QString getVideoSongFile() const;
 
 		/**
 		 * @brief Sets the song start time.
@@ -148,7 +165,7 @@ namespace MusicQuiz {
 		 *
 		 * @return The song start time.
 		 */
-		size_t getSongStartTime();
+		size_t getSongStartTime() const;
 
 		/**
 		 * @brief Sets the answer start time.
@@ -162,7 +179,7 @@ namespace MusicQuiz {
 		 *
 		 * @return The answer start time.
 		 */
-		size_t getAnswerStartTime();
+		size_t getAnswerStartTime() const;
 
 		/**
 		 * @brief Sets the video start time.
@@ -176,7 +193,7 @@ namespace MusicQuiz {
 		 *
 		 * @return The video start time.
 		 */
-		size_t getVideoStartTime();
+		size_t getVideoStartTime() const;
 
 		/**
 		 * @brief Sets the video song start time.
@@ -190,7 +207,7 @@ namespace MusicQuiz {
 		 *
 		 * @return The video song start time.
 		 */
-		size_t getVideoSongStartTime();
+		size_t getVideoSongStartTime() const;
 
 		/**
 		 * @brief Sets the video answer start time.
@@ -204,12 +221,46 @@ namespace MusicQuiz {
 		 *
 		 * @return The video answer start time.
 		 */
-		size_t getVideoAnswerStartTime();
+		size_t getVideoAnswerStartTime() const;
 
 		/**
 		 * @brief Stops the audio and video playing.
 		 */
 		void stop();
+
+		/**
+		 * @brief serialize entry into a boost property_tree
+		 *
+		 * @param[in] savePath path where the mediafiles should be saved.
+		 * @param[in] xmlPath path for the media files that should be written in the ptree.
+		 * 
+		 * @return the serialized ptree
+		 */
+
+		boost::property_tree::ptree toXml(const std::string& savePath, const std::string xmlPath) const;
+
+		/**
+		 * @brief serialize song media into the boost property_tree
+		 *
+		 * @param[out] tree tree to serialize into.
+		 * @param[in] savePath path where the mediafiles should be saved.
+		 * @param[in] xmlPath path for the media files that should be written in the ptree.
+		 * 
+		 * @return the serialized ptree
+		 */
+		void saveSongToXml(boost::property_tree::ptree& tree, const std::string& savePath, const std::string& xmlPath) const;
+
+		/**
+		 * @brief serialize video media into the boost property_tree
+		 *
+		 * @param[out] tree tree to serialize into.
+		 * @param[in] savePath path where the mediafiles should be saved.
+		 * @param[in] xmlPath path for the media files that should be written in the ptree.
+		 * 
+		 * @return the serialized ptree
+		 */
+		void saveVideoToXml(boost::property_tree::ptree& tree, const std::string& savePath, const std::string& xmlPath) const;
+
 
 	private slots:
 		/**
@@ -289,7 +340,7 @@ namespace MusicQuiz {
 		 *
 		 * @return True is name is valid.
 		 */
-		bool isSongFileValid(const QString& fileName);
+		bool isSongFileValid(const QString& fileName) const;
 
 		/**
 		 * @brief Checks if the video file name is valid.
@@ -298,7 +349,7 @@ namespace MusicQuiz {
 		 *
 		 * @return True is name is valid.
 		 */
-		bool isVideoFileValid(const QString& fileName);
+		bool isVideoFileValid(const QString& fileName) const;
 
 		/**
 		 * @brief Gets the time in msec from a QTime.
@@ -308,7 +359,7 @@ namespace MusicQuiz {
 		 *
 		 * @return The time in miliseconds.
 		 */
-		size_t toMSec(const QTime& time);
+		size_t toMSec(const QTime& time) const;
 
 		/**
 		 * @brief Gets the time in QTime from msec.
@@ -318,10 +369,24 @@ namespace MusicQuiz {
 		 *
 		 * @return The QTime.
 		 */
-		QTime fromMSec(size_t time);
+		QTime fromMSec(size_t time) const;
+
+		/**
+		 * @brief load song media from boost property_tree
+		 *
+		 * @param[out] tree tree to load from.
+		 */
+		void loadSongFromXml(const boost::property_tree::ptree &tree);
+
+		/**
+		 * @brief load video media from boost property_tree
+		 *
+		 * @param[out] tree tree to load from.
+		 */
+		void loadVideoFromXml(const boost::property_tree::ptree &tree);
 
 		/** Variables */
-		size_t _points = 0;
+		int _points = 0;
 
 		QString _entryName;
 		QLabel* _entryNameLabel = nullptr;
@@ -352,6 +417,8 @@ namespace MusicQuiz {
 		media::VideoPlayer* _videoPlayer = nullptr;
 
 		const std::vector< QString > _validAudioFormats = { ".mp3", ".mp4", ".wav" };
-		const std::vector< QString > _validVideoFormats = { ".mp4"};
+		const std::vector< QString > _validVideoFormats = { ".mp4" };
+
+		const common::Configuration& _config;
 	};
 }

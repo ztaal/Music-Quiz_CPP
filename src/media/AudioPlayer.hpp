@@ -12,12 +12,10 @@
 
 
 namespace media {
-	class AudioPlayer : public QWidget
-	{
+	class AudioPlayer : public QWidget {
 		Q_OBJECT
 	public:
-		enum class AudioPlayState
-		{
+		enum class AudioPlayState {
 			IDLE = 1,		// Default
 			PLAYING = 2,
 			PAUSED = 3
@@ -50,16 +48,9 @@ namespace media {
 		 * @brief Plays a video.
 		 *
 		 * @param[in] audioFile The name of the audio file to play.
+		 * @param[in] startTime The time at which to start playing the audio file from.
 		 */
-		void play(const QString& audioFile);
-
-		/**
-		 * @brief Plays a video.
-		 *
-		 * @param[in] audioFile The name of the audio file to play.
-		 * @param[in] startTime The time at which to start playing the video file from.
-		 */
-		void play(const QString& audioFile, size_t startTime);
+		void play(const QString& audioFile, size_t startTime = 0);
 
 		/**
 		 * @brief Pauses the audio that is currently playing.
@@ -75,6 +66,13 @@ namespace media {
 		 * @brief Stops the audio.
 		 */
 		void stop();
+
+	private slots:
+		/**
+		 * @brief Handles mediastatus changes
+		 */
+		void handleMediaStatus(QMediaPlayer::MediaStatus status);
+
 	protected:
 
 		/** Variables */

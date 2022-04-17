@@ -8,24 +8,26 @@
 #include <QWidget>
 #include <QButtonGroup>
 
-#include "util/QuizLoader.hpp"
+#include "LoadDialog.hpp"
 
 class QTableWidget;
 
+namespace common {
+	class Configuration;
+}
 
 namespace MusicQuiz {
 	/**
 	 * @brief Quiz Load Dialog.
 	 */
-	class LoadQuizDialog : public QDialog
-	{
+	class LoadQuizDialog : public LoadDialog {
 		Q_OBJECT
 
 	public:
 		/**
 		 * @brief Constructor.
 		 */
-		explicit LoadQuizDialog(QWidget* parent = nullptr);
+		explicit LoadQuizDialog(const common::Configuration& config, QWidget* parent = nullptr) : LoadDialog(parent), _config(config) {}
 
 		/**
 		 * @brief Default deconstructor.
@@ -38,30 +40,25 @@ namespace MusicQuiz {
 		LoadQuizDialog(const LoadQuizDialog&) = delete;
 		LoadQuizDialog& operator=(const LoadQuizDialog&) = delete;
 
-	private slots:
 		/**
 		 * @brief Updates the table.
 		 */
-		void updateTable();
+		virtual void updateTable();
+
+	private slots:
 
 		/**
-		 * @brief Emits the load quiz with the selected index.
+		 * @brief Called when load is pressed.
 		 */
-		void loadQuiz();
+		virtual void load();
+
 
 	signals:
 		void loadSignal(const std::string&);
 
 	private:
-		/**
-		 * @brief Constructs the widget layout.
-		 */
-		void makeWidgetLayout();
-
-		/** Variables */
-		QTableWidget* _quizTable = nullptr;
-		QButtonGroup* _buttonGroup = nullptr;
 
 		std::vector<std::string> _quizList;
+		const common::Configuration& _config;
 	};
 }
